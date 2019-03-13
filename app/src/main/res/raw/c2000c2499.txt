@@ -1,0 +1,3896 @@
+﻿编译器错误 C2001 Compiler Error C2001 11
+常量中有换行符字符串常量不能继续在第二个行上，除非你执行以下操作：结束以反斜杠的第一行。关闭与双引号匹配的第一行中的字符串，并使用另一个双引号打开下一步的行中的字符串。结束用的第一行是不够的。示例下面的示例生成 C2001: The following sample generates C2001: // C2001.cpp
+// C2001 expected
+#include <stdio.h>
+
+int main()
+{
+    printf_s("Hello,
+             world");
+    printf_s("Hello,\n
+             world");
+} 示例 Example 字符串常量中包括空格开头的行延续字符之后的下一行。 Spaces at the beginning of the next line after a line-continuation character are included in the string constant. 上面所示的示例都没有嵌入字符串常量的换行字符。 None of the examples shown above embed a newline character into the string constant. 你可以嵌入换行字符，如下所示： You can embed a newline character as shown here: // C2001b.cpp
+#include <stdio.h>
+
+int main()
+{
+    printf_s("Hello,\n\
+             world");
+
+    printf_s("Hello,\
+             \nworld");
+
+    printf_s("Hello,\n"
+             "world");
+
+    printf_s("Hello,"
+             "\nworld");
+
+    printf_s("Hello,"
+             " world");
+
+    printf_s("Hello,\
+             world");
+}
+
+编译器错误 C2002 Compiler Error C2002 11
+无效的宽字符常量多字节字符常量无效。通过检查以下可能的原因进行修复宽字符常量包含比预期更多字节。标准标头不包括。不能与普通字符串文本串联宽字符。宽字符常量的前面必须是字符预处理器指令的文本参数必须为。例如，该指令，，而无效。
+
+编译器错误 C2003 Compiler Error C2003 11
+预期定义的标识符必须遵循预处理器关键字。
+
+编译器错误 C2004 Compiler Error C2004 11
+应输入“”标识符必须出现在括号中，且后接预处理器关键字。此错误还可能来自于为执行的编译器一致性工作：在预处理器指令中缺少括号。如果预处理器指令中缺少右括号，编译器将生成错误。示例以下示例生成：示例可能的解决方法：
+
+编译器错误 C2005 Compiler Error C2005 11
+行应输入行号，找到指令后面必须跟一个行号。下面的示例生成 C2005: The following sample generates C2005: // C2005.cpp
+int main() {
+   int i = 0;
+   #line i   // C2005
+} 可能的解决方法： Possible resolution: // C2005b.cpp
+int main() {
+   int i = 0;
+   #line 0
+}
+
+编译器错误 C2006 Compiler Error C2006 11
+应为文件名，找到如指令或需要文件名。若要解决此错误，请确保令牌是有效的文件名。此外，将该文件名放在双引号或尖括号。下面的示例生成 C2006: The following sample generates C2006: // C2006.cpp
+#include stdio.h   // C2006 可能的解决方法： Possible resolution: // C2006b.cpp
+// compile with: /c
+#include <stdio.h>
+
+编译器错误 C2007 Compiler Error C2007 11
+定义语法后未出现标识符。若要解决此错误，使用标识符。下面的示例生成 C2007: The following sample generates C2007: // C2007.cpp
+#define   // C2007 可能的解决方法： Possible resolution: // C2007b.cpp
+// compile with: /c
+#define true 1
+
+编译器错误 C2008 Compiler Error C2008 11
+“”宏定义中的意外在紧靠宏名称之后出现的字符。若要解决此错误，必须有一个空格后的宏名称。下面的示例生成 C2008: The following sample generates C2008: // C2008.cpp
+#define TEST1"mytest1"    // C2008 可能的解决方法： Possible resolution: // C2008b.cpp
+// compile with: /c
+#define TEST2 "mytest2"
+
+编译器错误 C2009 Compiler Error C2009 11
+宏形式“”重复使用宏定义的形参列表不止一次使用的标识符。宏的参数列表中的标识符必须是唯一的。示例下面的示例生成 C2009: The following sample generates C2009: // C2009.cpp
+#include <stdio.h>
+
+#define macro1(a,a) (a*a)   // C2009
+
+int main()
+{
+    printf_s("%d\n", macro1(2));
+} 示例 Example 可能的解决方法： Possible resolution: // C2009b.cpp
+#include <stdio.h>
+
+#define macro2(a)   (a*a)
+#define macro3(a,b) (a*b)
+
+int main()
+{
+    printf_s("%d\n", macro2(2));
+    printf_s("%d\n", macro3(2,4));
+}
+
+编译器错误 C2010 Compiler Error C2010 11
+：意外宏形参表中在宏定义的形参列表中错误地使用了该字符。删除要解决该错误的字符。下面的示例生成 C2010: The following sample generates C2010: // C2010.cpp
+// compile with: /c
+#define mymacro(a|) (2*a)   // C2010
+#define mymacro(a) (2*a)   // OK
+
+编译器错误 C2011 Compiler Error C2011 11
+“”：“”类型重定义标识符已定义为。检查标识符的重定义。如果不止一次将头文件或类型库导入同一个文件，则也有可能生成。若要防止多次包含头文件中定义的类型，使用防护或后指令标头文件中。如果您需要查找重定义的类型的初始声明，则可以使用编译器标 志生成的预处理的输出传递到编译器。你可以使用文本搜索工具在输出文件中查找重定义的标识符的实例。下面的示例生成了 C2011 并演示了修复此错误的一种方法： The following sample generates C2011 and shows one way to fix it: // C2011.cpp
+// compile with: /c
+struct S;
+union S;   // C2011
+union S2;   // OK
+
+编译器错误 C2012 Compiler Error C2012 11
+在“”之后缺少名称指令缺少必需的文件名。以下示例生成：可能的解决方法：
+
+编译器错误 C2013 Compiler Error C2013 11
+缺少“”指令缺少右尖括号。添加右括号可解决该错误。下面的示例生成 C2013： The following sample generates C2013: // C2013.cpp
+#include <stdio.h    // C2013 可能的解决方法： Possible resolution: // C2013b.cpp
+// compile with: /c
+#include <stdio.h>
+
+编译器错误 C2014 Compiler Error C2014 11
+预处理器命令必须作为第一个非空白空间启动的预处理器指令的登录必须是不是空白的行的第一个字符。下面的示例生成 C2014: The following sample generates C2014: // C2014.cpp
+int k; #include <stdio.h>   // C2014 可能的解决方法： Possible resolution: // C2014b.cpp
+// compile with: /c
+int k;
+#include <stdio.h>
+
+编译器错误 C2015 Compiler Error C2015 11
+常量中的字符太多字符常量包含两个以上的字符。限制为标准字符常量的一个字符，但长字符常量的两个字符。转义序列，如，转换为单个字符。示例下面的示例生成 C2015: The following sample generates C2015: // C2015.cpp
+// compile with: /c
+
+char test1 = 'error';   // C2015
+char test2 = 'e';   // OK 示例 Example 使用 Microsoft 扩展，转换为整数字符常量时，也会发生 C2015。 C2015 can also occur when using a Microsoft extension, character constants converted to integers. 下面的示例生成 C2015: The following sample generates C2015: // C2015b.cpp
+#include <stdio.h>
+
+int main()
+{
+    int a = 'abcde';   // C2015
+
+    int b = 'a';   // 'a' = ascii 0x61
+    printf_s("%x\n", b);
+}
+
+编译器错误 C2017 Compiler Error C2017 11
+非法的转义序列转义序列，如，出现在外的字符或字符串常量。下面的示例生成 C2017: The following sample generates C2017: // C2017.cpp
+int main() {
+   char test1='a'\n;   // C2017
+   char test2='a\n';   // ok
+} C2017 会时发生 stringize 运算符用于包含转义序列的字符串。 C2017 can occur when the stringize operator is used with strings that include escape sequences. 下面的示例生成 C2017: The following sample generates C2017: // C2017b.cpp
+#define TestDfn(x) AfxMessageBox(#x)
+TestDfn(CString("\\") + CString(".h\"\n\n"));   // C2017
+
+编译器错误 C2018 Compiler Error C2018 11
+未知字符“”源文件包含意外的字符，标识由其十六进制数。若要解决此错误，删除的字符。
+
+编译器错误 C2019 Compiler Error C2019 11
+应为预处理器指令，却找到“”字符跟登录，但这不是预处理器指令的第一个字母。下面的示例生成 C2019: The following sample generates C2019: // C2019.cpp
+#!define TRUE 1   // C2019 可能的解决方法： Possible resolution: // C2019b.cpp
+// compile with: /c
+#define TRUE 1
+
+编译器错误 C2020 Compiler Error C2020 11
+成员重定义重新定义继承自的基类或结构的成员。不能重新定义继承的成员，除非声明为基类中。
+
+编译器错误 C2021 Compiler Error C2021 11
+应输入指数值而非“”用作浮点常数的指数的字符不是有效的数字。请务必使用在范围内的指数。示例下面的示例生成 C2021: The following sample generates C2021: // C2021.cpp
+float test1=1.175494351E;   // C2021 示例 Example 可能的解决方法： Possible resolution: // C2021b.cpp
+// compile with: /c
+float test2=1.175494351E8;
+
+编译器错误 C2022 Compiler Error C2022 11
+“”：对字符来说太大后一个反斜杠的八进制数中的字符或字符串常量是过大而无法表示字符。
+
+编译器错误 C2026 Compiler Error C2026 11
+字符串太大，已截断尾部字符字符串的长度超出单字节字符的限制。之前在连接的相邻字符串，字符串不能超过单字节字符。此长度约的字符串还会生成此错误。如果你有定义，如下所示的字符串，则会生成你无法将其分解，如下所示：你可能想要存储特别大的字符串 （或更大）自定义资源或外部文件中。请参阅创建新的自定义资源或数据资源有关详细信息。
+
+编译器错误 C2027 Compiler Error C2027 11
+使用未定义的类型它定义之前，不能使用的类型。若要解决此错误，请确保在引用它之前完全定义的类型。示例下面的示例生成 C2027。 The following sample generates C2027. // C2027.cpp
+class C;
+class D {
+public:
+   void func() {
+   }
+};
+
+int main() {
+   C *pC;
+   pC->func();   // C2027
+
+   D *pD;
+   pD->func();
+} 示例 Example 它是可以声明指向声明但未定义类型的指针。 It is possible to declare a pointer to a declared but undefined type. 但 Visual c + + 不允许对未定义类型的引用。 But Visual C++ does not allow a reference to an undefined type. 下面的示例生成 C2027。 The following sample generates C2027. // C2027_b.cpp
+class A;
+A& CreateA();
+
+class B;
+B* CreateB();
+
+int main() {
+   CreateA();   // C2027
+   CreateB();   // OK
+}
+
+编译器错误 C2028 Compiler Error C2028 11
+结构联合成员必须在结构联合中必须在结构或联合中声明结构或联合成员。
+
+编译器错误 C2030 Compiler Error C2030 11
+具有“”可访问性的析构函数不能是声明为“”的类的成员声明为的运行时类不能具有受保护的私有析构函数。已密封的类型上只允许使用公共虚拟和私有非虚拟析构函数。有关详细信息，请参阅类和结构。若要修复此错误，请更改析构函数的可访问性。
+
+编译器错误 C2032 Compiler Error C2032 11
+：函数不能为结构联合的成员结构或联合具有成员函数时，这允许中但不是在。若要解决此错误，请编译为程序，或删除成员函数。下面的示例生成 C2032: The following sample generates C2032: // C2032.c
+struct z {
+   int i;
+   void func();   // C2032
+}; 可能的解决方法： Possible resolution: // C2032b.c
+// compile with: /c
+struct z {
+   int i;
+};
+
+编译器错误 C2033 Compiler Error C2033 11
+“”：位域不能有间接寻址位域声明为了指针，这是不允许的。下面的示例生成 C2033： The following sample generates C2033: // C2033.cpp
+struct S {
+   int *b : 1;  // C2033
+}; 可能的解决方法： Possible resolution: // C2033b.cpp
+// compile with: /c
+struct S {
+   int b : 1;
+};
+
+编译器错误 C2034 Compiler Error C2034 11
+：位域的比特数太小的类型位域声明中的比特数超过的基类型的大小。下面的示例生成 C2034: The following sample generates C2034: // C2034.cpp
+struct A {
+   char test : 9;   // C2034, char has 8 bits
+}; 可能的解决方法： Possible resolution: // C2034b.cpp
+// compile with: /c
+struct A {
+   char test : 8;
+};
+
+编译器错误 C2036 Compiler Error C2036 11
+：未知的大小上的操作需要的数据对象，无法确定大小。示例下面的示例生成 C2036。 The following sample generates C2036. // C2036.c
+// a C program
+struct A* pA;
+struct B { int i; } *pB;
+int main() {
+   pA++;   // C2036, size of A not known
+   ((char*)pA)++;   // OK
+
+   pB++;   // OK
+} 示例 Example 下面的示例生成 C2036。 The following sample generates C2036. // C2036_2.cpp
+// a C++ program
+struct A* pA;
+int main() {
+   pA++;   // C2036, size of A not known
+   ((char*&)pA)++;   // OK, if sizeof(A) == sizeof(char)
+}
+
+编译器错误 C2039 Compiler Error C2039 11
+：不是的成员代码不正确地调用或引用的结构、类或联合成员。示例下面的示例生成 C2039。 The following sample generates C2039. // C2039.cpp
+struct S {
+   int mem0;
+} s, *pS = &s;
+
+int main() {
+   pS->mem1 = 0;   // C2039 mem1 is not a member
+   pS->mem0 = 0;   // OK
+} 示例 Example 下面的示例生成 C2039。 The following sample generates C2039. // C2039_b.cpp
+// compile with: /clr
+using namespace System;
+int main() {
+   Console::WriteLine( "{0}", DateTime::get_Now());   // C2039
+   Console::WriteLine( "{0}", DateTime::Now);   // OK
+   Console::WriteLine( "{0}", DateTime::Now::get());   // OK
+} 示例 Example 下面的示例生成 C2039。 The following sample generates C2039. // C2039_c.cpp
+// compile with: /clr /c
+ref struct S {
+   property int Count {
+     int get();
+     void set(int i){}
+   };
+};
+
+int S::get_Count() { return 0; }   // C2039
+int S::Count::get() { return 0; }   // OK 示例 Example 如果你尝试访问默认索引器不正确，也会发生 C2039。 C2039 can also occur if you attempt to access a default indexer incorrectly. 下面的示例定义一个 C# 编写的组件。 The following sample defines a component authored in C#. // C2039_d.cs
+// compile with: /target:library
+// a C# program
+[System.Reflection.DefaultMember("Item")]
+public class B {
+   public int Item {
+      get { return 13; }
+      set {}
+   }
+}; 示例 Example 下面的示例生成 C2039。 The following sample generates C2039. // C2039_e.cpp
+// compile with: /clr
+using namespace System;
+#using "c2039_d.dll"
+
+int main() {
+   B ^ b = gcnew B;
+   int n = b->default;   // C2039
+   // try the following line instead
+   // int n = b->Item;
+   Console::WriteLine(n);
+} 示例 Example 如果你使用的泛型，也会发生 C2039。 C2039 can also occur if you use generics. 下面的示例生成 C2039。 The following sample generates C2039. // C2039_f.cpp
+// compile with: /clr
+interface class I {};
+
+ref struct R : public I {
+   virtual void f3() {}
+};
+
+generic <typename T>
+where T : I
+void f(T t) {
+   t->f3();   // C2039
+   safe_cast<R^>(t)->f3();   // OK
+}
+
+int main() {
+   f(gcnew R());
+} 示例 Example 当你尝试释放托管或非托管资源，则会发生 C2039。 C2039 can occur when you try to release managed or unmanaged resources. 有关详细信息，请参阅 析构函数和终结器 。 For more information, see Destructors and finalizers . 下面的 示例生成 C2039。 The following sample generates C2039. // C2039_g.cpp
+// compile with: /clr
+using namespace System;
+using namespace System::Threading;
+
+void CheckStatus( Object^ stateInfo ) {}
+
+int main() {
+   ManualResetEvent^ event = gcnew ManualResetEvent( false );
+   TimerCallback^ timerDelegate = gcnew TimerCallback( &CheckStatus );
+   Timer^ stateTimer = gcnew Timer( timerDelegate, event, 1000, 250 );
+
+   ((IDisposable ^)stateTimer)->Dispose();   // C2039
+
+   stateTimer->~Timer();   // OK
+}
+
+编译器错误 C2040 Compiler Error C2040 11
+“运算符”“”与“”的间接级别不同涉及指定操作数的表达式具有不兼容的操作数类型或隐式转换的操作数类型。如果这两个操作数都是算术的，或两个都是非算术的（如数组或指针），使用时将不做更改。如果一个操作数是算术的而另一个不是算术的，则算术操作 数将转换为非算术操作数的类型。此示例生成，并演示如何对其进行修复。
+
+编译器错误 C2041 Compiler Error C2041 11
+非法数字基数目指定的字符不是有效的数字（如八进制或十六进制）基。下面的示例生成 C2041: The following sample generates C2041: // C2041.cpp
+int i = 081;   // C2041  8 is not a base 8 digit 可能的解决方法： Possible resolution: // C2041b.cpp
+// compile with: /c
+int j = 071;
+
+编译器错误 C2042 Compiler Error C2042 11
+关键字互相排斥单个声明中同时使用了关键字和。以下示例生成：可能的解决方法：
+
+编译器错误 C2043 Compiler Error C2043 11
+非法仅在、、或语句中合法。
+
+编译器错误 C2044 Compiler Error C2044 11
+非法仅在、或语句中才合法。
+
+编译器错误 C2045 Compiler Error C2045 11
+“”：标签已被重定义标签出现在同一函数中的多个语句之前。以下示例生成：
+
+编译器错误 C2046 Compiler Error C2046 11
+非法的关键字仅出现在语句中。以下示例生成：可能的解决方法：
+
+编译器错误 C2047 Compiler Error C2047 11
+非法的关键字仅出现在语句中。以下示例生成可能的解决方法：
+
+编译器错误 C2048 Compiler Error C2048 11
+多于一个一个语句包含多个标签。请删除其中一个标签以解决该错误。下面的示例生成 C2048： The following sample generates C2048: // C2048.cpp
+int main() {
+   int a = 1;
+   switch (a) {
+      case 1:
+         a = 0;
+      default:
+         a = 2;
+      default:   // C2048
+         a = 3;
+   }
+} 可能的解决方法： Possible resolution: // C2048b.cpp
+int main() {
+   int a = 1;
+   switch (a) {
+      case 1:
+         a = 0;
+      default:
+         a = 2;
+   }
+}
+
+编译器错误 C2050 Compiler Error C2050 11
+表达式不整型表达式计算结果为一个非整数值。若要解决此错误，请在语句中使用仅整数值。下面的示例生成 C2050: The following sample generates C2050: // C2050.cpp
+int main() {
+   int a = 1;
+   switch ("a") {   // C2050
+      case 1:
+         a = 0;
+      default:
+         a = 2;
+   }
+} 可能的解决方法： Possible resolution: // C2050b.cpp
+int main() {
+   int a = 1;
+   switch (a) {
+      case 1:
+         a = 0;
+      default:
+         a = 2;
+   }
+}
+
+编译器错误 C2051 Compiler Error C2051 11
+表达式不是常量表达式必须是整数常量。下面的示例生成 C2051: The following sample generates C2051: // C2051.cpp
+class X {};
+
+int main() {
+   static X x;
+   int i = 0;
+
+   switch (i) {
+      case x:   // C2051 use constant expression to resolve error
+         break;
+      default:
+         break;
+   }
+} 可能的解决方法： Possible resolution: // C2051b.cpp
+class X {};
+
+int main() {
+   static X x;
+   int i = 0;
+
+   switch (i) {
+      case 1:
+         break;
+      default:
+         break;
+   }
+}
+
+编译器错误 C2052 Compiler Error C2052 11
+：非法的表达式类型表达式必须是整数常量。下面的示例生成 C2052: The following sample generates C2052: // C2052.cpp
+int main() {
+   int index = 0;
+   switch (index) {
+      case 1:
+         return 24;
+      case 1.0:   // C2052
+      // try the following line instead
+      // case 2:
+         return 23;
+   }
+}
+
+编译器错误 C2053 Compiler Error C2053 11
+：宽字符串不匹配宽字符串分配给不兼容的类型。下面的示例生成 C2053: The following sample generates C2053: // C2053.c
+int main() {
+   char array[] = L"Rika";   // C2053
+}
+
+编译器错误 C2054 Compiler Error C2054 11
+预期遵循需要尾部括号的上下文中使用函数标识符。可以通过省略等号（）在复杂的初始化导致此错误。下面的示例生成 C2054: The following sample generates C2054: // C2054.c
+int array1[] { 1, 2, 3 };   // C2054, missing = 可能的解决方法： Possible resolution: // C2054b.c
+int main() {
+   int array2[] = { 1, 2, 3 };
+}
+
+编译器错误 C2055 Compiler Error C2055 11
+预期的形式参数列表中，不是类型列表函数定义包含参数类型列表而不是形参列表。要求形参，除非它们是或省略号命名为。下面的示例生成 C2055: The following sample generates C2055: // C2055.c
+// compile with: /c
+void func(int, char) {}  // C2055
+void func (int i, char c) {}   // OK
+
+编译器错误 C2056 Compiler Error C2056 11
+非法表达式由于前面的错误，表达式无效。
+
+编译器错误 C2057 Compiler Error C2057 11
+应输入常量表达式该上下文要求输入常数表达式，即其值在编译时已知的表达式。编译器在编译时必须知道类型的大小，以便为该类型的实例分配空间。示例下面的示例生成 C2057，并演示如何修复此错误： The following sample generates C2057 and shows how to fix it: // C2057.cpp
+int i;
+int b[i];   // C2057 - value of i is unknown at compile time
+int main() {
+   const int i = 8;
+   int b[i]; // OK - value of i is fixed and known to compiler
+} 示例 Example C 对常数表达式有限制性更强的规则。 C has more restrictive rules for constant expressions. 下面的示例生成 C2057，并演示如何修复此错误： The following sample generates C2057 and shows how to fix it: // C2057b.c
+#define ArraySize1 10
+int main() {
+   const int ArraySize2 = 10;
+   int h[ArraySize2];   // C2057 - C does not allow variables here
+   int h[ArraySize1];   // OK - uses preprocessor constant
+}
+
+编译器错误 C2058 Compiler Error C2058 11
+常量表达式不是整型上下文需要整型常量表达式。
+
+编译器错误 C2059 Compiler Error C2059 11
+语法错误该标记导致语法错误。下面的示例生成声明的行的错误消息 j 。 The following example generates an error message for the line that declares j . // C2059e.cpp
+// compile with: /c
+// C2143 expected
+// Error caused by the incorrect use of '*'.
+   int j*; // C2059 若要确定错误的原因，请检查错误消息中列出的行不仅上面的行。 To determine the cause of the error, examine not only the line that's listed in the error message, but also the lines above it. 如果对行的检查任何线索有关的问题，请尝试注释掉错误消息中列出的一行，并可能对上面的若干行。 If examining the lines yields no clue about the problem, try commenting out the line that's listed in the error message and perhaps several lines above it. 如果在紧随的符号上会出现该错误消息 typedef 变量，请确保该变量已定义的源代码中。 If the error message occurs on a symbol that immediately follows a typedef variable, make sure that the variable is defined in the source code. 如果符号计算结果为执行任何操作， 可能会发生，可能会 C2059 时 /D symbol = 用于编译。 You may get C2059 if a symbol evaluates to nothing, as can occur when /D symbol = is used to compile. // C2059a.cpp
+// compile with: /DTEST=
+#include <stdio.h>
+
+int main() {
+   #ifdef TEST
+      printf_s("\nTEST defined %d", TEST);   // C2059
+   #else
+      printf_s("\nTEST not defined");
+   #endif
+} 在其中会发生 C2059 的另一种是在编译的应用程序中的函数的默认自变量指定了结构时。 Another case in which C2059 can occur is when you compile an application that specifies a structure in the default arguments for a function. 自变量的默认值必须是一个表达式。 The default value for an argument must be an expression. 初始值设定项列表-例如，一个用于初始化结构 — 不是表达式。 An initializer list—for example, one that used to initialize a structure—is not an expression. 若要解决此问题，请定义一个构造函数来执行所需的初始化。 To resolve this problem, define a constructor to perform the required initialization. 下面的示例生成 C2059: The following example generates C2059: // C2059b.cpp
+// compile with: /c
+struct ag_type {
+   int a;
+   float b;
+   // Uncomment the following line to resolve.
+   // ag_type(int aa, float bb) : a(aa), b(bb) {}
+};
+
+void func(ag_type arg = {5, 7.0});   // C2059
+void func(ag_type arg = ag_type(5, 7.0));   // OK 如果你定义的成员模板类或函数的类之外，还可以获取 C2059。 You can also get C2059 if you define a member template class or function outside the class. 有关信息，请参阅 知识库文章 241949 。 For information, see Knowledge Base article 241949 . C2059 可能格式不正确的强制转换。 C2059 can occur for an ill-formed cast. 下面的示例生成 C2059: The following sample generates C2059: // C2059c.cpp
+// compile with: /clr
+using namespace System;
+ref class From {};
+ref class To : public From {};
+
+int main() {
+   From^ refbase = gcnew To();
+   To^ refTo = safe_cast<To^>(From^);   // C2059
+   To^ refTo2 = safe_cast<To^>(refbase);   // OK
+} 如果你尝试创建命名空间名称包含句点，也会发生 C2059。 C2059 can also occur if you attempt to create a namespace name that contains a period. 下面的示例生成 C2059: The following sample generates C2059: // C2059d.cpp
+// compile with: /c
+namespace A.B {}   // C2059
+
+// OK
+namespace A  {
+   namespace B {}
+} 时可限定名称的运算符会发生 C2059 ( :: ， -> ，和 . ) 关键字后面必须跟 template ，此示例中所示： C2059 can occur when an operator that can qualify a name ( :: , -> , and . ) must be followed by the keyword template , as shown in this example: template <typename T> struct Allocator {
+    template <typename U> struct Rebind {
+        typedef Allocator<U> Other;
+    };
+};
+
+template <typename X, typename AY> struct Container {
+    typedef typename AY::Rebind<X>::Other AX; // error C2059
+}; 默认情况下，C++ 会假定 AY::Rebind 不是模板；因此，后面的 < 解释为小于号。 By default, C++ assumes that AY::Rebind isn't a template; therefore, the following < is interpreted as a less-than sign. 必须显式告知编译器 Rebind 是模板，以便 其正确分析尖括号。 You must tell the compiler explicitly that Rebind is a template so that it can correctly parse the angle bracket. 若要更正此错误，请在依赖类型的名称上使用 template 关键字，如下所示： To correct this error, use the template keyword on the dependent type's name, as shown here: template <typename T> struct Allocator {
+    template <typename U> struct Rebind {
+        typedef Allocator<U> Other;
+...
+
+编译器错误 C2060 Compiler Error C2060 11
+语法错误：发现文件尾应至少一个标记。
+
+编译器错误 C2061 Compiler Error C2061 11
+语法错误：标识符编译器发现标识符不应在此。请确保在使用它之前声明。初始值设定项可能由括号括起。若要避免此问题，请将声明符括在括号中，或使其。当编译器检测到作为类模板参数表达式时，也可能导致此错误使用以告知编译器它是类型。下面的示例生成 C2061: The following sample generates C2061: // C2061.cpp
+// compile with: /c
+template < A a >   // C2061
+// try the following line instead
+// template < typename b >
+class c{}; 如果传递到实例名称，则会发生 C2061 typeid : C2061 can occur if you pass an instance name to typeid : // C2061b.cpp
+// compile with: /clr
+ref struct G {
+   int i;
+};
+
+int main() {
+   G ^ pG = gcnew G;
+   System::Type ^ pType = typeid<pG>;   // C2061
+   System::Type ^ pType2 = typeid<G>;   // OK
+}
+
+编译器错误 C2062 Compiler Error C2062 11
+类型意外编译器意料之外的类型名称。下面的示例生成 C2062: The following sample generates C2062: // C2062.cpp
+// compile with: /c
+struct A {  : int l; };   // C2062
+struct B { private: int l; };   // OK C2062 也可能发生的方式编译器由于句柄构造函数的参数列表中未定义的类型。 C2062 can also occur due to the way the compiler handles undefined types in a constructor's parameter list. 如果编译器遇到了未定义的 （拼写错误？） 类型，则假定该构造函数是一个表达式，并发出 C2062。 If the compiler encounters an undefined (misspelled?) type, it assumes the constructor is an expression, and issues C2062. 若要解决，只能在构造函数参数列表中使用定义 的类型。 To resolve, only use defined types in a constructor parameter list.
+
+编译器错误 C2063 Compiler Error C2063 11
+“”不是函数该标识符用作函数，但未声明为函数。下面的示例生成 C2063： The following sample generates C2063: // C2063.c
+int main() {
+   int i, j;
+   j = i();    // C2063, i is not a function
+} 可能的解决方法： Possible resolution: // C2063b.c
+int i() { return 0;}
+int main() {
+   int j;
+   j = i();
+}
+
+编译器错误 C2064 Compiler Error C2064 11
+项不会计算为接受个自变量的函数通过一个表达式对函数进行调用。表达式不会计算为指向接受指定数量的参数的函数的指针。在此示例中，代码尝试调用非函数作为函数。以下示例生成：必须从对象实例的上下文调用指向非静态成员函数的指针。以下示例生成，并演 示如何修复此错误：在类中，成员函数指针必须也指示调用对象上下文。以下示例生成，并演示如何修复此错误：
+
+编译器错误 C2065 Compiler Error C2065 11
+标识符：未声明的标识符编译器找不到标识符的声明。有许多可能的原因，此错误。最常见原因是，该标识符未声明、拼写错误标识符、标识符的声明位置的标头未包含在文件中，或标识符缺少范围限定符，例如，而不是有关中的声明的详细信息，请参阅声明和定义（ ）。以下是一些常见的问题和解决方案中更多详细信息。未声明的标识符都是如果该标识符是变量或函数名，必须将其声明，然后才能使用。函数声明还必须包括其参数的类型，然后才能使用该函数。如果使用声明变量，编译器必须能够从其初始值设定项推断类型。如 果标识符是类或结构的成员或命名空间中声明，则必须表示为类或结构名称或命名空间名称，这是时的结构、类或命名空间的范围之外使用。或者，命名空间必须放入范围内指令如，或成员名称必须放入范围内声明，如。否则的非限定的名称被视为可在当前范围内未声 明的标识符。如果该标识符是的标记的用户定义的类型，例如，或，必须声明该标记的类型，然后才能使用。例如，声明之前可以声明一个变量，必须存在在代码中。如果该标识符是类型别名，必须通过使用声明的类型声明或前，可以使用它。例如，您必须声明然后才 能使用为的类型别名。示例：拼写错误的标识符此错误通常在标识符名称拼写错误，或标识符使用错误的大写和小写字母时发生。声明中的名称必须与你使用的名称完全匹配。示例：使用未区分范围的标识符如果你的标识符的范围不正确，可能出现此错误。如果你使用 时，将显示，这是可能的原因。当标准库函数和运算符未完全限定的命名空间，或不使到使用的当前作用域的命名空间指令，到它们。若要解决此问题，你必须完全限定的标识符名称，或指定的命名空间与指令。
+
+编译器错误 C2066 Compiler Error C2066 11
+强制转换为函数类型是非法的在中，是不合法函数指针与数据指针之间强制转换。
+
+编译器错误 C2067 Compiler Error C2067 11
+转换到数组类型是非法的对象强制转换为数组类型。
+
+编译器错误 C2069 Compiler Error C2069 11
+“”项到非“”项的转换类型不能转换为其他任何类型。
+
+编译器错误 C2070 Compiler Error C2070 11
+：非法的操作数运算符要求表达式或类型的名称。下面的示例生成 C2070: The following sample generates C2070: // C2070.cpp
+void func() {}
+int main() {
+   int a;
+   a = sizeof(func);   // C2070
+} 可能的解决方法： Possible resolution: // C2070b.cpp
+void func() {}
+int main() {
+   int a;
+   a = sizeof(a);
+}
+
+编译器错误 C2071 Compiler Error C2071 11
+：非法存储类已使用无效声明存储类。为标识符指定多个存储类时或定义与存储类声明不兼容时，会导致此错误。若要解决此问题，请了解标识符的预期的存储类—例如，或并更正要匹配的声明。——示例以下示例生成。示例以下示例生成。
+
+编译器错误 C2072 Compiler Error C2072 11
+：函数的初始化未正确指定了函数初始值设定项。
+
+编译器错误 C2073 Compiler Error C2073 11
+：部分初始化数组的元素必须具有默认构造函数为用户定义的类型或常量的数组指定了过少的初始值设定项。如果为数组成员不指定显式初始值设定项和其相应的构造函数，则必须提供一个默认构造函数。下面的示例生成 C2073: The following sample generates C2073: // C2073.cpp
+class A {
+public:
+   A( int );   // constructor for ints only
+};
+A a[3] = { A(1), A(2) };   // C2073, no default constructor // C2073b.cpp
+// compile with: /c
+class B {
+public:
+   B();   // default constructor declared
+   B( int );
+};
+B b[3] = { B(1), B(2) };   // OK
+
+编译器错误 C2074 Compiler Error C2074 11
+“”：“”初始化需要大括号指定的类、结构或联合初始值设定项两边没有大括号。
+
+编译器错误 C2075 Compiler Error C2075 11
+“”：数组初始化需要大括号指定的数组两边没有大括号。以下示例生成：可能的解决方法：
+
+编译器错误 C2077 Compiler Error C2077 11
+非标量字段初始值设定项你尝试以初始化非标量（结构、联合、数组或类）的位字段。使用整数或浮点值。
+
+编译器错误 C2078 Compiler Error C2078 11
+初始值设定项太多初始值设定项数超过要初始化的对象的数目。如果内部大括号省略了初始值设定项列表，编译器可以推断出对对象和内部对象初始值设定项的正确分配。完整的大括号还有助于消除歧义，从而获得正确分配。由于对对象的初始值设定项的分配不明确， 大括号不完整可能会导致。下面的示例产生，并演示如何修复此错误：
+
+编译器错误 C2079 Compiler Error C2079 11
+使用未定义的类结构联合指定的标识符是未定义的类、结构或联合。初始化匿名联合，可以导致此错误。下面的示例生成 C2079: The following sample generates C2079: // C2079.cpp
+// compile with: /EHsc
+#include <iostream>
+int main() {
+   std::ifstream g;   // C2079
+} 可能的解决方法： Possible resolution: // C2079b.cpp
+// compile with: /EHsc
+#include <fstream>
+int main( ) {
+   std::ifstream g;
+} 如果你尝试在其前向声明为仅在作用域中的 type 堆栈上声明的对象，也会发生 C2079。 C2079 can also occur if you attempt to declare an object on the stack of a type whose forward declaration is only in scope. // C2079c.cpp
+class A;
+
+class B {
+   A a;   // C2079
+};
+
+class A {}; 可能的解决方法： Possible resolution: // C2079d.cpp
+// compile with: /c
+class A;
+class C {};
+
+class B {
+   A * a;
+   C c;
+};
+
+class A {};
+
+编译器错误 C2081 Compiler Error C2081 11
+：形参列表非法中的名称标识符导致语法错误。可以通过使用旧样式的形式参数列表导致此错误。你必须指定的正式参数的类型形参表中。下面的示例生成 C2081: The following sample generates C2081: // C2081.c
+void func( int i, j ) {}  // C2081, no type specified for j 可能的解决方法： Possible resolution: // C2081b.c
+// compile with: /c
+void func( int i, int j ) {}
+
+编译器错误 C2082 Compiler Error C2082 11
+形参“”的重定义已在函数体中重新声明了函数的形参。若要解决此错误，请删除重新定义。以下示例生成：
+
+编译器错误 C2083 Compiler Error C2083 11
+结构联合比较非法结构或联合直接与另一个用户定义的类型进行比较此操作不被允许，除非已定义了比较运算符或存在到标量类型的转换。
+
+编译器错误 C2084 Compiler Error C2084 11
+函数函数已具有一个主体已定义的函数。在之前的的版本编译器将接受解析为相同的实际类型的多个模板专用化，尽管其他定义将永远不可用。现在，编译器检测到这些多个定义。和则被视为单独的类型。编译器现在将的同义词。这意味着，编译器检测到多个定义如果 函数重载两侧和，并且产生错误。示例下面的示例生成 C2084: The following sample generates C2084: // C2084.cpp
+void Func(int);
+void Func(int) {}   // define function
+void Func(int) {}   // C2084 second definition 若要更正此错误，删除重复的定义： To correct this error, remove the duplicate definition: // C2084b.cpp
+// compile with: /c
+void Func(int);
+void Func(int) {}
+
+编译器错误 C2085 Compiler Error C2085 11
+：形参列表中没有函数定义中但不是在形参列表中，已声明该标识符。仅适用于下面的示例生成 C2085: The following sample generates C2085: // C2085.c
+void func1( void )
+int main( void ) {}   // C2085 可能的解决方法： Possible resolution: // C2085b.c
+void func1( void );
+int main( void ) {} 用分号缺失 func1() 看起来像函数定义，而不是原型，因此 main 中定义 func1() ，标识符中生成错误 C2085 main 。 With the semicolon missing, func1() looks like a function definition, not a prototype, so main is defined within func1() , generating Error C2085 for identifier main .
+
+编译器错误 C2086 Compiler Error C2086 11
+：重定义不止一次，定义标识符或后续的声明与上一。也可以是引用的程序集的增量生成的结果。重新生成要解决此错误的程序集。下面的示例生成 C2086: The following sample generates C2086: // C2086.cpp
+main() {
+  int a;
+  int a;   // C2086 not an error in ANSI C
+}
+
+编译器错误 C2087 Compiler Error C2087 11
+：缺少下标具有多个下标的数组的定义缺少下标大于的维度的值。下面的示例生成 C2087: The following sample generates C2087: // C2087.cpp
+int main() {
+   char a[10][];   // C2087
+} 可能的解决方法： Possible resolution: // C2087b.cpp
+int main() {
+   char b[4][5];
+}
+
+编译器错误 C2088 Compiler Error C2088 11
+：非法的没有为结构或联合定义运算符。此错误是仅针对代码有效。下面的示例生成 C2088 三次： The following sample generates C2088 three times: // C2088.c
+struct S {
+   int m_i;
+} s;
+
+int main() {
+   int i = s * 1;   // C2088
+   struct S s2 = +s;   // C2088
+   s++;   // C2088
+}
+
+编译器错误 C2089 Compiler Error C2089 11
+太大指定的结构或联合超过的限制。
+
+编译器错误 C2090 Compiler Error C2090 11
+函数返回数组函数不能返回数组。请返回指向数组的指针。下面的示例生成 C2090: The following sample generates C2090: // C2090.cpp
+int func1(void)[] {}   // C2090 可能的解决方法： Possible resolution: // C2090b.cpp
+// compile with: /c
+int* func2(int * i) {
+   return i;
+}
+
+编译器错误 C2091 Compiler Error C2091 11
+函数返回函数函数无法返回一个函数。请返回指向函数的指针。
+
+编译器错误 C2092 Compiler Error C2092 11
+数组数组元素类型不能是函数不允许的函数的数组。使用指向函数的指针的数组。示例下面的示例生成 C2092: The following sample generates C2092: // C2092.cpp
+typedef void (F) ();
+typedef F AT[10];   // C2092 示例 Example 可能的解决方法： Possible resolution: // C2092b.cpp
+// compile with: /c
+typedef void (F) ();
+typedef F * AT[10];
+
+编译器错误 C2093 Compiler Error C2093 11
+：无法使用自动变量的地址初始化使用编译时，程序将尝试自动变量的地址用作初始值设定项。下面的示例生成 C2093: The following sample generates C2093: // C2093.c
+// compile with: /Za /c
+void func() {
+   int li;   // an implicit auto variable
+   int * s[]= { &li };   // C2093 address is not a constant
+
+   // OK
+   static int li2;
+   int * s2[]= { &li2 };
+}
+
+编译器错误 C2094 Compiler Error C2094 11
+标签“”未定义通过语句使用的标签在函数中不存在。示例以下示例生成：可能的解决方法：
+
+编译器错误 C2095 Compiler Error C2095 11
+：实参具有类型：参数参数传递给函数的类型为，这不允许。使用指向的指针相反。指示哪些参数是。
+
+编译器错误 C2097 Compiler Error C2097 11
+初始化非法通过检查以下可能的原因进行修复使用一个非常量值变量的初始化。使用长地址短地址初始化。初始化的局部结构、联合或数组时，用非常量表达式使用编译。初始化包含逗号运算符的表达式。既不常量，也不符号的表达式初始化。
+
+编译器错误 C2099 Compiler Error C2099 11
+初始值设定项不是常量此错误仅由编译器发出，并仅发生在非自动变量上。编译器在启动程序时初始化非自动变量，并且初始化的值必须是常数。示例下面的示例生成 C2099。 The following sample generates C2099. // C2099.c
+int j;
+int *p;
+j = *p;   // C2099 *p is not a constant 示例 Example 由于编译时与运行时的浮点精度环境设置（有关详细信息，请参阅 _controlfp_s ）可能不同，因此，编译器无法在 /fp:strict 下对表达式执行常数合并。在这种情况下，也可能发生 C2099。 C2099 can also occur because the compiler is not able to perform constant folding on an expression under /fp:strict because the floating point precision environment settings (see _controlfp_s for more information) may differ from compile to run time. 当常数折叠失败时，编译器将调用动态初始化，而这在 C 中是不被允许的。 When constant folding fails, the compiler invokes dynamic initialization, which is not allowed in C. 若要解决此错误，请将模块编译为 .cpp 文件或简化表达式。 To resolve this error, compile the module as a .cpp file or simplify the expression. 有关更多信息，请参见 /fp (Specify Floating-Point Behavior) 。 For more information, see /fp (Specify Floating-Point Behavior) . 下面的示例生成 C2099。 The following sample generates C2099. // C2099_2.c
+// compile with: /fp:strict /c
+float X = 2.0 - 1.0;   // C2099
+float X2 = 1.0;   // OK
+
+编译器错误 C2100 Compiler Error C2100 11
+非法的间接寻址间接寻址运算符应用于非指针值。下面的示例生成 C2100: The following sample generates C2100: // C2100.cpp
+int main() {
+   int r = 0, *s = 0;
+   s = &r;
+   *r = 200;   // C2100
+   *s = 200;   // OK
+}
+
+编译器错误 C2101 Compiler Error C2101 11
+常量上的“”运算符必须将左值作为操作数。下面的示例生成 C2101： The following sample generates C2101: // C2101.cpp
+int main() {
+   char test;
+   test = &'a';   // C2101
+   test = 'a';   // OK
+}
+
+编译器错误 C2102 Compiler Error C2102 11
+要求左值运算符必须将左值作为操作数。
+
+编译器错误 C2103 Compiler Error C2103 11
+寄存器变量上的“”你不能采用寄存器的地址。
+
+编译器错误 C2104 Compiler Error C2104 11
+位域上的“”被忽略不能采用位字段的地址。下面的示例生成 C2104: The following sample generates C2104: // C2104.cpp
+struct X {
+   int sb : 1;
+};
+
+int main() {
+   X x;
+   &x.sb;   // C2104
+   x.sb;   // OK
+}
+
+编译器错误 C2105 Compiler Error C2105 11
+要求左值运算符必须将左值作为操作数。下面的示例生成 C2105: The following sample generates C2105: // C2105.cpp
+int main() {
+   unsigned char * p1 = 0;
+   unsigned int * p2 = (unsigned int *)p1;
+   p2++;
+
+   unsigned int * p = 0;
+   p++;   // ok
+
+   p2 = (unsigned int *)p1;
+   ((unsigned int *)p1)++;   // C2105
+} 下面的示例生成 C2105: The following sample generates C2105: // C2105b.cpp
+int main() {
+   int a[10] = {0};
+   int b[10] = {0};
+   ++(a , b);   // C2105
+
+   // OK
+   ++(a[0] , b[0]);
+   ++a[0];
+}
+
+编译器错误 C2106 Compiler Error C2106 11
+：左的操作数必须为左值运算符必须将左值作为其左操作数。下面的示例生成 C2106: The following sample generates C2106: // C2106.cpp
+int main() {
+   int a;
+   1 = a;   // C2106
+   a = 1;   // OK
+}
+
+编译器错误 C2107 Compiler Error C2107 11
+非法索引，不允许的间接寻址下标应用于表达式计算结果不为指针。示例如果错误地使用，则会发生值类型访问该类型的默认索引器的指针。有关详细信息，请参阅语义指针。下面的示例生成 C2107。 The following sample generates C2107. // C2107.cpp
+// compile with: /clr
+using namespace System;
+
+value struct B {
+   property String ^ default[String ^] {
+      String ^ get(String ^ data) {
+         return "abc";
+      }
+   }
+   void Test() {
+      Console::WriteLine("{0}", this["aa"]);   // C2107
+      Console::WriteLine("{0}", this->default["aa"]);   // OK
+   }
+};
+
+int main() {
+   B ^ myb = gcnew B();
+   myb->Test();
+}
+
+编译器错误 C2108 Compiler Error C2108 11
+下标不是整数类型该数组下标是非了非整型表达式。示例如果错误地使用，则会发生值类型访问该类型的默认索引器的指针。有关详细信息，请参阅语义指针。下面的示例生成 C2108。 The following sample generates C2108. // C2108.cpp
+// compile with: /clr
+using namespace System;
+
+value struct B {
+   property Double default[Double] {
+      Double get(Double data) {
+         return data*data;
+      }
+   }
+   void Test() {
+      Console::WriteLine("{0}", this[3.3]);   // C2108
+      Console::WriteLine("{0}", this->default[3.3]);   // OK
+   }
+};
+
+int main() {
+   B ^ myb = gcnew B();
+   myb->Test();
+}
+
+编译器错误 C2109 Compiler Error C2109 11
+下标需要数组或指针类型该下标用了不是数组的变量上。下面的示例生成 C2109: The following sample generates C2109: // C2109.cpp
+int main() {
+   int a, b[10] = {0};
+   a[0] = 1;   // C2109
+   b[0] = 1;   // OK
+}
+
+编译器错误 C2110 Compiler Error C2110 11
+“”：不能添加两个指针尝试使用加号运算符添加两个指针值。以下示例生成：
+
+编译器错误 C2111 Compiler Error C2111 11
+指针加法要求整型操作数试图使用加号运算符将非整型值添加到指针。下面的示例生成 C2111： The following sample generates C2111: // C2111.cpp
+int main() {
+   int *a = 0, *pa = 0, b = 0;
+   double d = 0.00;
+
+   a = pa + d;   // C2111
+   a = pa + b;   // OK
+}
+
+编译器错误 C2112 Compiler Error C2112 11
+：指针减法要求整型或指针操作数尝试减去指向不同类型的指针。
+
+编译器错误 C2113 Compiler Error C2113 11
+“”：指针只能从另一个指针上进行减法运算减法操作中的右操作数是一个指针，但左操作数不是。
+
+编译器错误 C2114 Compiler Error C2114 11
+“”：左侧指针；需要右侧的整数值如果的左操作数为一个指针，则右操作数不能为整数值。
+
+编译器错误 C2115 Compiler Error C2115 11
+“”不符合的类型表达式中包含不匹配的类型。
+
+编译器错误 C2116 Compiler Error C2116 11
+函数参数列表有差异默认参数列表中的参数与形参列表不匹配。
+
+编译器错误 C2117 Compiler Error C2117 11
+：数组界限溢出数组具有初始值设定项太多：数组元素和初始值设定项在大小和数量不匹配。字符串中终止符的占用任何空间。下面的示例生成 C2117: The following sample generates C2117: // C2117.cpp
+int main() {
+   char abc[4] = "abcd";   // C2117
+   char def[4] = "abd";   // OK
+}
+
+编译器错误 C2118 Compiler Error C2118 11
+负下标定义数组大小的值是超过最大数组大小大于或小于零。下面的示例生成 C2118: The following sample generates C2118: // C2118.cpp
+int main() {
+   int array1[-1];   // C2118
+   int array2[3];   // OK
+}
+
+编译器错误 C2120 Compiler Error C2120 11
+与所有类型的非法具有另一种类型的声明中使用类型。下面的示例生成 C2120: The following sample generates C2120: // C2120.cpp
+int main() {
+   void int i;   // C2120
+   int j;   // OK
+}
+
+编译器错误 C2121 Compiler Error C2121 11
+无效字符：可能宏展开的结果无效的字符可能由不正确的宏，而不是字符串化运算符使用标记粘贴运算符（）插入（）。
+
+编译器错误 C2122 Compiler Error C2122 11
+：原型中的参数名称列表非法参数不是合法的类型。不支持用户定义的类型。
+
+编译器错误 C2124 Compiler Error C2124 11
+被零除或对零求模常量表达式的分母为零。若要解决此错误，请勿将零作为除数。下面的示例生成 C2124： The following sample generates C2124: // C2124.cpp
+int main() {
+  int i = 1 / 0;   // C2124  do not divide by zero
+  int i2 = 12 / 2;   // OK
+}
+
+编译器错误 C2128 Compiler Error C2128 11
+仅适用于带链接的函数仅与函数声明为具有链接一起使用。下面的示例生成 C2128: The following sample generates C2128: // C2128.cpp
+// compile with: /c
+
+// Delete the following line to resolve.
+void func();
+// #pragma alloc_text("my segment", func)   // C2128
+
+extern "C" {
+void func();
+}
+
+#pragma alloc_text("my segment", func)
+void func() {}
+
+编译器错误 C2129 Compiler Error C2129 11
+静态函数声明但未定义对进行的前向引用永远不会定义的函数。必须在文件范围内定义函数。如果函数在另一个文件中定义的必须将它声明。
+
+编译器错误 C2130 Compiler Error C2130 11
+行应包含文件名，却找到的字符串在后面的可选文件名标记必须是字符串。以下示例生成
+
+编译器错误 C2132 Compiler Error C2132 11
+语法错误意外的标识符标识符出现在不受支持的上下文中。
+
+编译器错误 C2133 Compiler Error C2133 11
+：未知的大小未确定大小的数组声明为类、结构、联合或枚举的成员。选项不允许未确定大小的成员数组。下面的示例生成 C2133: The following sample generates C2133: // C2133.cpp
+// compile with: /Za
+struct X {
+   int a[0];   // C2133 unsized array
+}; 可能的解决方法： Possible resolution: // C2133b.cpp
+// compile with: /c
+struct X {
+   int a[0];   // no /Za
+};
+
+编译器错误 C2134 Compiler Error C2134 11
+：调用不会导致常量表达式声明为只能调用其他函数的函数声明为。下面的示例生成 C2134: The following sample generates C2134: // C2134.cpp
+// compile with: /c
+int A() {
+    return 42;
+};
+
+constexpr int B() {
+    return A();  // Error C2134: 'A': call does not result in a constant expression.
+} 可能的解决方法： Possible resolution: // C2134b.cpp
+constexpr int A() {  // add constexpr to A, since it meets the requirements of constexpr.
+    return 42;
+};
+
+constexpr int B() {
+    return A();  // No error
+}
+
+编译器错误 C2135 Compiler Error C2135 11
+“”：非法的位域操作运算符不能应用于位域。以下示例生成：
+
+编译器错误 C2137 Compiler Error C2137 11
+空字符常量不允许使用空字符常量。下面的示例生成 C2137： The following sample generates C2137: // C2137.cpp
+int main() {
+   char c = '';   // C2137
+   char d = ' ';   // OK
+}
+
+编译器错误 C2138 Compiler Error C2138 11
+定义一个枚举，没有任何成员是非法的枚举必须有至少一个成员时（来禁用扩展）选择。
+
+编译器错误 C2139 Compiler Error C2139 11
+：未定义的类不允许作为编译器内部类型特征特征的自变量类型特征传递的参数无效。有关详细信息，请参阅编译器支持类型特征。示例下面的示例生成 C2139。 The following sample generates C2139. // C2139.cpp
+// compile with: /EHsc
+#include <iostream>
+using namespace std;
+
+template <class T>
+struct is_polymorphic {
+   static const bool value = __is_polymorphic(T);
+};
+
+class C;
+class D {};
+
+class E {
+public:
+   virtual void Test() {}
+};
+
+int main() {
+   cout << is_polymorphic<C>::value << endl;   // C2139
+   cout << is_polymorphic<D>::value << endl;   // OK
+   cout << is_polymorphic<E>::value << endl;   // OK
+}
+
+编译器错误 C2140 Compiler Error C2140 11
+：依赖于泛型类型参数的类型不允许作为编译器内部类型特征特征的自变量无效的类型说明符传递到的类型特征。有关详细信息，请参阅编译器支持类型特征。示例下面的示例生成 C2140。 The following sample generates C2140. // C2140.cpp
+// compile with: /clr /c
+template <class T>
+
+struct is_polymorphic {
+   static const bool value = __is_polymorphic(T);
+};
+
+class x {};
+
+generic <class T>
+ref class C {
+   void f() {
+      System::Console::WriteLine(__is_polymorphic(T));   // C2140
+      System::Console::WriteLine(is_polymorphic<T>::value);   // C2140
+
+      System::Console::WriteLine(__is_polymorphic(x));   // OK
+      System::Console::WriteLine(is_polymorphic<x>::value);   // OK
+   }
+};
+
+编译器错误 C2141 Compiler Error C2141 11
+数组大小溢出数组超过的限制。减少数组的大小。示例下面的示例生成 C2141。 The following sample generates C2141. // C2141.cpp
+// processor: IPF
+class A {
+   short m_n;
+};
+
+int main()
+{
+   A* pA = (A*)(-1);
+   pA = new A[0x8000000000000001];   // C2141
+
+   A* pA2 = (A*)(-1);
+   pA2 = new A[0x80000000000000F];   // OK
+}
+
+编译器错误 C2142 Compiler Error C2142 11
+函数声明不同，只能在其中之一中指定的变量参数该函数的一个声明包含变量参数列表。另一个声明却没有。仅。下面的示例生成 C2142: The following sample generates C2142: // C2142.c
+// compile with: /Za /c
+void func();
+void func( int, ... );   // C2142
+void func2( int, ... );   // OK
+
+编译器错误 C2143 Compiler Error C2143 11
+语法错误：缺少之前编译器需要一个特定的标记（即，空白区域以外的语言元素），但发现另一个标记。有关此错误的信息时它发生在使用该函数块时，请参阅知识库文章。检查语言参考以确定其中代码的语法不正确。该错误前面代码的多个的行，因为编译器可能会报 告此错误，在它遇到导致问题的行之后，检查。在不同情况下可能发生。可限定名称（、和）的运算符后面必须跟有关键字时可能发生，如下例所示：默认情况下，会假定不是模板；因此，后面的解释为小于号。必须显式告知是模板，以便其正确分析尖括号。若要更正 此错误，请在依赖类型的名称上使用关键字，如下所示：可能发生时使用和指令有语法错误：当你尝试文件，方法是使用语法而不使用它也会发生跟在语句后的第一个非空白字符必须是左括号。转换任何其他内容：在检测到错误的行上或紧靠该行的上面某行中缺少右大 括号、圆括号或分号时，可能发生：或者类声明中存在无效的标记时：或者一个标签未附加到语句时。如果你必须将标签放置的本身，例如，在复合语句的末尾将其附加到语句：标准库中的类型进行非限定的调用时，会发生此错误：或者缺失关键字：
+
+编译器错误 C2144 Compiler Error C2144 11
+语法错误类型前面应带有令牌编译器预期令牌和找到类型相反。缺少右大括号、右括号或分号可能导致此错误。尝试从包含一个空白字符的关键字创建的宏时，也会发生。如果你尝试进行类型转发，还可能会看到。请参阅类型转发有关详细信息。示例下面的示例生成 C2144，并演示了如何修复此错误： The following sample generates C2144, and shows a way to fix it: // C2144.cpp
+// compile with: /clr /c
+#define REF ref
+REF struct MyStruct0;   // C2144
+
+// OK
+#define REF1 ref struct
+REF1 MyStruct1; 下面的示例生成 C2144，并演示了如何修复此错误： The following sample generates C2144, and shows a way to fix it: // C2144_2.cpp
+// compile with: /clr /c
+ref struct X {
+
+   property double MultiDimProp[,,] {   // C2144
+   // try the following line instead
+   // property double MultiDimProp[int , int, int] {
+      double get(int, int, int) { return 1; }
+      void set(int i, int j, int k, double l) {}
+   }
+
+   property double MultiDimProp2[] {   // C2144
+   // try the following line instead
+   // property double MultiDimProp2[int] {
+      double get(int) { return 1; }
+      void set(int i, double l) {}
+   }
+};
+
+编译器错误 C2145 Compiler Error C2145 11
+语法错误：标识符的前面缺少“”编译器预期，却找到了标识符。块中的最后一个声明后，缺少分号可能会导致此错误。
+
+编译器错误 C2146 Compiler Error C2146 11
+语法错误：缺少标识符的前面编译器预期和找到相反。可能的原因：拼写或大小写错误。标识符的声明中缺少类型说明符。犯了输入错误可能导致此错误。错误通常在之前发生此错误。示例下面的示例生成 C2146。 The following sample generates C2146. // C2146.cpp
+class CDeclaredClass {};
+
+class CMyClass {
+   CUndeclared m_myClass;   // C2146
+   CDeclaredClass m_myClass2;   // OK
+};
+
+int main() {
+   int x;
+   int t x;   // C2146 : missing semicolon before 'x'
+} 示例 Example 此错误还可能来自于为 Visual Studio.NET 2003年执行的编译器一致性工作： 缺少 typename 关键字。 This error can also be generated as a result of compiler conformance work that was done for Visual Studio .NET 2003: missing typename keyword. 下面的示例在 Visual Studio.NET 2002年中编译，但在 Visual Studio.NET 2003年中将失败： The following sample compiles in Visual Studio .NET 2002 but will fail in Visual Studio .NET 2003: // C2146b.cpp
+// compile with: /c
+template <typename T>
+struct X {
+   struct Y {
+      int i;
+   };
+   Y memFunc();
+};
+
+template <typename T>
+X<T>::Y func() { }   // C2146
+
+// OK
+template <typename T>
+typename X<T>::Y func() { } 示例 Example 您还会看到此错误于为 Visual Studio.NET 2003年执行的编译器一致性工作： 显式专用化无法再找到从主模板的模板参数。 You will also see this error as a result of compiler conformance work that was done for Visual Studio .NET 2003: explicit specializations no longer find template parameters from primary template. 使用 T 显式专用化中不允许从主模板。 The use of T from the primary template is not allowed in the explicit specialization. 对于要在 Visual c + + 的 Visual Studio.NET 2003年和 Visual Studio.NET 版本中有效的代码，替换的显式专用化类型的专用化中的模板参数的所有实例。 For code to be valid in the Visual Studio .NET 2003 and Visual Studio .NET versions of Visual C++, replace all instances of the template parameter in the specialization with the explicitly specialized type. 下面的示例在 Visual Studio.NET 中编译，但在 Visual Studio.NET 2003年中将失败： The following sample compiles in Visual Studio .NET but will fail in Visual Studio .NET 2003: // C2146_c.cpp
+// compile with: /c
+template <class T>
+struct S;
+
+template <>
+struct S<int> {
+   T m_t;   // C2146
+   int m_t2;   // OK
+};
+
+编译器错误 C2147 Compiler Error C2147 11
+语法错误是一个新的关键字标识符使用，现在是语言中的保留的关键字。下面的示例生成 C2147: The following sample generates C2147: // C2147.cpp
+// compile with: /clr
+int main() {
+   int gcnew = 0;   // C2147
+   int i = 0;   // OK
+}
+
+编译器错误 C2148 Compiler Error C2148 11
+数组的总大小不得超过字节数组超出了限制。减少数组的大小。示例下面的示例生成 C2148: The following sample generates C2148: // C2148.cpp
+#include <stdio.h>
+#include <stdlib.h>
+
+int main( ) {
+   char MyArray[0x7ffffffff];   // C2148
+   char * MyArray2 = (char *)malloc(0x7fffffff);
+
+   if (MyArray2)
+      printf_s("It worked!");
+   else
+      printf_s("It didn't work.");
+}
+
+编译器错误 C2149 Compiler Error C2149 11
+“”：已命名位域不能具有零宽度位域只有在未命名时才可以有零宽度。下面的示例生成 C2149： The following sample generates C2149: // C2149.cpp
+// compile with: /c
+struct C {
+   int i : 0;   // C2149
+   int j : 2;   // OK
+};
+
+编译器错误 C2150 Compiler Error C2150 11
+标识符：位域必须具有类型、的或的位域的基类型必须是，，或。示例此示例演示如何可能会遇到，以及如何修复此错误：
+
+编译器错误 C2151 Compiler Error C2151 11
+多个语言属性某函数有多个关键字，，或指定的调用约定。
+
+编译器错误 C2152 Compiler Error C2152 11
+：指向具有不同的属性的函数的指针使用一个调用约定函数指针，，或分配给使用另一个调用约定函数指针。
+
+编译器错误 C2153 Compiler Error C2153 11
+十六进制常量必须至少一个十六进制数字十六进制常量，，和不是有效的。至少一个十六进制数字必须遵循。下面的示例生成 C2153: The following sample generates C2153: // C2153.cpp
+int main() {
+   int a= 0x;    // C2153
+   int b= 0xA;   // OK
+}
+
+编译器错误 C2154 Compiler Error C2154 11
+“”：只有枚举类型才允许作为编译器内部类型特征“”的自变量你只能获取枚举类型的基础类型。有关详细信息，请参阅编译器支持类型特征。
+
+编译器错误 C2155 Compiler Error C2155 11
+？无效的左侧操作数，预期算术或指针类型在左侧的表达式中不能为零进行比较。你必须使用可以比较为零的算术或指针表达式。
+
+编译器错误 C2156 Compiler Error C2156 11
+杂注必须在函数的外部必须在全局级别（在函数体外部）指定的杂注位于函数内。下面的示例生成 C2156： The following sample generates C2156: // C2156.cpp
+#pragma optimize( "l", on )   // OK
+int main() {
+   #pragma optimize( "l", on )   // C2156
+}
+
+编译器错误 C2157 Compiler Error C2157 11
+“”：必须先声明才能用于杂注列表在杂注的函数列表中引用之前，未声明函数名。下面的示例生成 C2157： The following sample generates C2157: // C2157.cpp
+// compile with: /c
+#pragma alloc_text( "func", func)   // C2157
+
+// OK
+extern "C" void func();
+#pragma alloc_text( "func", func)
+
+编译器错误 C2158 Compiler Error C2158 11
+“”目前只有本机非模板类型才支持指令杂注只能应用于本机非模板类型。示例下面的示例生成 C2158。 The following sample generates C2158. // C2158.cpp
+// compile with: /clr /c
+ref class A {};
+#pragma make_public(A)   // C2158
+
+template< typename T >
+class B {};
+#pragma make_public(B)   // C2158
+#pragma make_public(B<int>)   // C2158
+
+void C () {}
+#pragma make_public(C)   // C2158
+
+class D {};
+#pragma make_public(D)   // OK
+
+编译器错误 C2159 Compiler Error C2159 11
+指定了一个以上的存储类声明包含多个存储类。下面的示例生成 C2159： The following sample generates C2159: // C2159.cpp
+// compile with: /c
+static int i;   // OK
+extern static int i;   // C2159
+
+编译器错误 C2160 Compiler Error C2160 11
+“”不能在宏定义的开始处出现以标记粘贴运算符开头的宏定义。以下示例生成：
+
+编译器错误 C2161 Compiler Error C2161 11
+“”不能在宏定义的结尾处出现以标记粘贴运算符结尾的宏定义。以下示例生成：
+
+编译器错误 C2162 Compiler Error C2162 11
+预期的宏形参字符串化运算符（）后面的标记不是正式参数名称。示例下面的示例生成 C2162: The following sample generates C2162: // C2162.cpp
+// compile with: /c
+#include <stdio.h>
+
+#define print(a) printf_s(b)   // OK
+#define print(a) printf_s(#b)    // C2162
+
+编译器错误 C2163 Compiler Error C2163 11
+：不可用作内部函数或杂注列出在内部形式中不可用的函数。例如，某些内部函数并非编译使用编程的程序时。
+
+编译器错误 C2164 Compiler Error C2164 11
+：未声明的内部函数杂注使用了未声明的函数只对具有执行。或者，而不包括其标头文件使用一种编译器内部函数。下面的示例生成 C2164: The following sample generates C2164: // C2164.c
+// compile with: /c
+// processor: x86
+// Uncomment the following line to resolve.
+// #include "xmmintrin.h"
+void b(float *p) {
+   _mm_load_ss(p);   // C2164
+}
+
+编译器错误 C2165 Compiler Error C2165 11
+“”不能修改指向数据的指针、或关键字尝试修改指向数据的指针。以下示例生成：
+
+编译器错误 C2166 Compiler Error C2166 11
+左值指定对象代码尝试修改声明为的项。下面的示例生成 C2166： The following sample generates C2166: // C2166.cpp
+int f();
+int main() {
+   ( (const int&) 1 ) = 5;   // C2166
+}
+
+编译器错误 C2167 Compiler Error C2167 11
+“”：内部函数的实参太多函数引用的参数太多。
+
+编译器错误 C2168 Compiler Error C2168 11
+“”：内部函数的实参太少对函数的引用具有的参数过少。
+
+编译器错误 C2169 Compiler Error C2169 11
+：不能定义内部函数函数定义为已声明的函数显示。
+
+编译器错误 C2170 Compiler Error C2170 11
+：未声明为函数，不能为内部函数通过检查以下可能的原因进行修复杂注用于与函数之外的项。杂注用于没有内部形式的函数。
+
+编译器错误 C2171 Compiler Error C2171 11
+“”：“”类型的操作数非法通过无效的操作数类型使用了一元运算符。示例下面的示例生成 C2171。 The following sample generates C2171. // C2171.cpp
+int main() {
+   double d, d1;
+   d = ~d1;   // C2171
+
+   // OK
+   int d2 = 0, d3 = 0;
+   d2 = ~d3;
+} 示例 Example 下面的示例生成 C2171。 The following sample generates C2171. // C2171_b.cpp
+// compile with: /c
+class A {
+public:
+   A() { STF( &A::D ); }
+
+   void D() {}
+   void DTF() {
+      (*TF)();   // C2171
+      (this->*TF)();   // OK
+   }
+
+   void STF(void (A::*fnc)()) {
+      TF = fnc;
+   }
+
+private:
+   void (A::*TF)();
+};
+
+编译器错误 C2172 Compiler Error C2172 11
+“”：实参不是指针：参数数目参数不是指针。该函数需要一个指针。
+
+编译器错误 C2173 Compiler Error C2173 11
+“”：实参不是指针：参数，参数列表传递给参数列表的参数不是指针。该函数需要一个指针。
+
+编译器错误 C2174 Compiler Error C2174 11
+：实参具有类型：参数，参数列表参数传递给参数列表是参数。参数不能有类型。请改用。
+
+编译器错误 C2175 Compiler Error C2175 11
+区域设置：无效的区域设置指定的区域设置不是有效的。请参阅语言和国家地区字符串中运行时库参考适用于支持的区域设置。
+
+编译器错误 C2177 Compiler Error C2177 11
+常量太大常量值对分配的变量类型来说太大。下面的示例生成 C2177： The following sample generates C2177: // C2177.cpp
+int main() {
+   int a=18446744073709551616;   // C2177
+   int b=18446744073709551615;   // OK
+}
+
+编译器错误 C2178 Compiler Error C2178 11
+标识符不能使用声明说明符说明符在声明中，已使用说明符，但此上下文中不允许使用说明符。说明符可以只能应用于类数据成员的名称和不能应用于声明名称或，和不能应用于引用的成员。示例下面的示例演示如何可能发生，以及如何修复此错误。
+
+编译器错误 C2179 Compiler Error C2179 11
+：特性自变量不能使用类型参数在运行时解析泛型类型参数。但是，属性参数必须在编译时解析。因此，不能使用泛型类型参数作为属性的自变量。示例下面的示例生成 C2179。 The following sample generates C2179. // C2179.cpp
+// compile with: /clr
+using namespace System;
+
+public ref struct Attr : Attribute {
+   Attr(Type ^ a) {
+      x = a;
+   }
+
+   Type ^ x;
+};
+
+ref struct G {};
+
+generic<typename T>
+public ref class Z {
+public:
+   Type ^ d;
+   [Attr(T::typeid)]   // C2179
+   // try the following line instead
+   // [Attr(G::typeid)]
+   T t;
+};
+
+编译器错误 C2180 Compiler Error C2180 11
+控制表达式具有类型“”、、或语句中的控制表达式是强制转换为的表达式。若要解决此问题，请将控制表达式更改为生成的表达式或更改为可以转换为的类型。以下示例生成：
+
+编译器错误 C2181 Compiler Error C2181 11
+没有匹配的非法每个必须具有匹配的。以下示例生成：可能的解决方法：
+
+编译器错误 C2182 Compiler Error C2182 11
+“”：非法使用“”类型变量声明类型。下面的示例生成 C2182： The following sample generates C2182: // C2182.cpp
+// compile with: /c
+int main() {
+   int i = 10;
+   void &ir = i;   // C2182 cannot have a reference to type void
+   int &ir = i;   // OK
+}
+
+编译器错误 C2183 Compiler Error C2183 11
+语法错误：翻译单元为空预处理生成空的源代码文件。
+
+编译器错误 C2184 Compiler Error C2184 11
+“”：对表达式而言为非法类型，必须为整型语句中使用了某个类型，但不允许使用该类型。下面的示例生成 C2184： The following sample generates C2184: // C2184.cpp
+void f() {
+   int * p;
+   __try{}
+   __except(p){};   // C2184
+} 可能的解决方法： Possible resolution: // C2184b.cpp
+// compile with: /c
+void f() {
+   int i = 0;
+   __try{}
+   __except(i){};
+}
+
+编译器错误 C2185 Compiler Error C2185 11
+：非法基于分配寄存器变量或自动（本地）变量声明。可以将仅全局变量声明。
+
+编译器错误 C2186 Compiler Error C2186 11
+“”：“”类型的操作数非法运算符有操作数。下面的示例生成 C2186： The following sample generates C2186: // C2186.cpp
+// compile with: /c
+void func1( void );
+int  func2( void );
+int i = 2 + func1();   // C2186 func1() is type void
+int j = 2 + func2();   // OK both operands are type int
+
+编译器错误 C2188 Compiler Error C2188 11
+“”：对宽字符来说太大数值超过宽字符类型的大小限制。选择更大的类型。
+
+编译器错误 C2190 Compiler Error C2190 11
+第一个参数列表超过第二个第二次使用较短的参数列表声明了函数。不支持重载的函数。下面的示例生成 C2190: The following sample generates C2190: // C2190.c
+// compile with: /Za /c
+void func( int, float );
+void func( int  );   // C2190, different parameter list
+void func2( int  );   // OK
+
+编译器错误 C2191 Compiler Error C2191 11
+第二个参数列表超过第一个第二个时间的较长的参数列表声明了函数。不支持重载的函数。示例下面的示例生成 C2191: The following sample generates C2191: // C2191.c
+// compile with: /Za /c
+void func( int );
+void func( int, float );   // C2191 different parameter list
+void func2( int, float );   // OK
+
+编译器错误 C2192 Compiler Error C2192 11
+不同的参数声明第二次使用不同的参数列表声明了函数。不支持重载的函数。下面的示例生成 C2192: The following sample generates C2192: // C2192.c
+// compile with: /Za /c
+void func( float, int );
+void func( int, float );   // C2192, different parameter list
+void func2( int, float );   // OK
+
+编译器错误 C2193 Compiler Error C2193 11
+：已在一段一个函数被放在两个不同的网段使用和杂注。下面的示例生成 C2193: The following sample generates C2193: // C2193.cpp
+// compile with: /c
+extern "C" void MYFUNCTION();
+#pragma alloc_text(MYCODE, MYFUNCTION)
+#pragma code_seg("MYCODE2")
+extern "C" void MYFUNCTION() {}   // C2193
+extern "C" void MYFUNCTION2() {}
+
+编译器错误 C2194 Compiler Error C2194 11
+：是的文本段杂注使用用于段名称。下面的示例生成 C2194: The following sample generates C2194: // C2194.cpp
+// compile with: /c
+#pragma code_seg("MYCODE")
+#pragma data_seg("MYCODE")   // C2194
+#pragma data_seg("MYCODE2")   // OK
+
+编译器错误 C2195 Compiler Error C2195 11
+：是数据段杂注使用用于段名称杂注。下面的示例生成 C2195: The following sample generates C2195: // C2195.cpp
+#pragma data_seg("MYDATA")
+#pragma code_seg("MYDATA")   // C2195
+#pragma code_seg("MYDATA2")   // OK
+
+编译器错误 C2196 Compiler Error C2196 11
+值“”已使用。语句不止一次使用相同的值。下面的示例生成 C2196： The following sample generates C2196: // C2196.cpp
+int main() {
+   int i = 0;
+   switch( i ) {
+   case 0:
+      break;
+   case 0:   // C2196
+   // try the following line instead
+   // case 1:
+      break;
+   }
+}
+
+编译器错误 C2197 Compiler Error C2197 11
+“”用于调用的参数太多编译器检测到用于函数调用的参数太多或函数声明不正确。下面的示例生成 C2197： The following sample generates C2197: // C2197.c
+// compile with: /Za /c
+void func( int );
+int main() {
+   func( 1, 2 );   // C2197 two actual parameters
+   func( 2 );   // OK
+}
+
+编译器错误 C2198 Compiler Error C2198 11
+“”用于调用的参数太少编译器发现用于函数调用的参数太少或函数声明不正确。以下示例生成：
+
+编译器错误 C2199 Compiler Error C2199 11
+语法错误：找到标识符在全局范围内（是否要使用声明）？指定的上下文导致语法错误。可能有不正确的声明语法。下面的示例生成 C2199: The following sample generates C2199: // C2199.cpp
+// compile with: /c
+int j = int(1) int(1);   // C2199
+int j = 1;   // OK
+
+编译器错误 C2200 Compiler Error C2200 11
+“”：函数已被定义杂注使用已定义的函数名称。
+
+编译器错误 C2201 Compiler Error C2201 11
+：必须拥有才能导出导入的外部链接导出的标识符是。下面的示例生成 C2286： The following sample generates C2286: // C2201.cpp
+// compile with: /c
+__declspec(dllexport) static void func() {}   // C2201 func() is static
+__declspec(dllexport) void func2() {}   // OK 请参阅 See Also 链接的类型 Types of Linkage
+
+编译器错误 C2203 Compiler Error C2203 11
+删除运算符不能指定数组的边界与选项，运算符可以删除整个数组，但不是部分或数组的特定成员。下面的示例生成 C2203: The following sample generates C2203: // C2203.cpp
+// compile with: /Za
+int main() {
+   int *ar = new int[10];
+   delete [4] ar;   // C2203
+   // try the following line instead
+   // delete [] ar;
+}
+
+编译器错误 C2204 Compiler Error C2204 11
+“”：括号中找到的类型定义类型被定义为操作数，或在原型范围中定义了类型。
+
+编译器错误 C2205 Compiler Error C2205 11
+：无法初始化具有块范围的外部变量不能在函数中初始化变量。
+
+编译器错误 C2206 Compiler Error C2206 11
+“”：不能用于函数定义一个用于定义一种函数类型。以下示例生成：
+
+编译器错误 C2207 Compiler Error C2207 11
+“”：类模板的成员无法获取函数类型类模板的以前被分析为非静态数据成员。不能将它重新定义为成员函数。
+
+编译器错误 C2208 Compiler Error C2208 11
+：没有定义使用此类型的成员标识符解析为类型名称是在聚合的声明中，但编译器无法声明成员。下面的示例生成 C2208: The following sample generates C2208: // C2208.cpp
+class C {
+   C;   // C2208
+   C(){}   // OK
+};
+
+编译器错误 C2212 Compiler Error C2212 11
+：不可用于指向函数的指针不能声明为指向函数的指针。如果你需要基于代码的数据，使用关键字或杂注。
+
+编译器错误 C2213 Compiler Error C2213 11
+：非法的自变量以自变量修改无效。下面的示例生成 C2213: The following sample generates C2213: // C2213.cpp
+// compile with: /c
+int i;
+int *j;
+char __based(i) *p;   // C2213
+char __based(j) *p2;   // OK
+
+编译器错误 C2216 Compiler Error C2216 11
+“”不能和“”一起使用一起使用两个互相排斥的关键字。示例下面的示例生成 C2216。 The following sample generates C2216. // C2216.cpp
+// compile with: /clr /c
+ref struct Y1 {
+   literal
+   static int staticConst2 = 10;   // C2216
+}; 示例 Example 下面的示例生成 C2216。 The following sample generates C2216. // C2216b.cpp
+// compile with: /clr /c
+public ref class X {
+   extern property int i { int get(); }   // C2216 extern not allowed on property
+   typedef property int i2;   // C2216 typedef not allowed on property
+}; 示例 Example 下面的示例生成 C2216。 The following sample generates C2216. // C2216c.cpp
+// compile with: /clr /c
+public interface struct I {
+   double f();
+   double g();
+   double h();
+};
+
+public ref struct R : I {
+   virtual double f() new override { return 0.0; }   // C2216
+   virtual double g() new { return 0.0; }   // OK
+   virtual double h() override { return 0.0; }   // OK
+};
+
+编译器错误 C2217 Compiler Error C2217 11
+需要第一个函数属性要求第二个属性。通过检查以下可能的原因进行修复中断函数声明为。中断函数必须是。中断用声明的函数，或。中断函数必须使用调用约定。示例如果你尝试将委托绑定到采用数量可变的自变量的函数，也会发生。如果函数还具有数组重载，使用 该副本。下面的示例生成 C2217。 The following sample generates C2217. // C2217.cpp
+// compile with: /clr
+using namespace System;
+delegate void MyDel(String^, Object^, Object^, ...);   // C2217
+delegate void MyDel2(String ^, array<Object ^> ^);   // OK
+
+int main() {
+   MyDel2^ wl = gcnew MyDel2(Console::WriteLine);
+   array<Object ^ > ^ x = gcnew array<Object ^>(2);
+   x[0] = safe_cast<Object^>(0);
+   x[1] = safe_cast<Object^>(1);
+
+   // wl("{0}, {1}", 0, 1);
+   wl("{0}, {1}", x);
+}
+
+编译器错误 C2218 Compiler Error C2218 11
+“”不能和“”一起使用调用约定仅受到包括流式处理扩展和更高版本的和处理器上的本机代码的支持。有关详细信息，请参阅。若要修复此错误，请将编译器选项更改为目标、或指令集的。有关详细信息，请参阅。
+
+编译器错误 C2219 Compiler Error C2219 11
+语法错误：必须晚于类型限定符类型限定符或将显示未被允许。
+
+编译器错误 C2220 Compiler Error C2220 11
+警告视为错误没有生成的对象文件告知编译器将所有警告视为错误。由于发生了错误，未生成对象或可执行文件。时，此错误仅出现设置标志，并且在编译期间出现警告。若要纠正此错误，必须消除项目中的每个警告。若要纠正错误，请使用以下方法之一解决导致项目 中出现警告的问题。在较低警告等级进行编译例如，使用而不是。—使用警告杂注来禁用还是禁止在某个具体的警告。不要使用进行编译。
+
+编译器错误 C2222 Compiler Error C2222 11
+意外类型“”：应为基类或成员初始值设定项列表只能初始化某个类型的基类或成员。要修复此错误，请确保在初始值设定项列表中仅初始化该类型的基类或成员。
+
+编译器错误 C2223 Compiler Error C2223 11
+“”的左侧必须指向结构联合左侧的操作数不是指向类、结构或联合的指针。此错误可能引起是未定义的变量的左操作数因此键入。
+
+编译器错误 C2224 Compiler Error C2224 11
+的左侧必须具有结构联合类型句点（）左侧的操作数不是类、结构或联合。此错误可能引起是未定义的变量的左操作数因此键入。
+
+编译器错误 C2226 Compiler Error C2226 11
+语法错误意外的“”类型类型说明符之中或之前发生语法错误。
+
+编译器错误 C2227 Compiler Error C2227 11
+“”的左边必须指向类结构联合泛型类型左侧的操作数不是指向类、结构或联合的指针。以下示例生成：
+
+编译器错误 C2228 Compiler Error C2228 11
+“”的左边必须有类结构联合句点（）左侧的操作数不是类、结构或联合。下面的示例生成 C2228： The following sample generates C2228: // C2228.cpp
+int i;
+struct S {
+public:
+    int member;
+} s, *ps = &s;
+
+int main() {
+   i.member = 0;   // C2228 i is not a class type
+   ps.member = 0;  // C2228 ps is a pointer to a structure
+
+   s.member = 0;   // s is a structure type
+   ps->member = 0; // ps points to a structure S
+} 如果在使用托管扩展时用了不正确的语法，也会看到此错误。 You will also see this error if you use incorrect syntax when using Managed Extensions. 而在其他 Visual Studio 语言中，可以使用点运算符访问托管类的成员，指向 C++ 中对象的指针意味着你需要使用 -> 运算符来访问该成员: Whereas in other Visual Studio languages, you can use the dot operator to access a member of a managed class, a pointer to the object in C++ means you have to use the -> operator to access the member: 错误： String * myString = checkedListBox1->CheckedItems->Item[0].ToString(); Wrong: String * myString = checkedListBox1->CheckedItems->Item[0].ToString(); 正确： String * myString = checkedListBox1->CheckedItems->Item[0]->ToString(); Right: String * myString = checkedListBox1->CheckedItems->Item[0]->ToString();
+
+编译器错误 C2229 Compiler Error C2229 11
+类型具有非法的零大小的数组结构或位域的成员包含不是最后一个成员的大小为零的数组。由于你可以有零大小的数组作为结构的最后一个成员，必须指定其大小，当分配结构。如果零大小的数组不是结构的最后一个成员，则编译器无法计算剩余的字段的偏移量。下面 的示例生成 C2229: The following sample generates C2229: // C2229.cpp
+struct S {
+   int a[0];  // C2229  zero-sized array
+   int b[1];
+};
+
+struct S2 {
+   int a;
+   int b[0];
+};
+
+int main() {
+   // allocate 7 elements for b field
+   S2* s2 = (S2*)new int[sizeof(S2) + 7*sizeof(int)];
+   s2->b[6] = 100;
+}
+
+编译器错误 C2231 Compiler Error C2231 11
+。：左操作数指向，使用成员选择运算（）左侧操作数是指针，而不是类、结构或联合。下面的示例生成 C2231: The following sample generates C2231: // C2231.c
+struct S {
+   int member;
+} s, *ps = &s;
+int main() {
+   ps.member = 0;   // C2231
+
+   // OK
+   ps->member = 0;   // crash
+   s.member = 0;
+}
+
+编译器错误 C2232 Compiler Error C2232 11
+：左的操作数具有类别键类型，使用。运算符左侧的操作数不是指针。对于类、结构或联合使用句点（）运算符。下面的示例生成 C2232： The following sample generates C2232: // C2232.c
+struct X {
+    int member;
+} x, *px;
+int main() {
+    x->member = 0;   // C2232, x is not a pointer
+
+    px->member = 0;
+    x.member = 0;
+}
+
+编译器错误 C2233 Compiler Error C2233 11
+：包含大小为零数组的对象的数组是非法的数组中的每个对象必须包含至少一个元素。下面的示例生成 C2233: The following sample generates C2233: // C2233.cpp
+// compile with: /c
+class A {
+   char somearray[1];
+};
+
+class B {
+   char zeroarray[];
+};
+
+A array[100];   // OK
+B array2[100];   // C2233
+
+编译器错误 C2234 Compiler Error C2234 11
+：数组的引用是非法因为不允许引用的指针，则数组的引用不可能。下面的示例生成 C2234: The following sample generates C2234: // C2234.cpp
+int main() {
+   int i = 0, j = 0, k = 0, l = 0;
+   int &array[4] = {i,j,k,l};   // C2234
+   int array2[4] = {i,j,k,l};   // OK
+}
+
+编译器错误 C2236 Compiler Error C2236 11
+意外的标记“”。你是否忘了“”？该标识符已经定义为类型，无法被用户定义类型重写。下面的示例生成 C2236： The following sample generates C2236: // C2236.cpp
+// compile with: /c
+int class A {};  // C2236 "int class" is unexpected
+int i;
+class B {};
+
+编译器错误 C2238 Compiler Error C2238 11
+“”前有意外的标记发现不正确的标记。下面的示例生成 C2238： The following sample generates C2238: // C2238.cpp
+// compile with: /c
+class v {
+virtual: int vvv;   // C2238
+};
+
+编译器错误 C2241 Compiler Error C2241 11
+“”：成员访问受限制代码试图访问私有或受保护成员。使用以下可能的解决方案进行修复更改成员的访问级别。将成员声明为访问函数的。
+
+编译器错误 C2242 Compiler Error C2242 11
+名不能位于类结构联合之后限定名称的末尾出现名称。
+
+编译器错误 C2243 Compiler Error C2243 11
+存在从“类型”到“类型”的“转换类型”转换，但不可访问访问保护（或）已禁止从指向派生类的指针转换为指向基类的指针。下面的示例生成 C2243： The following sample generates C2243: // C2243.cpp
+// compile with: /c
+class B {};
+class D : private B {};
+class E : public B {};
+
+D d;
+B *p = &d;   // C2243
+
+E e;
+B *p2 = &e; 派生类的客户端不能访问具有 protected 或 private 访问权限的基类。 Base classes with protected or private access are not accessible to clients of the derived class. 这些级别的访问控制用于指示基类是对客户端不可见的实现细节。 These levels of access control are used to indicate that the base class is an implementation detail that should be invisible to clients. 如果你希望派生类的客户端有权访问派生类指针到基类指针的隐式转换，请使用公共派生。 Use public derivation if you want clients of the derived class to have access to implicit conversion of a derived class pointer to a pointer to the base class.
+
+编译器错误 C2244 Compiler Error C2244 11
+：无法匹配函数定义与现有的声明一元加运算符的异常用法已用于没有括号的函数调用的前面。此错误仅出现在项目中。下面的示例生成 C2244: The following sample generates C2244: // C2244.cpp
+int func(char) {
+   return 0;
+}
+
+int func(int) {
+   return 0;
+}
+
+int main() {
+   +func;   // C2244
+} 不正确的函数签名使用类模板的成员函数时，也会发生 c2244 错误。 C2244 can also occur when an incorrect function signature is used for a member function of a class template. // C2244b.cpp
+// compile with: /c
+template<class T>
+class XYZ {
+   void func(T t);
+};
+
+template<class T>
+void XYZ<T>::func(int i) {}   // C2244 wrong function signature
+// try the following line instead
+// void XYZ<T>::func(T t) {} 不正确的函数签名用于成员函数模板时，也会发生 c2244 错误。 C2244 can also occur when an incorrect function signature is used for a member function template. // C2244c.cpp
+// compile with: /c
+class ABC {
+   template<class T>
+   void func(int i, T t);
+};
+
+template<class T>
+void ABC::func(int i) {}   // C2244 wrong signature
+// try the following line instead
+// void ABC::func(int i, T t) {} 你无法部分专用化函数模板。 You cannot partially specialize a function template. // C2244d.cpp
+template<class T, class U>
+class QRS {
+   void func(T t, U u);
+};
+
+template<class T>
+void QRS<T,int>::func(T t, int u) {}   // C2244
+
+编译器错误 C2245 Compiler Error C2245 11
+将不存在的成员函数“”指定为友元成员函数签名与所有重载都不匹配编译器未找到指定为友元的函数。下面的示例生成 C2245： The following sample generates C2245: // C2245.cpp
+// compile with: /c
+class B {
+   void f(int i);
+};
+
+class A {
+   int m_i;
+   friend void B::f(char);   // C2245
+   // try the following line instead
+   // friend void B::f(int);
+};
+
+void B::f(int i) {
+   A a;
+   a.m_i = 0;
+}
+
+编译器错误 C2246 Compiler Error C2246 11
+“”：局部定义的类中出现非法静态数据成员具有局部范围的类、结构或联合的成员被声明。下面的示例生成 C2246： The following sample generates C2246: // C2246.cpp
+// compile with: /c
+void func( void ) {
+   class A { static int i; };   // C2246  i is local to func
+   static int j;   // OK
+};
+
+编译器错误 C2247 Compiler Error C2247 11
+无法访问，因为使用继承是从声明具有私有或受保护的访问权限的类继承。下面的示例生成 C2247: The following sample generates C2247: // C2247.cpp
+class A {
+public:
+   int i;
+};
+class B : private A {};    // B inherits a private A
+class C : public B {} c;   // so even though C's B is public
+int j = c.i;               // C2247, i not accessible 此错误还可能来自于为 Visual Studio.NET 2003年执行的编译器一致性工作： 访问控制与受保护的成员。 This error can also be generated as a result of compiler conformance work that was done for Visual Studio .NET 2003: access control with protected members. 仅可以通过从它 (n) 是其成员的类 (A) 继承的类 (B) 的成员函数的访问受保护的成员 (n)。 A protected member (n) can only be accessed through a member function of a class (B) that inherits from the class (A) of which it (n) is a member. 对于 Visual Studio.NET 2003年和 Visual Studio.NET 版本的 Visual c + + 中有效的代码，声明为友元的类型的成员。 For code that is valid in both the Visual Studio .NET 2003 and Visual Studio .NET versions of Visual C++, declare the member to be a friend of the type. 此外可以使用公共继承。 Public inheritance could also be used. // C2247b.cpp
+// compile with: /c
+// C2247 expected
+class A {
+public:
+   void f();
+   int n;
+};
+
+class B: protected A {
+   // Uncomment the following line to resolve.
+   // friend void A::f();
+};
+
+void A::f() {
+   B b;
+   b.n;
+} C2247 还可能来自于为 Visual Studio.NET 2003年执行的编译器一致性工作： 专用的基本类现在无法访问。 C2247 can also be generated as a result of compiler conformance work that was done for Visual Studio .NET 2003: private base classes now inaccessible. 是一种类型的私有基类的类 (A) （B） 不应访问的类型 （C） B 用作基类。 A class (A) that is a private base class to a type (B) should not be accessible to a type (C) that uses B as a base class. 对于 Visual Studio.NET 2003年和 Visual Studio.NET 版本的 Visual c + + 中有效的代码，请使用范围运算符。 For code that is valid in both the Visual Studio .NET 2003 and Visual Studio .NET versions of Visual C++, use the scope operator. // C2247c.cpp
+// compile with: /c
+struct A {};
+
+struct B: private A {};
+
+struct C : B {
+   void f() {
+      A *p1 = (A*) this;   // C2247
+      // try the following line instead
+      // ::A *p2 = (::A*) this;
+   }
+};
+
+编译器错误 C2248 Compiler Error C2248 11
+成员：无法访问在类中声明成员类派生类的成员不能访问基类的成员。无法访问或类实例的成员。示例下面的示例生成 C2248 时私有或受保护的成员的类从类外部访问。 The following sample generates C2248 when private or protected members of a class are accessed from outside the class. 若要解决此问题，不能访问这些直接在类外部的成员。 To fix this issue, do not access these members directly outside the class. 使用公共成员数据和成员函数与类进行交互。 Use public member data and member functions to interact with the class. // C2248_access.cpp
+// compile with: cl /EHsc /W4 C2248_access.cpp
+#include <stdio.h>
+
+class X {
+public:
+    int  m_publicMember;
+    void setPrivateMember( int i ) {
+        m_privateMember = i;
+        printf_s("\n%d", m_privateMember);
+    }
+protected:
+    int  m_protectedMember;
+
+private:
+    int  m_privateMember;
+} x;
+
+int main() {
+    x.m_publicMember = 4;
+    printf_s("\n%d", x.m_publicMember);
+    x.m_protectedMember = 2; // C2248 m_protectedMember is protected
+    x.m_privateMember = 3;   // C2248  m_privMemb is private
+    x.setPrivateMember(0);   // OK uses public access function
+} 另一个公开 C2248 的一致性问题是使用模板友元和专用化。 Another conformance issue that exposes C2248 is the use of template friends and specialization. 若要解决此问题，声明友元模板函数使用空的模板参数列表 <> 或特定的模板参数。 To fix this issue, declare friend template functions by using either an empty template parameter list <> or specific template parameters. // C2248_template.cpp
+// compile with: cl /EHsc /W4 C2248_template.cpp
+template<class T>
+void f(T t) {
+    t.i;   // C2248
+}
+
+struct S {
+private:
+    int i;
+
+public:
+    S() {}
+    friend void f(S);   // refer to the non-template function void f(S)
+    // To fix, comment out the previous line and
+    // uncomment the following line.
+    // friend void f<S>(S);
+};
+
+int main() {
+    S s;
+    f<S>(s);
+} 如果尝试以声明友元的类和类不是对作用域中的类的友元声明可见，公开 C2248 的另一个一致性问题。 Another conformance issue that exposes C2248 is when you attempt to declare a friend of a class and when the class is not visible to the friend declaration in the scope of the class. 若要解决此问题，授予对封闭类的友元关系。 To fix this issue, grant friendship to the enclosing class. // C2248_enclose.cpp
+// compile with: cl /W4 /c C2248_enclose.cpp
+class T {
+    class S {
+        class E {};
+    };
+    friend class S::E;   // C2248
+};
+
+class A {
+    class S {
+        class E {};
+        friend class A;  // grant friendship to enclosing class
+    };
+    friend class S::E;   // OK
+};
+
+编译器错误 C2249 Compiler Error C2249 11
+：在虚拟基中声明为访问成员没有可访问的路径继承自非公共基类或结构。示例下面的示例生成 C2249。 The following sample generates C2249. // C2249.cpp
+class A {
+private:
+   void privFunc( void ) {};
+public:
+   void pubFunc( void ) {};
+};
+
+class B : virtual public A {} b;
+
+int main() {
+   b.privFunc();    // C2249, private member of A
+   b.pubFunc();    // OK
+} 示例 Example 如果你尝试将流从 c + + 标准库分配给另一个流，也可能发生 C2249。 C2249 can also occur if you try to assign a stream from the C++ Standard Library to another stream. 下面的示例生成 C2249。 The following sample generates C2249. // C2249_2.cpp
+#include <iostream>
+using namespace std;
+int main() {
+   cout = cerr;   // C2249
+   #define cout cerr;   // OK
+}
+
+编译器错误 C2250 Compiler Error C2250 11
+：不明确的继承派生的类继承的虚函数的虚拟基类的多个重写。这些替代是在派生类中不明确。下面的示例生成 C2286： The following sample generates C2286: // C2250.cpp
+// compile with: /c
+// C2250 expected
+struct V {
+   virtual void vf();
+};
+
+struct A : virtual V {
+   void vf();
+};
+
+struct B : virtual V {
+   void vf();
+};
+
+struct D : A, B {
+   // Uncomment the following line to resolve.
+   // void vf();
+};
+
+编译器错误 C2251 Compiler Error C2251 11
+命名空间“”不具有成员“”是否要使用“”？编译器无法在指定的命名空间中找到标识符。下面的示例生成 C2251： The following sample generates C2251: // C2251.cpp
+// compile with: /c
+namespace A {
+   namespace B {
+      void f1();
+   }
+
+   using namespace B;
+}
+
+void A::f1() {}   // C2251
+void A::B::f1() {}   // OK
+
+编译器错误 C2252 Compiler Error C2252 11
+无法显式实例化模板在当前范围内编译器检测到模板的显式实例化有问题。例如，不能显式实例化的函数中的模板。下面的示例生成 C2252: The following sample generates C2252: // C2252.cpp
+class A {
+public:
+   template <class T>
+   int getit(int i , T * it ) {
+      return i;
+   }
+   template int A::getit<double>(int i, double * it);   // C2252
+   // try the following line instead
+   // template <> int A::getit<double>(int i, double * it);
+
+};
+
+int main() {
+   // cannot explicitly instantiate in function
+   template int A::getit<long>(int i, long * it);   // C2252
+}
+
+编译器错误 C2253 Compiler Error C2253 11
+：纯说明符或抽象重写说明符仅允许对虚拟函数非虚拟函数被指定为纯。下面的示例生成 C2253: The following sample generates C2253: // C2253.cpp
+// compile with: /c
+class A {
+public:
+   void func1() = 0;   // C2253 not virtual
+   virtual void func2() = 0;   // OK
+}; 下面的示例生成 C2253: The following sample generates C2253: // C2253_2.cpp
+// compile with: /clr /c
+ref struct A {
+   property int Prop_3 {
+      int get() abstract;   // C2253
+      // try the following line instead
+      // virtual int get() abstract;
+
+      void set(int i) abstract;   // C2253
+      // try the following line instead
+      // virtual void set(int i) abstract;
+   }
+};
+
+编译器错误 C2254 Compiler Error C2254 11
+：纯说明符或抽象重写说明符不允许对友元函数函数被指定为纯。下面的示例生成 C2254: The following sample generates C2254: // C2254.cpp
+// compile with: /c
+class A {
+public:
+   friend void func1() = 0;   // C2254, func1 is friend
+   void virtual func2() = 0;   // OK, pure virtual
+   friend void func3();   // OK, friend not virtual nor pure
+};
+
+void func1() {};
+void func3() {};
+
+编译器错误 C2255 Compiler Error C2255 11
+“元素”不允许位于类定义之外例如，非成员函数声明。下面的示例生成 C2255: The following sample generates C2255: // C2255.cpp
+// compile with: /c
+class A {
+private:
+   void func1();
+   friend void func2();
+};
+
+friend void func1() {}   // C2255
+void func2(){}
+
+编译器错误 C2256 Compiler Error C2256 11
+上的友元说明符非法使用析构函数或构造函数不能指定为友元。下面的示例生成 C2256: The following sample generates C2256: // C2256.cpp
+// compile with: /c
+class C {
+public:
+   friend ~C();   // C2256
+   ~C();   // OK
+};
+
+编译器错误 C2258 Compiler Error C2258 11
+非法的纯语法，必须为“”用不正确的语法声明一个纯虚函数。下面的示例生成 C2258： The following sample generates C2258: // C2258.cpp
+// compile with: /c
+class A {
+public:
+   void virtual func1() = 1; // C2258
+   void virtual func2() = 0;   // OK
+};
+
+编译器错误 C2259 Compiler Error C2259 11
+：无法实例化的抽象类代码声明一个抽象类或结构的实例。无法实例化类或结构具有一个或多个纯虚函数。若要实例化的派生类的对象，派生的类必须重写每个纯虚函数。有关详细信息，请参阅隐式抽象类。下面的示例生成 C2259: The following sample generates C2259: // C2259.cpp
+// compile with: /c
+class V {
+public:
+   void virtual func() = 0;
+};
+class A : public V {};
+class B : public V {
+public:
+   void func();
+};
+V v;  // C2259, V is an abstract class
+A a;  // C2259, A inherits func() as pure virtual
+B b;  // OK, B defines func() 无论何时你从接口派生，并在具有非公共访问权限的派生类中实现接口方法，你可能会收到 C2259。 Whenever you derive from an interface and implement the interface methods in the derived class with access permissions other than public, you may receive C2259. 这是因为编译器需要具有公共访问权限的派生类中实现的接口方法。 This occurs because the compiler expects the interface methods implemented in the derived class to have public access. 当您实现了限制性更强的访问权限的接口的成员函数时，编译器不考虑它们可以在接口中，这会使一个抽象类派生的类定义的接口方法的实现。 When you implement the member functions for an interface with more restrictive access permissions, the compiler does not consider them to be implementations for the interface methods defined in the interface, which in turn makes the derived class an abstract class. 有两种可能解决问题的方法： There are two possible workarounds for the problem: 公开的访问权限，实现方法。 Make the access permissions public for the implemented methods. 为派生类中实现接口方法使用范围解析运算符来限定同名的接口的实现的方法名称。 Use the scope resolution operator for the interface methods implemented in the derived class to qualify the implemented method name with the name of the interface. 于在 Visual c + + 2005 中中, 完成的一致性工作也可能导致 C2259 /zc: wchar_t 现在默认是打开的。 C2259 can also occur as a result of conformance work that was done in Visual C++ 2005, /Zc:wchar_t is now on by default. 在此情况下，C2599 可被解析或者通过使用编译 /Zc:wchar_t- ，以获得的行为，从早期版本中，或者最好是通过更新你的类型，使它们互相兼容。 In this situation, C2599 can be resolved either by compiling with /Zc:wchar_t- , to get the behavior from previous versions, or preferably, by updating your types so they are compatible. 有关详细信息，请参阅 /Zc:wchar_t（wchar_t 是本机类型） 。 For more information, see /Zc:wchar_t (wchar_t Is Native Type) . 下面的示例生成 C2259: The following sample generates C2259: // C2259b.cpp
+// compile with: /c
+#include <windows.h>
+
+class MyClass {
+public:
+   // WCHAR now typedef'ed to wchar_t
+   virtual void func(WCHAR*) = 0;
+};
+
+class MyClass2 : MyClass {
+public:
+   void func(unsigned short*);
+};
+
+MyClass2 x;   // C2259
+
+// OK
+class MyClass3 {
+public:
+   virtual void func(WCHAR*) = 0;
+   virtual void func2(wchar_t*) = 0;
+   virtual void func3(unsigned short*) = 0;
+};
+
+class MyClass4 : MyClass3 {
+public:
+   void func(WCHAR*) {}
+   void func2(wchar_t*) {}
+   void func3(unsigned short*) {}
+};
+
+MyClass4 y; 下面的示例生成 C2259: The following sample generates C2259: // C2259c.cpp
+// compile with: /clr
+interface class MyInterface {
+   void MyMethod();
+};
+
+ref class MyDerivedClass: public MyInterface {
+private:
+   // Uncomment the following line to resolve.
+   // public:
+   void MyMethod(){}
+   // or the following line
+   // void MyInterface::MyMethod() {};
+};
+
+int main() {
+   MyDerivedClass^ instance = gcnew MyDerivedClass; // C2259
+}
+
+编译器错误 C2261 Compiler Error C2261 11
+程序集引用无效，无法解析值不是有效的。用于指定友元程序集。例如，如果想要指定为友元程序集，你会指定（在。然后，运行时允许访问（除外私有类型）中的所有内容。有关指定友元程序集时，正确的语法的详细信息，请参阅友元程序集（）。示例下面的示例生 成 C2261。 The following sample generates C2261. // C2261.cpp
+// compile with: /clr /c
+using namespace System::Runtime::CompilerServices;
+[assembly: InternalsVisibleTo("a,a,a")];   // C2261
+[assembly: InternalsVisibleTo("a.a")];   // OK
+[assembly: InternalsVisibleTo("a")];   // OK
+
+编译器错误 C2262 Compiler Error C2262 11
+“”：不能为声明指定版本、区域性或处理器体系结构未正确指定特性。示例下面的示例生成 C2262。 The following sample generates C2262. // C2262.cpp
+// compile with: /clr /c
+using namespace System::Runtime::CompilerServices;
+[assembly: InternalsVisibleTo("assembly_name, version=1.2.3.7")];   // C2262
+[assembly: InternalsVisibleTo("assembly_name ")];   // OK
+
+编译器错误 C2264 Compiler Error C2264 11
+：函数定义或声明中的错误未调用的函数由于不正确的定义或声明不能调用函数。下面的示例生成 C2264: The following sample generates C2264: // C2264.cpp
+struct C {
+   // Delete the following line to resolve.
+   operator int(int = 0){}   // incorrect declaration
+};
+
+struct D {
+   operator int(){return 0;}   // OK
+};
+
+int main() {
+   int i;
+
+   C c;
+   i = c;   // C2264
+
+   D d;
+   i = d;   // OK
+}
+
+编译器错误 C2266 Compiler Error C2266 11
+“”：对非常量绑定数组的引用非法对具有非常数绑定的数组声明了引用。该数组必须具有常量绑定。
+
+编译器错误 C2267 Compiler Error C2267 11
+：具有块范围的静态函数是非法的声明的本地函数。静态函数必须具有全局作用域。下面的示例生成 C2267: The following sample generates C2267: // C2267.cpp
+static int func2();   // OK
+int main() {
+    static int func1();   // C2267
+}
+
+编译器错误 C2268 Compiler Error C2268 11
+“”是编译器预定义的库帮助器。系统不支持使用的库帮助器，编译对象文件“”时不要使用。源代码中定义的函数与内部编译器函数具有相同的名称。编译包含函数的模块时不要使用。下面的示例生成 C2268： The following sample generates C2268: // C2268.c  
+// compile with: /c
+// processor: x86
+extern int SHFusionLoadLibrary(int lpLibFileName);
+
+int __cdecl _except_handler3(void) {
+   return SHFusionLoadLibrary(0);
+}
+
+extern int main(void);
+
+void* mainCRTStartup(void* p) {
+   p = main;
+   return p;
+} 然后： and then: // C2268b.c
+// compile with: C2268.c /EHsc /GL /Ob0 /O2 /Fa /GS- /link /nodefaultlib
+// processor: x86
+extern int SHFusionLoadLibrary(int lpLibFileName);
+
+extern int __cdecl _except_handler3(void);
+extern void mainCRTStartup(void*);
+int g = 2;
+
+#define ENTERCONTEXT(fail) \
+   int ulCookie = 0;\
+   if (!SHActivateContext(&ulCookie)) \
+      return fail;\
+   __try {
+
+#define LEAVECONTEXT \
+    } __finally {SHDeactivateContext(ulCookie);}
+
+int SHActivateContext(int* a) {
+    return *a == g || !*a ||_except_handler3();
+}
+
+void SHDeactivateContext(int a) {
+    g = a;
+}
+
+int SHFusionLoadLibrary(int lpLibFileName) {   // C2268
+    ENTERCONTEXT(0)
+    g = lpLibFileName;
+    LEAVECONTEXT
+
+    return lpLibFileName;
+}
+
+int main(void) {
+    g = SHFusionLoadLibrary(10);
+    return 0;
+}
+
+编译器错误 C2270 Compiler Error C2270 11
+：非成员函数上不允许的修饰符使用声明非成员函数，易失性，或另一个内存模型修饰符。下面的示例生成 C2270: The following sample generates C2270: // C2270.cpp
+// compile with: /c
+void func1(void) const;   // C2270, nonmember function
+
+void func2(void);
+
+class CMyClass {
+public:
+   void func2(void) const;
+};
+
+编译器错误 C2271 Compiler Error C2271 11
+：新删除不能具有形参列表修饰符运算符或使用的内存模型说明符声明。下面的示例生成 C2271: The following sample generates C2271: // C2271.cpp
+// compile with: /c
+void* operator new(size_t) const {   // C2271
+// try the following line instead
+// void* operator new(size_t) {
+   return 0;
+}
+
+struct X {
+   static void* operator new(size_t) const;   // C2271
+   // try the following line instead
+   // void * X::operator new(size_t) const;   // static member operator new
+};
+
+编译器错误 C2272 Compiler Error C2272 11
+：静态成员函数上不允许的修饰符成员函数使用内存模型说明符，如声明或易失性，且此类修饰符不允许对成员函数。下面的示例生成 C2272: The following sample generates C2272: // C2272.cpp
+// compile with: /c
+class CMyClass {
+public:
+   static void func1() const volatile;   // C2272  func1 is static
+   void func2() const volatile;   // OK
+};
+
+编译器错误 C2273 Compiler Error C2273 11
+“”位于“”运算符右边时非法类型的右操作数作为出现运算符。通过尝试访问用户定义类型转换可以导致此错误。请在和之间使用关键字。下面的示例生成 C2273: The following sample generates C2273: // C2273.cpp
+struct MyClass {
+   operator int() {
+      return 0;
+   }
+};
+int main() {
+   MyClass * ClassPtr = new MyClass;
+   int i = ClassPtr->int();   // C2273
+   int j = ClassPtr-> operator int();   // OK
+}
+
+编译器错误 C2274 Compiler Error C2274 11
+：非法作为右侧。运算符类型显示为一个成员访问（）运算符的右操作数。通过尝试访问用户定义类型转换可以导致此错误。使用关键字之间的这段和。下面的示例生成 C2286： The following sample generates C2286: // C2274.cpp
+struct MyClass {
+   operator int() {
+      return 0;
+   }
+};
+
+int main() {
+   MyClass ClassName;
+   int i = ClassName.int();   // C2274
+   int j = ClassName.operator int();   // OK
+}
+
+编译器错误 C2275 Compiler Error C2275 11
+：非法使用此类型作为表达式表达式使用运算符具有标识符。下面的示例生成 C2275: The following sample generates C2275: // C2275.cpp
+typedef struct S {
+    int mem;
+} *S_t;
+void func1( int *parm );
+void func2() {
+    func1( &S_t->mem );   // C2275, S_t is a typedef
+}
+
+编译器错误 C2276 Compiler Error C2276 11
+：非法操作绑定的成员函数表达式编译器发现用于创建指针到成员的语法有问题。下面的示例生成 C2276: The following sample generates C2276: // C2276.cpp
+class A {
+public:
+   int func(){return 0;}
+} a;
+
+int (*pf)() = &a.func;   // C2276
+// try the following line instead
+// int (A::*pf3)() = &A::func;
+
+class B {
+public:
+   void mf() {
+      &this -> mf;   // C2276
+      // try the following line instead
+      // &B::mf;
+   }
+};
+
+int main() {
+   A a;
+   &a.func;   // C2276
+   // try the following line instead
+   // &A::func;
+}
+
+编译器错误 C2277 Compiler Error C2277 11
+：不能采用该成员函数的地址不能采用成员函数的地址。下面的示例生成 C2277: The following sample generates C2277: // C2277.cpp
+class A {
+public:
+   A();
+};
+(*pctor)() = &A::A;   // C2277
+
+编译器错误 C2279 Compiler Error C2279 11
+异常规范不能出现在声明下 yiw，异常规范声明中不允许。下面的示例生成 C2279: The following sample generates C2279: // C2279.cpp
+// compile with: /Za /c
+typedef int (*xy)() throw(...);   // C2279
+typedef int (*xyz)();   // OK
+
+编译器错误 C2280 Compiler Error C2280 11
+声明尝试引用已删除的函数编译器检测到尝试引用函数。可以通过对显式标记为成员函数的调用导致此错误的源代码中。此错误还可能引起对结构或自动声明并在标记为类的隐式的特殊成员函数的调用由编译器。有关编译器自动生成的详细信息或特殊成员函数，请参阅 特殊成员函数。示例：显式删除函数调用显式函数会导致此错误。显式成员函数意味着类或结构有意旨在防止他人使用，因此，若要解决此问题，应更改代码以避免它。示例：未初始化的数据成员未初始化的引用类型的数据成员或数据成员使声明默认构造函数。若要解 决此问题，请在声明它时初始化的数据成员。示例：引用和数据成员或引用类型的数据成员，将导致复制赋值运算符。初始化后，这些成员不能将分配给，因此不能工作的简单复制或移动。若要解决此问题，我们建议你更改你的逻辑来删除导致错误的赋值操作。示例： 可移动删除隐式的副本如果一个类声明一个移动构造函数或移动赋值运算符，但未显式声明复制构造函数，式声明复制构造函数，其定义为。同样，如果一个类声明一个移动构造函数或移动赋值运算符，但未显式声明复制赋值运算符，声明复制赋值运算符，其定义为。 若要解决此问题，必须显式声明这些成员。当你看到门户中的错误，几乎可以肯定是因为你尝试调用其副本构造函数，这是函数。按照设计，无法复制。使用移动构造函数，而是将所有权转交。
+
+编译器错误 C2283 Compiler Error C2283 11
+“”：未命名的结构上不允许使用纯说明符或抽象重写说明符使用纯说明符声明了未命名类或结构的成员函数，这是不允许的。以下示例生成：
+
+编译器错误 C2285 Compiler Error C2285 11
+已确定指针为成员表示形式忽略杂注类存在两个不同的表示形式。
+
+编译器错误 C2286 Compiler Error C2286 11
+指向成员的表示已设置为继承忽略声明类存在两个不同的指针到成员表示形式。有关详细信息，请参阅继承关键字。示例下面的示例生成 C2286： The following sample generates C2286: // C2286.cpp
+// compile with: /c
+class __single_inheritance X;
+class __multiple_inheritance X;   // C2286
+class  __multiple_inheritance Y;   // OK
+
+编译器错误 C2287 Compiler Error C2287 11
+：继承表示形式是不太常见比所需的类是使用比所需的更简单表示声明。下面的示例生成 C2287: The following sample generates C2287: // C2287.cpp
+// compile with: /vmg /c
+class __single_inheritance X;
+class __single_inheritance Y;
+
+struct A { };
+struct B { };
+struct X : A, B { };  // C2287  X uses multiple inheritance
+struct Y : A { };  // OK
+
+编译器错误 C2289 Compiler Error C2289 11
+多次使用同一类型限定符类型声明或定义多次使用类型限定符（、、或），从而导致兼容性错误。下面的示例生成 C2286： The following sample generates C2286: // C2289.cpp
+// compile with: /Za /c
+volatile volatile int i;   // C2289
+volatile int j;   // OK
+
+编译器错误 C2290 Compiler Error C2290 11
+忽略语法。使用。保留语法以供将来使用。
+
+编译器错误 C2292 Compiler Error C2292 11
+：最佳情况下继承表示形式，但所需声明编译下面的代码最佳情况下始终表示导致。
+
+编译器错误 C2293 Compiler Error C2293 11
+“”：使成员变量作为说明符非法说明符的修饰符必须为非成员指针。以下示例生成：
+
+编译器错误 C2295 Compiler Error C2295 11
+转义的“”在宏定义中非法宏定义不能包含带有指定字符的转义序列。
+
+编译器错误 C2296 Compiler Error C2296 11
+：错误的左的操作数左的操作数与使用无效。例如，编译器可能会看到一个声明打算函数调用。下面的示例生成 C2296: The following sample generates C2296: // C2296.cpp
+struct MyStruct {
+   struct Help {
+      Help(float f) : m_f(f) {}
+      float m_f;
+   };
+
+   MyStruct(const Help &h) : m_f(h.m_f) {}
+   MyStruct(float f) : m_f(f) {}
+   MyStruct operator*(const MyStruct &f1) const {
+      return MyStruct(m_f * f1.m_f);
+   }
+
+private:
+   float m_f;
+};
+
+int main() {
+   float f1 = 1.0f;
+
+   MyStruct m_MyStruct1 ( MyStruct::Help( f1 ) );
+   // try the following line instead
+   // MyStruct m_MyStruct1 = MyStruct::Help( f1 );
+
+   MyStruct m_MyStruct2 ( MyStruct::Help( f1 ) );
+   // try the following line instead
+   // MyStruct m_MyStruct2 = MyStruct::Help( f1 );
+
+   MyStruct m_MyStruct3 = m_MyStruct1 * m_MyStruct2;   // C2296
+}
+
+编译器错误 C2297 Compiler Error C2297 11
+：错误的右操作数右操作数与使用无效。例如，编译器可能会看到一个声明打算函数调用。下面的示例生成 C2297: The following sample generates C2297: // C2297.cpp
+struct MyStruct {
+   struct Help {
+      Help(float f) : m_f(f) {}
+      float m_f;
+   };
+
+   MyStruct(const Help &h) : m_f(h.m_f) {}
+
+   MyStruct(float f) : m_f(f) {}
+
+   MyStruct operator*(const MyStruct &f1) const {
+      return MyStruct(m_f * f1.m_f);
+   }
+
+private:
+   float m_f;
+};
+
+int main() {
+   float f1 = 1.0f;
+
+   MyStruct m_MyStruct1 ( MyStruct::Help( f1 ) );
+   // try the following line instead
+   // MyStruct m_MyStruct1 = MyStruct::Help( f1 );
+
+   MyStruct m_MyStruct2 ( MyStruct::Help( f1 ) );
+   // try the following line instead
+   // MyStruct m_MyStruct2 = MyStruct::Help( f1 );
+
+   MyStruct m_MyStruct3 = m_MyStruct1 * m_MyStruct2;   // C2297
+}
+
+编译器错误 C2298 Compiler Error C2298 11
+：非法操作指向成员函数表达式指向成员函数表达式必须调用成员函数。示例下面的示例生成 C2298。 The following sample generates C2298. // C2298.cpp
+#include <stdio.h>
+
+struct X {
+   void mf() {
+      puts("in X::mf");
+   }
+
+   void mf2() {
+      puts("in X::mf2");
+   }
+};
+
+X x;
+// pointer to member functions with no params and void return in X
+typedef void (X::*pmf_t)();
+
+// a pointer to member function X::mf
+void (X::*pmf)() = &X::mf;
+
+int main() {
+   int (*pf)();
+   pf = x.*pmf;   // C2298
+   +(x.*pmf);     // C2298
+
+   pmf_t pf2 = &X::mf2;
+   (x.*pf2)();   // uses X::mf2
+   (x.*pmf)();   // uses X::mf
+} 示例 Example 下面的示例生成 C2298。 The following sample generates C2298. // C2298_b.cpp
+// compile with: /c
+void F() {}
+
+class Measure {
+public:
+   void SetTrackingFunction(void (Measure::*fnc)()) {
+      TrackingFunction = this->*fnc;   // C2298
+      TrackingFunction = fnc;   // OK
+      GlobalTracker = F;   // OK
+   }
+private:
+   void (Measure::*TrackingFunction)(void);
+   void (*GlobalTracker)(void);
+};
+
+编译器错误 C2299 Compiler Error C2299 11
+：行为更改：显式专用化不能复制构造函数或复制赋值运算符此错误还可能来自于为年执行的编译器一致性工作：的早期版本的复制构造函数或复制赋值运算符允许显式专用化。若要解决，不要复制构造函数或赋值运算符的模板函数，但而是采用一个类类型的非模板函 数。通过显式指定模板自变量调用的复制构造函数或赋值运算符的任何代码需要进行删除的模板自变量。下面的示例生成 C2299: The following sample generates C2299: // C2299.cpp
+// compile with: /c
+class C {
+   template <class T>
+   C (T t);
+
+   template <> C (const C&);   // C2299
+   C (const C&);   // OK
+};
+
+编译器错误 C2300 Compiler Error C2300 11
+“”：类没有称作“”的析构函数此类没有具有所需名称的析构函数。
+
+编译器错误 C2301 Compiler Error C2301 11
+的左侧必须指向类结构联合运算符左侧表达式的计算结果不是指向类、结构或联合的指针。
+
+编译器错误 C2302 Compiler Error C2302 11
+“”的左边必须有类结构联合类型句点（）运算符左侧的表达式不是类、结构或联合。
+
+编译器错误 C2307 Compiler Error C2307 11
+如果启用增量编译，杂注杂注必须是外部函数你必须将放如果你使用的增量编译的函数之间的杂注。
+
+编译器错误 C2308 Compiler Error C2308 11
+串联不匹配的字符串串联指定了两个字符宽和非宽字符字符串。无法连接宽字符字符串和非宽字符字符串。
+
+编译器错误 C2309 Compiler Error C2309 11
+处理程序预期用圆括号括起来异常声明处理程序有任何用圆括号括起来的类型。下面的示例生成 C2309: The following sample generates C2309: // C2309.cpp
+// compile with: /EHsc
+#include <eh.h>
+class C {};
+int main() {
+   try {
+      throw "ooops!";
+   }
+   catch C {}   // C2309
+   // try the following line instead
+   // catch( C ) {}
+}
+
+编译器错误 C2310 Compiler Error C2310 11
+处理程序必须指定一个类型处理程序指定任何类型或多个类型。下面的示例生成 C2310: The following sample generates C2310: // C2310.cpp
+// compile with: /EHsc
+#include <eh.h>
+int main() {
+   try {
+      throw "Out of memory!";
+   }
+   catch( int ,int) {}   // C2310 two types
+   // try the following line instead
+   // catch( int)  {}
+}
+
+编译器错误 C2311 Compiler Error C2311 11
+：由在行号上捕获省略号（）的处理程序必须是用于引发的最后一个处理程序。下面的示例生成 C2311: The following sample generates C2311: // C2311.cpp
+// compile with: /EHsc
+#include <eh.h>
+int main() {
+   try {
+      throw "ooops!";
+   }
+   catch( ... ) {}
+   catch( int ) {}   // C2311  ellipsis handler not last catch
+}
+
+编译器错误 C2312 Compiler Error C2312 11
+“”由“”在行号上捕获两个处理程序捕获相同的异常类型。下面的示例生成 C2312: The following sample generates C2312: // C2312.cpp
+// compile with: /EHsc
+#include <eh.h>
+int main() {
+    try {
+        throw "ooops!";
+    }
+    catch( signed int ) {}
+    catch( int ) {}   // C2312
+}
+
+编译器错误 C2313 Compiler Error C2313 11
+“”：由引用（“”）在行号上捕获异常类型有两个处理程序。第二个的类型是对第一个类型的引用。以下示例生成：
+
+编译器错误 C2315 Compiler Error C2315 11
+“”：引用由“”在行号上捕获异常类型由上一个处理程序处理。第二个的引用具有的类型与第一个的相同。
+
+编译器错误 C2316 Compiler Error C2316 11
+异常：无法作为析构函数和或复制构造函数都不可访问捕获通过值或引用捕获了异常，但复制构造函数和或赋值运算符无法访问。通过在中之前的版本接受此代码，但现在会导致错误。进行此错误适用于错误的语句的异常派生自中的一致性更改。因为有一个继承私有复 制构造函数，类和及其派生非可复制，无法传递的值，这还意味着无法通过值捕获它们。捕获导致未捕获的异常，在运行时，以前的值由捕获异常的语句，但现在编译器正确地标识此情形以及报表错误。若要解决此问题，我们建议你使用宏，而不是编写您自己的异常处 理程序但不适合你的代码，如果捕获异常由引用相反。示例下面的示例生成 C2316： The following sample generates C2316: // C2316.cpp
+// compile with: /EHsc
+#include <stdio.h>
+
+extern "C" int printf_s(const char*, ...);
+
+struct B
+{
+public:
+    B() {}
+    // Delete the following line to resolve.
+private:
+    // copy constructor
+    B(const B&)
+    {
+    }
+};
+
+void f(const B&)
+{
+}
+
+int main()
+{
+    try
+    {
+        B aB;
+        f(aB);
+    }
+    catch (B b) {   // C2316
+        printf_s("Caught an exception!\n");
+    }
+}
+
+编译器错误 C2317 Compiler Error C2317 11
+在行“”上开始的“”块没有处理程序块至少须具有一个处理程序。以下示例生成：可能的解决方法：
+
+编译器错误 C2318 Compiler Error C2318 11
+没有与该处理程序关联的块定义一个处理程序，但其前面没有块。以下示例生成：可能的解决方法：
+
+编译器错误 C2319 Compiler Error C2319 11
+“”后面必须有复合语句。缺少“”在或语句后面未找到或块。块必须括在大括号内。下面的示例生成 C2319： The following sample generates C2319: // C2319.cpp
+// compile with: /EHsc
+#include <eh.h>
+class C {};
+int main() {
+   try {
+      throw "ooops!";
+   }
+   catch( C ) ;    // C2319
+   // try the following line instead
+   // catch( C ) {}
+}
+
+编译器错误 C2320 Compiler Error C2320 11
+应在访问说明符“”的后面输入“”关键字、或必须后接一个冒号。
+
+编译器错误 C2322 Compiler Error C2322 11
+“”：“”地址不是静态的使用非静态值作为借助声明的函数地址。
+
+编译器错误 C2324 Compiler Error C2324 11
+：意外右侧的使用不正确的标识符调用析构函数。下面的示例生成 C2324: The following sample generates C2324: // C2324.cpp
+class A {};
+typedef A* pA_t;
+int i;
+
+int main() {
+   pA_t * ppa = new pA_t;
+   ppa->~i;   // C2324
+   ppa->~pA_t();   // OK
+}
+
+编译器错误 C2325 Compiler Error C2325 11
+：右侧的的意外的类型对不正确的类型的析构函数进行调用。下面的示例生成 C2325: The following sample generates C2325: // C2325.cpp
+// compile with: /c
+class A {};
+typedef A* pA_t;
+void f() {
+    A** ppa = new A *;
+    ppa->~A*;   // C2325
+
+   pA_t *ppa2 = new pA_t;
+   ppa2->~pA_t();   // OK
+}
+
+编译器错误 C2326 Compiler Error C2326 11
+“声明符”函数无法访问“名称”该代码尝试修改成员变量，这是不可能的。示例下面的示例生成 C2326: The following sample generates C2326: // C2326.cpp
+void MyFunc() {
+   int i;
+
+   class MyClass  {
+   public:
+      void mf() {
+         i = 4;   // C2326 i is inaccessible
+      }
+   };
+}
+
+编译器错误 C2327 Compiler Error C2327 11
+：不是类型名称、静态、或枚举器嵌套类中的代码尝试访问不是类型名称、静态成员或一个枚举器在封闭类的成员。使用编译时，的常见原因是具有同名的属性类型的属性。下面的示例生成 C2327: The following sample generates C2327: // C2327.cpp
+int x;
+class enclose {
+public:
+   int x;
+   static int s;
+   class inner {
+      void f() {
+         x = 1;   // C2327; enclose::x is not static
+         s = 1;   // ok; enclose::s is static
+         ::x = 1;   // ok; ::x refers to global
+      }
+   };
+}; 如果类型的名称隐藏的成员的名称，也可能发生 C2327: C2327 can also occur if the name of a type is hidden by the name of a member: // C2327b.cpp
+class X {};
+
+class S {
+   X X;
+   // try the following line instead
+   // X MyX;
+   X other;   // C2327, rename member X
+}; 在此情况下，你需要完全指定的参数的数据类型，也可以激发 C2327: C2327 can also fire in this situation, where you need to fully specify the data type of the parameter: // C2327c.cpp
+// compile with: /c
+struct A {};
+
+struct B {
+   int A;
+   void f(A a) {   // C2327
+   void f2(struct A a) {}   // OK
+   }
+}; 下面的示例生成 C2327: The following sample generates C2327: // C2327d.cpp
+// compile with: /clr /c
+using namespace System;
+
+namespace NA {
+   public enum class E : Int32 {
+      one = 1,
+      two = 2,
+      three = 3
+   };
+
+   public ref class A {
+   private:
+      E m_e;
+   public:
+      property E E {
+         NA::E get() {
+            return m_e;
+         }
+         // At set, compiler doesn't know whether E is get_E or
+         // Enum E, therefore fully qualifying Enum E is necessary
+         void set( E e ) {   // C2327
+            // try the following line instead
+            // void set(NA::E e) {
+            m_e = e;
+         }
+      }
+   };
+} 下面的示例演示 C2327，当属性具有同名的属性类型： The following sample shows C2327 when a property has the same name as the property type: // C2327f.cpp
+// compile with: /clr /c
+public value class Address {};
+
+public ref class Person {
+public:
+   property Address Address {
+      ::Address get() {
+         return address;
+      }
+      void set(Address addr) {   // C2327
+      // try the following line instead
+      // set(::Address addr) {
+         address = addr;
+      }
+   }
+private:
+   Address address;   // C2327
+   // try the following line instead
+   // ::Address address;
+};
+
+编译器错误 C2332 Compiler Error C2332 11
+：缺少标记名称编译器找到的不完整的类型定义。下面的示例生成 C2332: The following sample generates C2332: // C2332.cpp
+// compile with: /c
+struct S {
+   int i;
+};
+
+typedef struct * pS;   // C2332
+typedef struct S* pS;   // OK
+
+int get_S_i(pS p) {
+   return p->i;
+}
+
+编译器错误 C2333 Compiler Error C2333 11
+：函数声明中的存在错误正在跳过的函数体在另一个错误，有关其类中定义的成员函数后出现此错误。下面的示例生成 C2333: The following sample generates C2333: // C2333.cpp
+struct s1 {
+   s1(s1) {}   // C2333
+};
+
+编译器错误 C2334 Compiler Error C2334 11
+前面的意外的标记：或正在跳过明显函数体下面的示例生成 C2334。 The following sample generates C2334. 在错误 C2059 之后会发生此错误： This error occurs after error C2059: // C2334.cpp
+// compile with: /c
+// C2059 expected
+struct s1 {
+   s1   {}   // C2334
+   s1() {}   // OK
+};
+
+编译器错误 C2337 Compiler Error C2337 11
+“”：未找到特性你使用了此版本的不支持的特性。以下示例生成：
+
+编译器错误 C2338 Compiler Error C2338 11
+错误消息此错误可能由编译过程中的出错。通过提供消息参数。此外可以通过外部提供程序与编译器生成此错误消息。在大多数情况下，这些错误由特性提供程序，如进行报告。此消息的某些常见形式包括：属性特性提供程序：错误数消息属性的用法不正确属性用法： 特性的使用率的格式不正确这些错误通常是不可恢复，并且可能跟严重的编译器错误。若要修复这些问题，请更正属性用法。例如，在某些情况下，属性参数必须声明后，才可以使用。如果提供错误号，请检查该错误的更具体的信息的文档。
+
+编译器错误 C2341 Compiler Error C2341 11
+：必须使用、或之前的部分，用于定义段分配语句是指由尚未定义段，，或部分杂注。下面的示例生成 C2341: The following sample generates C2341: // C2341.cpp
+// compile with: /c
+__declspec(allocate(".test"))   // C2341
+int j = 1; 可能的解决方法： Possible resolution: // C2341b.cpp
+// compile with: /c
+#pragma data_seg(".test")
+__declspec(allocate(".test"))
+int j = 1;
+
+编译器错误 C2344 Compiler Error C2344 11
+：对齐必须是的幂当使用关键字时，传递的值必须是的幂。例如，下面的代码生成，因为不是的幂：
+
+编译器错误 C2345 Compiler Error C2345 11
+：非法的对齐值向关键字传递了允许范围之外的值。下面的代码生成
+
+编译器错误 C2346 Compiler Error C2346 11
+不能编译为本机：原因编译器无法编译为的函数。有关详细信息，请参阅、和（公共语言运行时编译）。更正此错误不能编译为的函数中删除该代码。请不编译的模块，或将函数标记为非托管与非托管杂注。示例下面的示例生成 C2346。 The following sample generates C2346. // C2346.cpp
+// processor: x86
+// compile with: /clr
+// C2346 expected
+struct S
+{
+   S()
+   {
+      { __asm { nop } }
+   }
+   virtual __clrcall ~S() { }
+};
+
+void main()
+{
+   S s;
+}
+
+编译器错误 C2348 Compiler Error C2348 11
+：不是样式聚合的不能嵌入的中导出要放置在文件中使用导出属性，必须只包含数据。下面的示例生成 C2348: The following sample generates C2348: // C2348.cpp
+// C2348 error expected
+[ module(name="SimpleMidlTest") ];
+
+[export]
+struct Point {
+   // Delete the following two lines to resolve.
+   Point() : m_i(0), m_j(0) {}
+   Point(int i, int j) : m_i(i), m_j(j) {}
+
+   int m_i;
+   int m_j;
+};
+
+编译器错误 C2349 Compiler Error C2349 11
+为托管，则不能编译原因使用非托管的有关详细信息请参阅编译器警告（等级和）。
+
+编译器错误 C2350 Compiler Error C2350 11
+“”不是静态成员不能定义类或结构的非静态成员。
+
+编译器错误 C2351 Compiler Error C2351 11
+已过时的构造函数初始化语法在新样式初始化列表中的构造函数，必须显式命名每个直接的基类，即使它是唯一的基类。下面的示例生成 C2351: The following sample generates C2351: // C2351.cpp
+// compile with: /c
+class B {
+public:
+   B() : () {}   // C2351
+   B() {}   // OK
+};
+
+编译器错误 C2352 Compiler Error C2352 11
+“”：非静态成员函数的非法调用成员函数调用了非静态成员函数。或者，从类外部将非静态成员函数作为静态函数进行了调用。下面的示例生成 C2352，并演示如何修复此错误： The following sample generates C2352 and shows how to fix it: // C2352.cpp
+// compile with: /c
+class CMyClass {
+public:
+   static void func1();
+   void func2();
+   static void func3() {
+      func2();   // C2352 calls nonstatic func2
+      func1();   // OK calls static func1
+   }
+}; 下面的示例生成 C2352，并演示如何修复此错误： The following sample generates C2352 and shows how to fix it: // C2352b.cpp
+class MyClass {
+public:
+   void MyFunc() {}
+   static void MyFunc2() {}
+};
+
+int main() {
+   MyClass::MyFunc();   // C2352
+   MyClass::MyFunc2();   // OK
+}
+
+编译器错误 C2353 Compiler Error C2353 11
+不允许异常规范异常规范不允许的托管类成员函数上。下面的示例生成 C2353: The following sample generates C2353: // C2353.cpp
+// compile with: /clr /c
+ref class X {
+   void f() throw(int);   // C2353
+   void f();   // OK
+};
+
+编译器错误 C2355 Compiler Error C2355 11
+“”：只能在非静态成员函数或非静态数据成员初始值设定项的内部引用指针仅在非静态成员函数或非静态数据成员初始值设定项的内部有效。当类声明外部的成员函数定义的类范围未正确限定时，可能发生此错误。当指针用于未在类中声明的函数时，也可能发生此错 误。要解决此问题，请确保成员函数定义与类中的成员函数声明匹配，且未声明为静态。对于数据成员初始值设定项，请确保数据成员未声明为静态。下面的示例生成 C2355，并演示如何修复此错误： The following sample generates C2355 and shows how to fix it: // C2355.cpp
+// compile with: /c
+class MyClass {};
+MyClass *p = this;   // C2355
+
+// OK
+class MyClass2 {
+public:
+   void Test() {
+      MyClass2 *p = this;
+   }
+};
+
+编译器错误 C2356 Compiler Error C2356 11
+在翻译单元期间，初始化段不得更改。可能的原因：跟在段初始化代码前面是另一个若要解决，将移动到的模块开头的段初始化代码。如果必须初始化多个区域，将它们移到单独的模块。下面的示例生成 C2356: The following sample generates C2356: // C2356.cpp 
+#pragma warning(disable : 4075)
+
+int __cdecl myexit(void (__cdecl *)());
+int __cdecl myexit2(void (__cdecl *)());
+
+#pragma init_seg(".mine$m",myexit)
+#pragma init_seg(".mine$m",myexit2)   // C2356
+
+编译器错误 C2357 Compiler Error C2357 11
+：必须是类型的函数你的代码声明版本由编译器内部声明的版本不匹配的函数。声明，如下所示：有关详细信息，请参阅。下面的示例生成 C2357: The following sample generates C2357: // C2357.cpp
+// compile with: /c
+// C2357 expected
+#pragma warning(disable : 4075)
+// Uncomment the following line to resolve.
+// int __cdecl myexit(void (__cdecl *)());
+#pragma init_seg(".mine$m",myexit)
+
+编译器错误 C2360 Compiler Error C2360 11
+的初始化已跳过标签初始化可以跳过中语句。除非声明将封闭的块中，不能跳过具有初始值设定项的声明。除非它被声明在块内，始终在范围变量的结束之前一直语句。下面的示例生成 C2360: The following sample generates C2360: // C2360.cpp
+int main() {
+   int x = 0;
+   switch ( x ) {
+   case 0 :
+      int i = 1;
+      { int j = 1; }
+   case 1 :   // C2360
+      int k = 1;
+   }
+} 可能的解决方法： Possible resolution: // C2360b.cpp
+int main() {
+   int x = 0;
+   switch ( x ) {
+   case 0 :
+      { int j = 1; int i = 1;}
+   case 1 :
+      int k = 1;
+   }
+}
+
+编译器错误 C2361 Compiler Error C2361 11
+的初始化已跳过标签初始化可以跳过中语句。除非声明将封闭的块中，不能跳过具有初始值设定项的声明。除非它被声明在块内，始终在范围变量的结束之前一直语句。下面的示例生成 C2361: The following sample generates C2361: // C2361.cpp
+void func( void ) {
+   int x;
+   switch (x) {
+   case 0 :
+      int i = 1;
+      { int j = 1; }
+   default :   // C2361 error
+      int k = 1;
+   }
+} 可能的解决方法： Possible resolution: // C2361b.cpp
+// compile with: /c
+void func( void ) {
+   int x = 0;
+   switch (x) {
+   case 0 :
+      { int j = 1; int i = 1;}
+   default :
+      int k = 1;
+   }
+}
+
+编译器错误 C2362 Compiler Error C2362 11
+的初始化已通过转到标签跳过使用编译时，跳转到标签防止标识符进行初始化。不能跳过具有初始值设定项的声明，除非声明包含在一个块，它不输入，或对象变量已初始化。下面的示例生成 C2326: The following sample generates C2326: // C2362.cpp
+// compile with: /Za
+int main() {
+   goto label1;
+   int i = 1;      // C2362, initialization skipped
+label1:;
+} 可能的解决方法： Possible resolution: // C2362b.cpp
+// compile with: /Za
+int main() {
+   goto label1;
+   {
+      int j = 1;   // OK, this block is never entered
+   }
+label1:;
+}
+
+编译器错误 C2364 Compiler Error C2364 11
+：非法类型的自定义特性自定义特性的命名自变量被限制为编译时常量。例如，整数类型，（、等），，和。示例下面的示例生成 C2364。 The following sample generates C2364. // c2364.cpp
+// compile with: /clr /c
+using namespace System;
+
+[attribute(AttributeTargets::All)]
+public ref struct ABC {
+public:
+   // Delete the following line to resolve.
+   ABC( Enum^ ) {}   // C2364
+   ABC( int ) {}   // OK
+};
+
+编译器错误 C2365 Compiler Error C2365 11
+“”重定义；以前的定义是“”你试图重新定义类成员。下面的示例生成 C2365。 The following sample generates C2365. // C2365.cpp
+// compile with: /c
+class C1 {
+   int CFunc();
+   char *CFunc;   // C2365, already exists as a member function
+
+   int CMem;
+   char *CMem();   // C2365, already exists as a data member
+};
+
+编译器错误 C2368 Compiler Error C2368 11
+“”：重定义；不同的分配说明符符号的声明和定义指定不同的特性。
+
+编译器错误 C2369 Compiler Error C2369 11
+“”：重定义；不同的下标已用其他下标声明数组。下面的示例生成 C2369： The following sample generates C2369: // C2369.cpp
+// compile with: /c
+int a[10];
+int a[20];   // C2369
+int b[20];   // OK
+
+编译器错误 C2370 Compiler Error C2370 11
+“”重定义；不同的存储类已使用不同的存储类声明标识符。示例下面的示例生成 C2370: The following sample generates C2370: // C2370.cpp
+// compile with: /Za /c
+extern int i;
+static int i;   // C2370
+int i;   // OK 示例 Example 下面的示例生成 C2370: The following sample generates C2370: // C2370b.cpp
+#define Thread __declspec( thread )
+extern int tls_i;
+int Thread tls_i;   // C2370 declaration and the definition differ
+int tls_i;   // OK
+
+编译器错误 C2371 Compiler Error C2371 11
+“”：重定义；不同的基类型已声明该标识符。以下示例生成：
+
+编译器错误 C2372 Compiler Error C2372 11
+：重定义不同类型的间接寻址使用不同的派生类型已定义标识符。下面的示例生成 C2326: The following sample generates C2326: // C2372.cpp
+// compile with: /c
+extern int *fp;
+extern int fp[];   // C2372
+extern int fp2[];   // OK
+
+编译器错误 C2373 Compiler Error C2373 11
+“”：重定义；不同的类型修饰符已使用不同的类型修饰符定义标识符。下面的示例生成 C2373： The following sample generates C2373: // C2373.h
+void __clrcall func( void );
+const int i = 20; 然后： And then: // C2373.cpp
+// compile with: /c
+#include "C2373.h"
+extern void __cdecl func( void );   // C2373
+extern void __clrcall func( void );   // OK
+
+extern int i;   // C2373
+extern const int i;   // OK
+
+编译器错误 C2374 Compiler Error C2374 11
+“”：重定义；多次初始化不止一次初始化了标识符。下面的示例生成 C2374： The following sample generates C2374: // C2374.cpp
+// compile with: /c
+int i = 0;
+int i = 1;   // C2374
+int j = 1;   // OK
+
+编译器错误 C2375 Compiler Error C2375 11
+“”：重定义；不同的链接该函数已经使用其他链接说明符声明。以下示例生成：
+
+编译器错误 C2376 Compiler Error C2376 11
+“”：重定义；不同基础的分配已使用不同基础的分配声明了该函数。
+
+编译器错误 C2377 Compiler Error C2377 11
+“”：重定义；不能由任何其他符号重载标识符被重新定义。以下示例生成：
+
+编译器错误 C2378 Compiler Error C2378 11
+“”：重定义；符号不能使用重载标识符已重定义为。下面的示例生成 C2378： The following sample generates C2378: // C2378.cpp
+// compile with: /c
+int i;
+typedef int i;   // C2378
+typedef int b;   // OK
+
+编译器错误 C2379 Compiler Error C2379 11
+形参数有不同的类型提升时指定的参数的类型不兼容，通过默认提升，与以前的声明中的类型。这是中的错误和警告具有扩展。下面的示例生成 C2379: The following sample generates C2379: // C2379.c
+// compile with: /Za
+void func();
+void func(char);   // C2379, char promotes to int
+
+编译器错误 C2380 Compiler Error C2380 11
+前面的（构造函数的返回类型或当前的类名称非法重定义？）的类型构造函数返回一个值，或重新定义的类名称。下面的示例生成 C2326: The following sample generates C2326: // C2380.cpp
+// compile with: /c
+class C {
+public:
+   int C();   // C2380, specifies an int return
+   int C;   // C2380, redefinition of i
+   C();   // OK
+};
+
+编译器错误 C2381 Compiler Error C2381 11
+：重定义（）不同声明函数并将其所使用的定义但然后定义修饰符。使用构成该函数的重定义的声明和定义需要使用上达成一致。下面的示例生成 C2381: The following sample generates C2381: // C2381.cpp
+// compile with: /c
+void f1();
+void __declspec(noreturn) f1() {}   // C2381
+void __declspec(noreturn) f2() {}   // OK
+
+编译器错误 C2382 Compiler Error C2382 11
+“”：重定义；不同的异常规范在下，此错误表示仅对异常规范尝试了函数重载。下面的示例生成 C2382： The following sample generates C2382: // C2382.cpp
+// compile with: /Za /c
+void f1(void) throw(int) {}
+void f1(void) throw(char) {}   // C2382
+void f2(void) throw(char) {}   // OK
+
+编译器错误 C2383 Compiler Error C2383 11
+符号：默认自变量不能存在于此符号编译器不允许在指向函数的指针上的默认自变量。中之前的版本中的编译器接受此代码，但现在会导致错误。对于适用于所有版本的的代码，现在将默认值分配给指针到函数参数。示例下面的示例生成 C2383，并显示可能的解决方法 ： The following example generates C2383, and shows a possible solution: // C2383.cpp
+// compile with: /c
+void (*pf)(int = 0);   // C2383
+void (*pf)(int);   // OK
+
+编译器错误 C2384 Compiler Error C2384 11
+“”：不能对托管类或类的成员应用线程修饰符不能使用上托管的成员或运行时类。托管代码中的静态线程本地存储仅可用于静态加载的（进程启动时，必须以静态方式加载该）。—运行时不支持线程本地存储。下面的行生成并演示如何在代码中修复此错误：
+
+编译器错误 C2385 Compiler Error C2385 11
+不明确访问权限成员可以从多个对象（它从多个对象继承的）派生。若要解决此错误通过提供强制转换，使该成员明确。重命名了基类中不明确的成员。示例下面的示例生成 C2385。 The following sample generates C2385. // C2385.cpp
+// C2385 expected
+#include <stdio.h>
+
+struct A
+{
+    void x(int i)
+    {
+        printf_s("\nIn A::x");
+    }
+};
+
+struct B
+{
+    void x(char c)
+    {
+        printf_s("\nIn B::x");
+    }
+};
+
+// Delete the following line to resolve.
+struct C : A, B {}
+
+// Uncomment the following 4 lines to resolve.
+// struct C : A, B
+// {
+//     using B::x;
+//     using A::x;
+// };
+
+int main()
+{
+    C aC;
+    aC.x(100);
+    aC.x('c');
+}
+
+struct C : A, B
+{
+    using B::x;
+    using A::x;
+};
+
+编译器错误 C2386 Compiler Error C2386 11
+“”：当前范围内已存在具有该名称的符号你尝试创建命名空间别名，但所选名称已存在。以下示例生成：
+
+编译器错误 C2387 Compiler Error C2387 11
+：不明确的基类因为多个基类中存在的函数，编译器无法明确地解析函数调用。若要解决此错误，请删除其中一个基类继承，从或显式限定函数调用。下面的示例生成 C2387: The following sample generates C2387: // C2387.cpp
+namespace N1 {
+   struct B {
+      virtual void f() {
+      }
+   };
+}
+
+namespace N2 {
+   struct B {
+      virtual void f() {
+      }
+   };
+}
+
+struct D : N1::B, N2::B {
+   virtual void f() {
+      B::f();   // C2387
+      // try the following line instead
+      // N1::B::f();
+   }
+};
+
+int main() {
+   D aD;
+   aD.f();
+}
+
+编译器错误 C2388 Compiler Error C2388 11
+：不能使用这两个声明符号和和修饰符不能用于相同的符号。变量的存储空间按进程或按应用程序域存在。有关详细信息，请参见应用程序域和过程。以下示例生成：
+
+编译器错误 C2389 Compiler Error C2389 11
+“”：非法的操作数“”不可为操作数。以下示例生成：
+
+编译器错误 C2390 Compiler Error C2390 11
+：不正确的存储类存储类对于全局范围标识符无效。默认的存储类用于替换无效的类。可能的解决方法：如果该标识符是一个函数，将其与声明存储。如果该标识符是正式参数或局部变量，则将其声明使用自动存储。如果该标识符是全局变量，则在使用没有任何存储类 （自动存储）的情况下声明它。示例下面的示例生成 C2390: The following sample generates C2390: // C2390.cpp
+register int i;   // C2390
+
+int main() {
+   register int j;   // OK
+}
+
+编译器错误 C2391 Compiler Error C2391 11
+：在类型定义，无法使用声明中包含完整类声明。声明可以指定的成员函数或详细的类型说明符，但不是完整的类声明。下面的示例生成 C2326: The following sample generates C2326: // C2391.cpp
+// compile with: /c
+class D {
+   void func( int );
+};
+
+class A {
+   friend class B { int i; };   // C2391
+
+   // OK
+   friend class C;
+   friend void D::func(int);
+};
+
+编译器错误 C2392 Compiler Error C2392 11
+：协变返回类型不支持在托管或，否则为将被重写协变返回类型时，不允许对于运行时成员函数或使用编译（公共语言运行时编译）选项。示例下面的示例生成了 C2392，并演示了如何修复此错误。 The following sample generates C2392 and shows how to fix it. // C2392.cpp
+// compile with: /clr
+public ref struct B {
+public:
+   int i;
+};
+
+public ref struct D: public B{};
+
+public ref struct B1 {
+public:
+   virtual B^ mf() {
+      B^ pB = gcnew B;
+      pB->i = 11;
+      return pB;
+   }
+};
+
+public ref struct D1: public B1 {
+public:
+   virtual D^ mf() override {  // C2392
+   // try the following line instead
+   // virtual B^ mf() override {
+   // return type D^ is covariant with B^, not allowed with CLR types
+      D^ pD = gcnew D;
+      pD->i = 12;
+      return pD;
+   }
+};
+
+int main() {
+   B1^ pB1 = gcnew D1;
+   B^ pB = pB1->mf();
+   D^ pD = dynamic_cast<D^>(pB);
+}
+
+编译器错误 C2393 Compiler Error C2393 11
+：不能在段领域中分配每个符号和编译器选项在中已弃用。使用变量表示您正在用编译或，和的安全或纯映像不能包含数据段。请参阅（公共语言运行时编译）有关详细信息。示例下面的示例生成 C2393。 The following sample generates C2393. // C2393.cpp
+// compile with: /clr:pure /c
+#pragma data_seg("myseg")
+int n = 0;   // C2393
+
+编译器错误 C2394 Compiler Error C2394 11
+或无效。至少一个参数必须是以下类型：“”、“”、“”，其中“”运行时或托管的类型中的一个运算符没有至少一个类型与运算符返回值的类型相同的参数。以下示例生成：
+
+编译器错误 C2395 Compiler Error C2395 11
+“”：或运算符无效。至少一个参数必须是以下类型：“”、“”、“”、“”、“”、“”，其中“”运行时或托管的类型中的一个运算符没有至少一个类型与运算符返回值的类型相同的参数。下面的示例生成 C2395，并演示如何修复此错误： The following sample generates C2395 and shows how to fix it: // C2395.cpp
+// compile with: /clr /c
+value struct V {
+   static V operator *(int i, char c);   // C2395
+
+   // OK
+   static V operator *(V v, char c);
+   // or
+   static V operator *(int i, V& rv);
+};
+
+编译器错误 C2396 Compiler Error C2396 11
+或用户定义的转换有效。必须转换自或转换至：“”、“”、“”，其中“”运行时或托管类型中的转换函数没有至少一个类型与包含转换函数的类型相同的参数。下面的示例生成 C2396，并演示如何修复此错误： The following sample generates C2396 and shows how to fix it: // C2396.cpp
+// compile with: /clr /c
+
+ref struct Y {
+   static operator int(char c);   // C2396
+
+   // OK
+   static operator int(Y^ hY);
+   // or
+   static operator Y^(char c);
+};
+
+编译器错误 C2397 Compiler Error C2397 11
+从类型到转换需要收缩转换使用统一初始化时找到的隐式收缩转换。语言允许在分配和初始化，隐式收缩转换和遵循适合，即使意外收缩是许多代码错误的原因。若要使代码更加安全，标准需要收缩转换发生在初始化列表中时诊断消息。在，诊断是编译器错误在中使用 统一安装支持的语法开头时。编译器将生成编译器警告（等级）时使用的列表或支持的的聚合初始化语法。当你知道目标中可以容纳该值可能的转换后的值范围时，可以认为可以收缩转换。在这种情况下，你知道个以上的编译器执行的操作。如果你有意进行收缩转换， 你的意图显式使用进行静态强制转换。否则，此错误消息几乎始终表示在代码中出现了。可以通过确保你初始化的对象具有足够大以处理输入的类型，从而修复此错误。下面的示例生成 C2397，并演示修复此错误的一种方法： The following sample generates C2397 and shows one way to fix it: // C2397.cpp -- C++ narrowing conversion diagnostics
+// Compile by using: cl /EHsc C2397.cpp
+#include <vector>
+
+struct S1 {
+    int m1;
+    double m2, m3;
+};
+
+void function_C2397(double d1) {
+    char c1 { 127 };          // OK
+    char c2 { 513 };          // error C2397
+
+    std::vector<S1> vS1;
+    vS1.push_back({ d1, 2, 3 }); // error C2397
+
+    // Possible fix if you know d1 always fits in an int
+    vS1.push_back({ static_cast<int>(d1), 2, 3 });
+}
+
+编译器错误 C2400 Compiler Error C2400 11
+中的内联汇编程序语法错误找到令牌在指定的上下文中导致语法错误。下面的示例生成 C2400: The following sample generates C2400: // C2400.cpp
+// processor: x86
+int main() {
+   __asm {
+      heh ax,bx;   // C2400, heh is not a valid x86 instruction
+      mov ax,bx;   // OK
+   }
+}
+
+编译器错误 C2401 Compiler Error C2401 11
+“”：寄存器必须为“”中的基间接存储操作数中的的寄存器必须是此上下文中的基寄存器。
+
+编译器错误 C2402 Compiler Error C2402 11
+“”：寄存器必须为“”中的索引间接存储操作数中使用的寄存器必须是此上下文中的索引寄存器。
+
+编译器错误 C2403 Compiler Error C2403 11
+“”寄存器必须为“”中的基索引寄存器间接存储操作数中使用的寄存器必须是此上下文中的基索引寄存器。
+
+编译器错误 C2404 Compiler Error C2404 11
+“”：“”中的寄存器非法此寄存器在该上下文中无效。
+
+编译器错误 C2405 Compiler Error C2405 11
+与偏移量的非法短前向引用短的前向引用必须引用仅的标签。无法使用附加的偏移量。
+
+编译器错误 C2406 Compiler Error C2406 11
+“”：在“”中未定义名称未定义的标识符用于，，或成员选择（）运算符。
+
+编译器错误 C2407 Compiler Error C2407 11
+“”中的“”寄存器非法在无效的上下文中指定了寄存器。
+
+编译器错误 C2408 Compiler Error C2408 11
+“”中运算符上的类型非法运算符的第一个参数不是合法的类型规范。
+
+编译器错误 C2409 Compiler Error C2409 11
+“”中用作运算符的非法类型该类型作为此上下文中的运算符是不合法的。
+
+编译器错误 C2410 Compiler Error C2410 11
+中的不明确的成员名称该标识符是多个结构或在此上下文中的联合的成员。导致错误操作数中使用的结构或联合的说明符。结构或联合说明符是类型的标识符或名称或与结构或联合所引用的类型相同的变量。该说明符必须是第一个的成员选择运算符（），以使用操作数 的左的操作数。
+
+编译器错误 C2411 Compiler Error C2411 11
+中的非法结构联合成员通过检查以下可能的原因进行修复该标识符不是可见的结构或在此上下文中的联合的成员。该标识符不是结构或使用成员选择（）运算符指定的联合的成员。
+
+编译器错误 C2412 Compiler Error C2412 11
+：不区分大小写的标签被重定义当前函数中多次定义该标签。更改标签和其引用的拼写。
+
+编译器错误 C2413 Compiler Error C2413 11
+：非法的对齐大小与使用的大小指令是缺少或超出有效范围。
+
+编译器错误 C2414 Compiler Error C2414 11
+非法的操作数的数目通过检查以下可能的原因进行修复操作码不支持的使用的操作数的数目。检查程序集语言参考手册》来确定的正确数目的操作数。较新的处理器支持的指令与不同数目的操作数。调整（最小体系结构）选项以使用更高版本的处理器。
+
+编译器错误 C2415 Compiler Error C2415 11
+操作数类型不正确操作码不使用此类型的操作数。通过检查以下可能的原因进行修复操作码不支持的使用的操作数的数目。检查程序集语言参考手册》来确定的正确数目的操作数。较新的处理器支持与其他类型的指令。调整（最小体系结构）选项以使用更高版本的处理 器。
+
+编译器错误 C2417 Compiler Error C2417 11
+在“”中被除除法运算符右侧的参数在此上下文中为零。
+
+编译器错误 C2418 Compiler Error C2418 11
+无法删除浏览器文件：编译器无法删除浏览器文件。通过检查以下可能的原因进行修复文件是只读的。文件正由另一个进程使用。
+
+编译器错误 C2419 Compiler Error C2419 11
+在“”中对求模运算符右侧的参数在此上下文中为零。
+
+编译器错误 C2420 Compiler Error C2420 11
+“”上下文中的非法符号标识符在此上下文中无效。
+
+编译器错误 C2421 Compiler Error C2421 11
+运算符用于中的注册运算符不能与使用操作数。
+
+编译器错误 C2422 Compiler Error C2422 11
+操作数中的非法段重写内联程序集代码错误地使用操作数段重写运算符（冒号）。可能的原因包括：该运算符前面寄存器不段寄存器。该运算符前面寄存器不是操作数中的唯一段寄存器。段重写运算符将显示在间接寻址运算符（括号）。跟后面段重写运算符的表达式不 是即时操作数或内存操作数。下面的示例生成 C2422: The following sample generates C2422: // C2422.cpp
+// processor: x86
+int main() {
+   _asm {
+      mov AX, [BX:ES]   // C2422
+      mov AX, ES   // OK
+   }
+}
+
+编译器错误 C2423 Compiler Error C2423 11
+编号：非法的小数位数内联程序集代码使用之外、、或数扩充寄存器。下面的示例生成 C2423: The following sample generates C2423: // C2423.cpp
+// processor: x86
+int main() {
+   _asm {
+      lea EAX, [EAX*3]   // C2423
+      lea EAX, [EAX+EAX*2]   // OK
+   }
+}
+
+编译器错误 C2424 Compiler Error C2424 11
+“令牌”“上下文”中的表达式不正确此上下文中包含此令牌的表达式不正确。
+
+编译器错误 C2425 Compiler Error C2425 11
+“令牌”：“上下文”中的非常量表达式此令牌构成此上下文中非常量表达式的一部分。若要解决此问题，请用常量文本或计算替换此令牌。以下示例生成：
+
+编译器错误 C2426 Compiler Error C2426 11
+中的非法运算符令牌不能用作在此上下文中的运算符。例如，不能嵌套索引运算符。
+
+编译器错误 C2427 Compiler Error C2427 11
+：无法在此作用域中定义类尝试定义嵌套的类，但嵌套的类是基本类，而不是最包含类的成员。下面的示例生成 C2427: The following sample generates C2427: // C2427.cpp
+// compile with: /c
+template <class T>
+struct S {
+   struct Inner;
+};
+
+struct Y : S<int> {};
+
+struct Y::Inner {};   // C2427
+
+// OK
+template<typename T>
+struct S<T>::Inner {};
+
+编译器错误 C2428 Compiler Error C2428 11
+：不允许对类型为的操作数不能将递减运算符应用于类型的对象。下面的示例生成 C2428: The following sample generates C2428: // C2428.cpp
+void g(bool fFlag) {
+   --fFlag;   // C2428
+   fFlag--;   // C2428
+}
+
+编译器错误 C2430 Compiler Error C2430 11
+在中注册多个索引多个注册进行缩放。编译器支持扩充的索引，但你只能扩展一个注册。示例下面的示例生成 C2430。 The following sample generates C2430. // C2430.cpp
+// processor: x86
+int main() {
+   _asm mov eax, [ebx*2+ecx*4] // C2430
+}
+
+编译器错误 C2431 Compiler Error C2431 11
+中的非法索引寄存器寄存器进行缩放，或用作索引和基寄存器。编码为处理器不允许是。下面的示例生成 C2431: The following sample generates C2431: // C2431.cpp
+// processor: x86
+int main() {
+   _asm mov ax, [ESI + 2*ESP]   // C2431
+   _asm mov ax, [esp + esp]   // C2431
+}
+
+编译器错误 C2432 Compiler Error C2432 11
+中的位数据的非法引用位寄存器用作索引或基寄存器。编译器不支持引用位数据。位寄存器在位代码编译时不能用作索引或基寄存器。下面的示例生成 C2432: The following sample generates C2432: // C2432.cpp
+// processor: x86
+int main() {
+   _asm mov eax, DWORD PTR [bx]   // C2432
+}
+
+编译器错误 C2433 Compiler Error C2433 11
+不允许在数据声明上，，和修饰符不能用于数据声明。示例下面的示例生成 C2433。 The following sample generates C2433. // C2433.cpp
+class C{};
+
+int main() {
+   inline C c;   // C2433
+}
+
+编译器错误 C2434 Compiler Error C2434 11
+：不能在中动态初始化使用声明的符号：纯模式和编译器选项在中已弃用。不能动态初始化每个进程变量在。有关详细信息，请参阅（公共语言运行时编译）和过程。示例下面的示例生成 C2434。 The following sample generates C2434. // C2434.cpp
+// compile with: /clr:pure /c
+int f() { return 0; }
+__declspec(process) int i = f();   // C2434
+__declspec(process) int i2 = 0;   // OK
+
+编译器错误 C2435 Compiler Error C2435 11
+：动态初始化需要托管的，不能使用编译和编译器选项在中已弃用。每个应用程序域全局变量的初始化要求使用编译的，这不会生成可验证的映像。有关详细信息，请参见应用程序域和过程。示例下面的示例生成 C2435: The following sample generates C2435: // C2435.cpp
+// compile with: /clr:safe /c
+int globalvar = 0;   // C2435
+
+__declspec(process)
+int globalvar2 = 0;
+
+编译器错误 C2436 Compiler Error C2436 11
+：成员函数或构造函数初始值设定项列表中的嵌套的类无法初始化成员函数或构造函数初始值设定项列表中的本地类。下面的示例生成 C2436: The following sample generates C2436: // C2436.cpp
+struct S{
+   int f();
+   struct Inner{
+      int i;
+   };
+   S():f(10), Inner(0){}   // C2436
+};
+
+编译器错误 C2437 Compiler Error C2437 11
+：已初始化一个对象只能初始化一次。下面的示例生成 C2437: The following sample generates C2437: // C2437.cpp
+// compile with: /c
+class A {
+public:
+   A(int i) {}
+};
+
+class B : A {
+   B() : A(1), A(2) {}   // C2437
+   B() : A(1) {}   // OK
+};
+
+编译器错误 C2438 Compiler Error C2438 11
+：无法初始化静态类数据通过构造函数构造函数用于初始化类的静态成员。必须在类声明的外部定义中初始化静态成员。下面的示例生成 C2438: The following sample generates C2438: // C2438.cpp
+struct X {
+   X(int i) : j(i) {}   // C2438
+   static int j;
+};
+
+int X::j;
+
+int main() {
+   X::j = 1;
+}
+
+编译器错误 C2439 Compiler Error C2439 11
+：无法初始化成员无法初始化类、结构或联合成员。通过检查以下可能的原因进行修复尝试初始化间接基类或结构。尝试初始化类或结构的继承的成员。必须通过类或结构的构造函数初始化继承的成员。
+
+编译器错误 C2440 Compiler Error C2440 11
+：无法从转换为编译器不能强制转换从到。示例如果你尝试初始化非常量，可能导致或通过使用代码中的字符串文字时的编译器一致性选项设置。在中，将字符串文本类型是数组，但在，它是数组。此示例生成示例如果你尝试将指针转换为到成员，也可能导致。下一步 的示例生成示例如果你尝试从仅前向声明但未定义的类型，强制转换，也可能导致。此示例生成示例第和的下一个示例行上的错误限定与消息。是用户定义类型，如类、结构或联合。的调用约定指定与实际的调用约定的用户定义的类型和涉及函数指针前向声明冲突的返 回类型中，会导致这些类型的不兼容性错误。在示例中，第一类是前向声明为结构和函数返回结构定该结构使用调用约定。下一步结构定义，其中，默认情况下，使用调用约定。因为道该结构的调用约定，直到其完成读取整个结构，该结构中的返回类型的调用约定还假 定为。结构后跟另一个函数声明返回结构，但此时，该结构的调用约定是。同样，函数指针，返回该结构，定义在结构定义之后，以便该结构使用调用约定。若要解决由于不兼容的调用约定发生的，声明在定义之后返回的函数。
+
+编译器错误 C2441 Compiler Error C2441 11
+使用声明的符号必须是常量在模式和编译器选项在中已弃用。默认情况下，变量是每个应用程序域下 yiw。变量标记下 yiw很容易导致错误，如果在一个应用程序域中修改并在另一个中读取。因此，编译器会强制执行每个进程变量为下 yiw：纯，仅在所有应用程序域中 的进行读取它们。有关详细信息，请参阅过程和（公共语言运行时编译）。示例下面的示例生成 C2441。 The following sample generates C2441. // C2441.cpp
+// compile with: /clr:pure /c
+__declspec(process) int i;   // C2441
+__declspec(process) const int j = 0;   // OK
+
+编译器错误 C2443 Compiler Error C2443 11
+操作数大小冲突该指令要求操作数相同的大小。下面的示例生成 C2443: The following sample generates C2443: // C2443.cpp
+// processor: x86
+short var;
+int main() {
+   __asm xchg ax,bl   // C2443
+   __asm mov al,red   // C2443
+   __asm mov al,BYTE PTR var   // OK
+}
+
+编译器错误 C2444 Compiler Error C2444 11
+“”：使用了原型，找到“”，应输入“”或“”函数原型后跟类型。缺少分号或大括号可能会引起此错误。
+
+编译器错误 C2446 Compiler Error C2446 11
+：从到的任何转换编译器无法转换到。转换可能没有意义，因为它违反了语义。
+
+编译器错误 C2447 Compiler Error C2447 11
+“”缺少函数标题是否是老式的形式表？此编译器在全局范围内遇到了意外的左大括号。大多数情况下，这是由格式错误的函数头、放错位置的声明或孤立的分号导致的。若要解决此问题，请确认左大括号跟在格式正确的函数头后面，并且其前面没有声明或孤立的分号 。此错误也可能由旧式语言形参列表引起。若要解决此问题，请重构参数列表以使用现代样式（即括在括号中）。—下面的示例生成 C2447: The following sample generates C2447: // C2447.cpp
+int c;
+{}       // C2447
+
+编译器错误 C2448 Compiler Error C2448 11
+：函数样式初始值设定项似乎是一个函数定义函数定义不正确。可以由旧式语言形参列表导致此错误。下面的示例生成 C2448: The following sample generates C2448: // C2448.cpp
+void func(c)
+   int c;
+{}   // C2448
+
+编译器错误 C2449 Compiler Error C2449 11
+找到在文件范围内（缺少函数标题？）在文件范围内出现的左大括号。此错误可能导致函数标头和左大括号的函数定义之间用分号隔开。下面的示例生成 C2499: The following sample generates C2499: // C2449.c
+// compile with: /c
+void __stdcall func(void) {}   // OK
+void __stdcall func(void);  // extra semicolon on this line
+{                         // C2449 detected here
+
+编译器错误 C2450 Compiler Error C2450 11
+类型的表达式是非法的表达式计算结果为无效的类型。它必须为整数类型或类类型与明确转换为整数类型。如果其计算结果为的用户定义的类型，则必须提供转换运算符。下面的示例生成 C2450: The following sample generates C2450: // C2450.cpp
+class X {
+public:
+   int i;
+} x;
+
+class Y {
+public:
+   int i;
+   operator int() { return i; }   // conversion operator
+} y;
+
+int main() {
+   int j = 1;
+   switch ( x ) {   // C2450, x is not type int
+   // try the following line instead
+   // switch ( y ) {
+      default:  ;
+   }
+}
+
+编译器错误 C2451 Compiler Error C2451 11
+条件表达式是类型的非法的条件表达式的计算结果为整数类型。下面的示例生成 C2451: The following sample generates C2451: // C2451.cpp
+class B {};
+
+int main () {
+   B b1;
+   int i = 0;
+   if (b1)   // C2451
+   // try the following line instead
+   // if (i)
+      ;
+}
+
+编译器错误 C2452 Compiler Error C2452 11
+的源类型无效源类型无效。例如，对中的所有类型操作必须是类型。下面的示例生成 C2452: The following sample generates C2452: // C2452.cpp
+// compile with: /clr
+
+struct A {};
+struct B : public A {};
+
+ref struct C {};
+ref struct D : public C{};
+
+int main() {
+   A a;
+   safe_cast<B*>(&a);   // C2452
+
+   // OK
+   C ^ c = gcnew C;
+   safe_cast<D^>(c);
+}
+
+编译器错误 C2457 Compiler Error C2457 11
+宏：预定义的宏不能出现在函数体外部您尝试使用预定义的宏，如函数，在全局空间中。示例下面的示例生成 C2457，并还显示正确用法： The following sample generates C2457 and also shows correct usage: // C2457.cpp
+#include <stdio.h>
+
+__FUNCTION__;   // C2457, cannot be global
+
+int main()
+{
+    printf_s("\n%s", __FUNCTION__);   // OK
+}
+
+编译器错误 C2458 Compiler Error C2458 11
+：重定义内定义类、结构、联合或枚举是在其自己的声明中重新定义。下面的示例生成 C2458: The following sample generates C2458: // C2458.cpp
+class C {
+   enum i { C };   // C2458
+};
+
+编译器错误 C2459 Compiler Error C2459 11
+：正在定义无法将添加为匿名成员类、结构或联合内重新定义其自己的范围由匿名联合的成员。下面的示例生成 C2459: The following sample generates C2459: // C2459.cpp
+// compile with: /c
+class C {
+   union { int C; };   // C2459
+   union { int D; };
+};
+
+编译器错误 C2460 Compiler Error C2460 11
+：使用，正在定义类或结构声明为其自身的成员。不允许递归定义的类和结构。下面的示例生成 C2460: The following sample generates C2460: // C2460.cpp
+class C {
+   C aC;    // C2460
+}; 相反，在类中使用的指针引用。 Instead, use a pointer reference in the class. // C2460.cpp
+class C {
+   C * aC;    // OK
+};
+
+编译器错误 C2461 Compiler Error C2461 11
+类：缺少正式参数的构造函数语法类的构造函数不指定任何形式的参数。构造函数的声明必须指定形参列表。列表可以为空。若要解决此问题，添加一对括号的声明后类类。示例下面的示例演示如何修复错误
+
+编译器错误 C2462 Compiler Error C2462 11
+：无法在新的表达式中定义的类型不能定义一种类型的操作数字段中运算符。将类型定义放入单独的语句。下面的示例生成 C2462: The following sample generates C2462: // C2462.cpp
+int main() {
+   new struct S { int i; };   // C2462
+}
+
+编译器错误 C2464 Compiler Error C2464 11
+：不能使用分配引用引用标识符分配运算符。引用不是内存的对象，因此无法返回指针指向它们。使用标准的变量声明语法来声明引用。下面的示例生成 C2464: The following sample generates C2464: // C2464.cpp
+int main() {
+   new ( int& ir );   // C2464
+}
+
+编译器错误 C2465 Compiler Error C2465 11
+不能在括号内定义匿名类型在带括号的表达式中定义了匿名结构、联合或枚举类型。这在中无效，因为该定义在函数范围中没有意义。
+
+编译器错误 C2466 Compiler Error C2466 11
+无法分配常量大小为的数组分配或使用大小为零声明数组时。数组大小的常量表达式必须是大于零的整数。用零个下标的数组声明是合法，仅为类、结构或联合成员，而且仅可与扩展。下面的示例生成 C2466: The following sample generates C2466: // C2466.cpp
+// compile with: /c
+int i[0];   // C2466
+int j[1];   // OK
+char *p;
+
+编译器错误 C2467 Compiler Error C2467 11
+匿名用户定义的类型的非法声明未声明的用户定义的嵌套的类型。编译源代码，与兼容性选项时，这是一个错误启用。下面的示例生成 C2467: The following sample generates C2467: //C2467.c
+// compile with: /Za
+int main() {
+   struct X {
+      union { int i; };   // C2467, nested declaration
+   };
+}
+
+编译器错误 C2469 Compiler Error C2469 11
+“”无法分配“”对象向运算符传递了一个无效类型。下面的示例生成 C2469： The following sample generates C2469: // C2469.cpp
+int main() {
+   int *i = new void;   // C2469
+   int *i = new int;   // OK
+}
+
+编译器错误 C2470 Compiler Error C2470 11
+：看起来像函数定义，但没有参数列表正在跳过明显正文函数定义为缺少其自变量列表。下面的示例生成 C2470: The following sample generates C2470: // C2470.cpp
+int MyFunc {};  // C2470
+void MyFunc2() {};  //OK
+
+int main(){
+   MyFunc();
+   MyFunc2();
+}
+
+编译器错误 C2471 Compiler Error C2471 11
+无法更新程序数据库编译器无法写入数据库文件。修复此问题确保磁盘具有足够的可用空间。确保文件不是只读的。确保没有共享冲突。
+
+编译器错误 C2472 Compiler Error C2472 11
+“”无法在托管代码“”中生成；请使用进行编译以生成混合映像当在纯公共语言运行库环境中使用托管代码不支持的类型时，将出现此错误。请使用进行编译以解决该错误。和编译器选项在中已弃用。示例下面的示例生成 C2472。 The following sample generates C2472. // C2472.cpp
+// compile with: /clr:pure
+// C2472 expected
+
+#include <cstdlib>
+
+int main()
+{
+   int * __ptr32 p32;
+   int * __ptr64 p64;
+
+   p32 = (int * __ptr32)malloc(4);
+   p64 = p32;
+} 请参阅 See Also /clr （公共语言运行时编译） /clr (Common Language Runtime Compilation)
+
+编译器错误 C2473 Compiler Error C2473 11
+“”看起来像函数定义，但却没有参数列表。编译器检测到看似为函数、但没有参数列表的内容。示例下面的示例生成 C2473。 The following sample generates C2473. // C2473.cpp
+// compile with: /clr /c
+class A {
+   int i {}   // C2473
+};
+
+class B {
+   int i() {}   // OK
+};
+
+编译器错误 C2474 Compiler Error C2474 11
+“”缺少相邻的分号，可能是关键字或标识符。编译器需要找到一个分号，因此不能确定你的意图。增加一个分号以解决此问题。示例以下示例生成。
+
+编译器错误 C2477 Compiler Error C2477 11
+：不能通过派生类中初始化静态数据成员一种模板类的静态数据成员未正确初始化。若要符合标准，这是一项重大更改与在中之前的编译器的版本。下面的示例生成 C2477: The following sample generates C2477: // C2477.cpp
+// compile with: /Za /c
+template <class T>
+struct S {
+   static int n;
+};
+
+struct X {};
+struct A: S<X> {};
+
+int A::n = 0;   // C2477
+
+template<>
+int S<X>::n = 0;
+
+编译器错误 C2479 Compiler Error C2479 11
+分配（）才有效静态范围的数据项语法可用于仅限静态数据。下面的示例生成 C2479: The following sample generates C2479: // C2479.cpp
+// compile with: /c
+#pragma section("mycode", read)
+static __declspec(allocate("mycode")) void DoNothing() {}   // C2479
+__declspec(allocate("mycode"))  int i = 0;   // OK
+
+编译器错误 C2480 Compiler Error C2480 11
+线程才有效静态范围的数据项不能使用使用自动变量、非静态数据成员、函数参数或函数声明或定义的属性。使用的全局变量、静态数据成员和仅局部静态变量的属性。下面的示例生成 C2480: The following sample generates C2480: // C2480.cpp
+// compile with: /c
+__declspec( thread ) void func();   // C2480
+__declspec( thread ) static int i;   // OK
+
+编译器错误 C2482 Compiler Error C2482 11
+标识符：不允许的线程数据的动态初始化此错误消息是在及更高版本中过时。在早期版本中，变量声明使用不能用需要运行时计算的表达式初始化属性。初始化所需的静态表达式数据。示例下面的示例生成 C2482 在 Visual Studio 2013 和早期版本： The following sample generates C2482 in Visual Studio 2013 and earlier: // C2482.cpp
+// compile with: /c
+#define Thread __declspec( thread )
+Thread int tls_i = tls_i;   // C2482
+
+int j = j;   // OK in C++; C error
+Thread int tls_i = sizeof( tls_i );   // Okay in C and C++
+
+编译器错误 C2483 Compiler Error C2483 11
+标识符：用构造函数或析构函数的对象不能声明为线程此错误消息是在及更高版本中过时。在早期版本中，变量声明与不能用一个构造函数或其他需要运行时计算的表达式初始化属性。初始化所需的静态表达式数据。示例下面的示例生成 C2483 Visual Studio 2013 和 早期版本中。 The following sample generates C2483 in Visual Studio 2013 and earlier versions. // C2483.cpp
+// compile with: /c
+__declspec(thread) struct A {
+   A(){}
+   ~A(){}
+} aa;   // C2483 error
+
+__declspec(thread) struct B {} b;   // OK 请参阅 See Also thread thread
+
+编译器错误 C2485 Compiler Error C2485 11
+“”：无法识别的扩展特性声明特性无效。
+
+编译器错误 C2486 Compiler Error C2486 11
+只允许在使用特性的函数在内联程序集函数中，名称保留为函数声明与裸属性。下面的示例生成 C2486: The following sample generates C2486: // C2486.cpp
+// processor: x86
+void __declspec(naked) f1() {
+   __asm {
+      mov   eax,   __LOCAL_SIZE
+   }
+}
+void f2() {
+   __asm {
+      mov   eax,   __LOCAL_SIZE   // C2486
+   }
+}
+
+编译器错误 C2487 Compiler Error C2487 11
+：不能与接口声明接口的类的成员您可以声明一个整个类或具有接口的非接口类的某些成员。你不能声明具有接口的类，然后再声明此类与接口的成员。
+
+编译器错误 C2488 Compiler Error C2488 11
+可以仅应用于非成员函数定义裸特性已应用于函数声明。下面的示例生成 C2488: The following sample generates C2488: // C2488.cpp
+// compile with: /c
+// processor: x86
+__declspec( naked ) void func();   // C2488  declaration, not definition
+__declspec( naked ) void i;   // C2488  i is not a function
+
+__declspec( naked ) void func() {}   // OK
+
+编译器错误 C2489 Compiler Error C2489 11
+：初始化函数范围中函数中不允许的自动或注册变量有关详细信息，请参阅裸。下面的示例生成 C2489: The following sample generates C2489: // C2489.cpp
+// processor: x86
+__declspec( naked ) int func() {
+   int i = 1;   // C2489
+   register int j = 1;   // C2489
+}
+
+编译器错误 C2490 Compiler Error C2490 11
+与特性的函数中不允许函数定义为裸不能使用结构化的异常处理。下面的示例生成 C2490: The following sample generates C2490: // C2490.cpp
+// processor: x86
+__declspec( naked ) int func() {
+   __try{}   // C2490, structured exception handling
+}
+
+编译器错误 C2491 Compiler Error C2491 11
+：不允许的函数定义可以将数据、静态数据成员和函数声明为，但不能定义为。若要解决此问题，请从函数定义中删除说明符。以下示例生成：
+
+编译器错误 C2492 Compiler Error C2492 11
+变量：具有线程存储持续时间的数据可能没有接口变量声明与线程属性，并使用的接口。地址变量之前运行时，不进行已知，以便它不能链接到导入或导出。下面的示例生成 C2492: The following sample generates C2492: // C2492.cpp
+// compile with: /c
+class C {
+public:
+   char   ch;
+};
+
+__declspec(dllexport) __declspec(thread) C c_1;   // C2492
+__declspec(thread) C c_1;   // OK
+
+编译器错误 C2493 Compiler Error C2493 11
+非法形式表达式必须基于指针。下面的示例生成 C2493: The following sample generates C2493: // C2493.cpp
+// compile with: /c
+char mybase;
+int __based(mybase) ptr;   // C2493
+
+// OK
+char * mybase;
+int __based(mybase) * ptr;
+
+编译器错误 C2494 Compiler Error C2494 11
+不能在筛选器表达式调用从或块不能使用中或块。下面的示例生成 C2494: The following sample generates C2494: // C2494.cpp
+#include <malloc.h>
+
+int main() {
+   __try {}
+   __except ( _alloca(100), 1 ) {}   // C2494
+   __try {}
+   __finally {
+      _alloca(100);   // C2494
+   }
+} 使用时也可能发生 C2494 /clr 。 C2494 can also occur when using /clr . // C2494b.cpp
+// compile with: /clr
+#include <malloc.h>
+
+int main() {
+   char * buf;
+   try {}
+   catch (char * buf2) {}
+   finally {
+      _alloca(100);   // C2494
+   }
+}
+
+编译器错误 C2495 Compiler Error C2495 11
+只能应用于函数声明或定义扩展的特性可以应用于函数声明或定义仅。下面的示例生成 C2495: The following sample generates C2495: // C2495.cpp
+// compile with: /c
+__declspec(nothrow) class X {   // C2495
+   int m_data;
+} x;
+
+__declspec(nothrow) void test();   // OK
+
+编译器错误 C2496 Compiler Error C2496 11
+只能应用到具有外部链接的数据项属性可以仅应用于外部可见的且全局数据项。下面的示例生成 C2496: The following sample generates C2496: // C2496.cpp
+// compile with: /c
+__declspec(selectany) int x1 = 1;
+const __declspec(selectany) int x2 = 2;   // C2496
+static __declspec(selectany) int x6 = 6;   // C2496
+
+extern const __declspec(selectany) int x3 = 3;
+
+__declspec(selectany) int x4;
+
+// dynamic initialization of x5
+int f();
+__declspec(selectany) int x5 = f();
+
+extern const int x7;
+// OK - redeclaration of x7 that is extern
+const __declspec(selectany) int x7 = 7;
+
+编译器错误 C2498 Compiler Error C2498 11
+只能应用于类声明或定义使用可导致此错误使用函数。示例下面的示例生成 C2498: The following sample generates C2498: // C2498.cpp
+// compile with: /c
+void __declspec(novtable) f() {}   // C2498
+class __declspec(novtable) A {};   // OK
+
+编译器错误 C2499 Compiler Error C2499 11
+类不能是其自己的基类你尝试指定要定义用作基类的类。下面的示例生成 C2499: The following sample generates C2499: // C2499.cpp
+// compile with: /c
+class CMyClass : public CMyClass {};   // C2499
+class CMyClass{};   // OK

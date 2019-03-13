@@ -1,0 +1,8 @@
+﻿按配置文件优化错误 PG0165 Profile-Guided Optimization Error PG0165 11
+ 读取 Filename.pgd: 不支持 PGD 版本 （版本不匹配）。 PGD 文件是特定于特定的编译器工具集。 使用与用于不同的编译器时，会生成此错误 Filename .pgd。 此错误指示，此编译器工具集无法使用从数据 Filename .pgd 来优化当前程序。若要解决此问题，重新生成 Filename .pgd 通过使用当前编译器工具集。
+
+按配置优化警告 PG1039 Profile-Guided Optimization Warning PG1039 11
+ 失败等待空闲时间以进行扫描。不允许应用程序 pgosweep 运行。 当应用程序处于空闲状态时，如果可能，运行 pgosweep。
+
+按配置优化警告 PG1087 Profile-Guided Optimization Warning PG1087 11
+ PGC 文件 file 不是有效的。 The PGC file 'file' is not valid. 对应的.pgc 文件已损坏，可能是因为异常结束分析会话。 重新运行分析的方案并正常终止。

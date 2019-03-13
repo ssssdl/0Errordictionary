@@ -1,0 +1,5311 @@
+﻿编译器警告（等级 1 和等级 3）C4793 Compiler Warning (level 1 and 3) C4793 11
+：函数编译为本机代码编译器无法编译函数到托管代码中，即使指定编译器选项。相反，编译器发出警告和说明性的连续消息，并进行编译函数到本机代码。连续消息包含原因文本，解释为什么函数不能编译为。这是一个级别警告，当你指定编译器选项。编译器选项在中已弃用。下表列出所有可能的连续消息。原因消息备注在托管代码中不支持对齐的数据类型必须能够分配数据，根据需要这可能不可行的如果数据对齐与声明如或对齐。在托管代码中不支持使用的函数是一个特殊的链接器符号，通常用于只能由低级别的本机代码加载。不支持编译器选项本机函数不能调用托管的函数具有变量自变量列表因为这些函数有不同的堆栈布局要求。但是，如果你指定编译器选项，因为该程序集可以包含仅托管函数支持列表的变量自变量。有关详细信息，请参阅纯代码和可验证代码。位不支持使用修饰符声明的数据指针必须在当前平台上的本机指针相同的大小。有关详细信息，请参阅、。位不支持使用修饰符声明的数据指针必须在当前平台上的本机指针相同的大小。有关详细信息，请参阅、。一个或多个内部函数不支持在托管代码中在发出消息的时间的内部函数的名称不可用。但是，内部函数通常导致此消息表示低级别的机器指令。在托管代码中不支持内联本机程序集内联程序集代码可以包含任意的本机代码，不能进行管理。非虚函数转换（）必须编译为本机非虚函数转换（）必须使用非托管的地址。使用的函数必须编译为本机必须能够控制程序执行。但是，函数通过保存和还原寄存器和执行状态等的低级信息忽略正则程序执行。示例下面的示例生成 C4793。 The following sample generates C4793. // C4793.cpp  
+// compile with: /c /clr /W3   
+// processor: x86  
+int asmfunc(void) {   // C4793, compiled as unmanaged, native code  
+   __asm {  
+      mov eax, 0  
+   }  
+} warning C4793: 'asmfunc' : function is compiled as native code:  
+        Inline native assembly ('__asm') is not supported in managed code 示例 Example 下面的示例生成 C4793。 The f...
+
+编译器警告（等级 1 和等级 4）C4700 Compiler Warning (level 1 and level 4) C4700 11
+未初始化的局部变量名称使用本地变量名称已使用，即从阅读，它具有之前被分配了值。在和中，默认情况下不初始化本地变量。未初始化的变量可以包含任何值，因而其使用会导致未定义的行为。警告几乎始终表示可能导致不可预知的结果或崩溃程序中存在。若要解决此问题，可以初始化本地变量，它们在声明时或在使用之前为它们分配一个值。函数可用来初始化的变量传递作为引用参数，或当作为指针参数传递其地址。示例如果变量、和习惯之前它们进行了初始化，并显示可能会导致垃圾回收值的种类，此示例将生成。变量、和是否会导致该警告，因为它们在使用前初始化：此代码时运行、、和未初始化，并且输出是不可预知：
+
+编译器警告（等级 1 和等级 4）C4949 Compiler Warning (level 1 and level 4) C4949 11
+托管和非托管杂注为仅在使用编译时，才有意义选项编译器将忽略托管和非托管杂注，如果不使用编译的源代码。此警告为信息性。下面的示例生成 C4949: The following sample generates C4949: // C4949.cpp  
+// compile with: /LD /W1  
+#pragma managed   // C4949 当 #pragma 非托管 使用不带 /clr ，C4949 是 4 级警告。 When #pragma unmanaged is used without /clr , C4949 is a level 4 warning. 下面的示例生成 C4949: The following sample generates C4949: // C4949b.cpp  
+// compile with: /LD /W4  
+#pragma unmanaged   // C4949
+
+编译器警告（等级 1）C4002 Compiler Warning (level 1) C4002 11
+“”宏的实参太多宏中的实参数量超过宏定义中的形参数量。预处理器会收集额外参数，但会在宏扩展过程中忽略它们。未正确使用时，可能会发生。下面的示例生成 C4002： The following sample generates C4002: // C4002.cpp  
+// compile with: /W1  
+#define test(a) (a)  
+
+int main() {  
+   int a = 1;  
+   int b = 2;  
+   a = test(a,b);   // C4002  
+   // try..  
+   a = test(a);  
+} 此错误还可能来自于为 Visual Studio .NET 2003 执行的编译器一致性工作：不再接受宏中的额外逗号。 This error can also be generated as a result of compiler conformance work that was done for Visual Studio .NET 2003: extra commas in macro no longer accepted. 编译器将不再接受宏中的额外逗号。 The compiler will no longer accept extra commas in a macro. 要使代码在 Visual Studio .NET 2003 和 Visual Studio .NET 版本的 Visual C++ 中有效，请删除额外逗号。 For code to be valid in both the Visual Studio .NET 2003 and Visual Studio .NET versions of Visual C++, remove the extra commas. // C4002b.cpp  
+// compile with: /W1  
+#define F(x,y)  
+int main()  
+{  
+   F(2,,,,,,3,,,,,,)   // C4002  
+   // Try the following line instead:  
+   // F(2,3)  
+}
+
+编译器警告 （等级 1） C4003 Compiler Warning (level 1) C4003 11
+“”宏的实参不足在宏定义中的正式参数的数目超过宏中的实际参数的数目。宏扩展替换为缺少的参数的空文本。下面的示例生成 C4003: The following sample generates C4003: // C4003.cpp  
+// compile with: /WX  
+#define test(a,b) (a+b)  
+
+int main()  
+{  
+   int a = 1;  
+   int b = 2;  
+   a = test(b);   // C4003  
+   // try..  
+   a = test(a,b);  
+}
+
+编译器警告 （等级 1） C4005 Compiler Warning (level 1) C4005 11
+：宏重定义宏标识符定义了两次。编译器使用在第二个宏的定义。通过检查以下可能的原因进行修复定义宏，在命令行和在代码中使用指令。从包含文件导入的宏。使用以下可能的解决方案进行修复删除其中一个定义。使用指令之前第二个定义。下面的示例生成 C4005: The following sample generates C4005: // C4005.cpp  
+// compile with: /W1 /EHsc  
+#include <iostream>  
+using namespace std;  
+
+#define TEST "test1"  
+#define TEST "test2"   // C4005 delete or rename to resolve the warning  
+
+int main() {  
+   cout << TEST << endl;  
+}
+
+编译器警告（等级 1）C4006 Compiler Warning (level 1) C4006 11
+应输入标识符指令未指定要取消定义的标识符。指令被忽略。若要解决此警告，请确保指定一个标识符。以下示例生成：
+
+编译器警告 （等级 1） C4010 Compiler Warning (level 1) C4010 11
+单行注释包含续行符单行注释，由此引入、包含一个反斜杠用作作为行继续符。编译器会考虑为延续的下一行，并会将其视为注释。某些语法导向型编辑器并不表示为一个注释延续字符后面的行。忽略语法突出显示的任何行的会导致此警告。下面的示例生成 C4010: The following sample generates C4010: // C4010.cpp  
+// compile with: /WX  
+int main() {  
+   // the next line is also a comment because of the backslash \  
+   int a = 3; // C4010  
+   a++;  
+}
+
+编译器警告 （等级 1） C4015 Compiler Warning (level 1) C4015 11
+：位域的类型必须是整型位域未声明为整数类型。编译器将假定将无符号的位字段的基类型。位域必须声明为无符号的整数类型。
+
+编译器警告 （等级 1） C4020 Compiler Warning (level 1) C4020 11
+：实参太多函数调用中的实际参数的数目超过的函数原型或定义中的正式参数的数目。编译器传递额外实际参数根据该函数的调用约定。下面的示例生成 C4020: The following sample generates C4020: // C4020.c  
+// compile with: /W1 /c  
+void f(int);  
+int main() {  
+   f(1,2);   // C4020  
+} 可能的解决方法： Possible resolution: // C4020b.c  
+// compile with: /c  
+void f(int);  
+int main() {  
+   f(1);  
+}
+
+编译器警告 （等级 1） C4022 Compiler Warning (level 1) C4022 11
+：指针的实际参数的不匹配实际的参数的指针类型不同于相应的形式参数的指针类型。实际的参数传递时未经更改。
+
+编译器警告 （等级 1） C4024 Compiler Warning (level 1) C4024 11
+：形参和实参参数的类型不同对应的形参和实参参数具有不同的类型。编译器将传递的实际参数，而无需更改。接收的函数将参数类型转换为期望的类型。
+
+编译器警告（等级 1）C4025 Compiler Warning (level 1) C4025 11
+“编号”基指针传递给带变量参数的函数参数号将基指针传递给使用变量参数的函数会导致指针被规范化，结果不可预知。请勿将基指针传递给带变量参数的函数。
+
+编译器警告（等级 1）C4026 Compiler Warning (level 1) C4026 11
+使用形参表声明的函数函数声明具有形参，而函数定义没有。对此函数的后续调用将假定该函数不具有参数。
+
+编译器警告（等级 1）C4027 Compiler Warning (level 1) C4027 11
+未用形参表声明的函数函数声明没有形参，但在函数定义中有形参或在调用中有实参。对此函数的后续调用假定该函数采用函数定义或调用中找到的类型的实参。
+
+编译器警告 （等级 1） C4028 Compiler Warning (level 1) C4028 11
+形参数字不同于声明在声明中的相应参数不一致的形参的类型。使用原始声明中的类型。此警告才有效的源代码。示例下面的示例生成 C4028。 The following sample generates C4028. // C4028.c  
+// compile with: /W1 /Za  
+void f(int , ...);  
+void f(int i, int j) {}   // C4028  
+
+void g(int , int);  
+void g(int i, int j) {}   // OK  
+
+int main() {}
+
+编译器警告 （等级 1） C4029 Compiler Warning (level 1) C4029 11
+定义不同的声明的正式参数列表函数声明中的形参类型与函数定义中不一致。编译器使用从定义的参数列表。
+
+编译器警告（等级 1）C4030 Compiler Warning (level 1) C4030 11
+第一个形参表比第二个长使用不同的正式参数重新声明了一个函数。编译器使用在第一个声明中给出的正式参数。
+
+编译器警告 （等级 1） C4031 Compiler Warning (level 1) C4031 11
+超过第一个列表中的第二个形参列表函数是使用不同的正式参数重新声明。编译器使用在第一个声明中给出的正式参数。
+
+编译器警告（等级 1）C4033 Compiler Warning (level 1) C4033 11
+“”必须返回值此函数未返回值。返回了一个未定义的值。必须将使用且没有返回值的函数声明为类型。此错误针对语言代码。以下示例生成：
+
+编译器警告 （等级 1） C4034 Compiler Warning (level 1) C4034 11
+返回运算符应用于操作数大小为零的空结构、联合、类或枚举的类型或类型。
+
+编译器警告（等级 1）C4036 Compiler Warning (level 1) C4036 11
+未命名的“”作为实际参数未向用作实际参数的结构、联合、枚举或类提供任何类型名称。如果使用来生成函数原型，编译器会发出此警告，并注释掉所生成原型中的形式参数。指定类型名称，以解决此警告。示例以下示例生成。
+
+编译器警告（等级 1）C4038 Compiler Warning (level 1) C4038 11
+“”：非法的环境类修饰符具有或特性的类不能使用此修饰符。
+
+编译器警告（等级 1）C4041 Compiler Warning (level 1) C4041 11
+编译器限制正在终止浏览器输出浏览器信息超出了编译器限制。使用（浏览器信息包含局部变量）进行编译可能导致该警告。使用以下可能的解决方案进行修复使用（浏览器信息不含局部变量）进行编译。禁用浏览器输出（不使用或进行编译）。
+
+编译器警告 （等级 1） C4042 Compiler Warning (level 1) C4042 11
+：具有错误的存储类指定的存储类不能用于在此上下文中此标识符。编译器将改为使用默认的存储类：如果标识符是一个函数。自动，如果标识符是正式参数或局部变量。没有存储类，如果标识符是全局变量。可以指定存储类而不导致此警告注册在参数声明中。下面的示例生成 C4042 The following sample generates C4042 // C4042.cpp  
+// compile with: /W1 /LD  
+int func2( __declspec( thread ) int tls_i )    // C4042  
+// try the following line instead  
+// int func2( int tls_i )  
+{  
+   return tls_i;  
+}
+
+编译器警告（等级 1）C4045 Compiler Warning (level 1) C4045 11
+“”：数组界限溢出数组的初始值设定项太多。忽略多余的初始值设定项。请确保数组元素与初始值设定项在大小和数量上匹配。
+
+编译器警告 （等级 1） C4047 Compiler Warning (level 1) C4047 11
+“运算符”“”与“”的间接级别不同指针可以指向的变量（一级间接寻址）给另一个指针指向变量（两个级别都的间接寻址下），依次类推。示例下面的示例生成 C4047: The following sample generates C4047: // C4047.c  
+// compile with: /W1  
+
+int main() {  
+   char **p = 0;   // two levels of indirection  
+   char *q = 0;   // one level of indirection  
+
+   char *p2 = 0;   // one level of indirection  
+   char *q2 = 0;   // one level of indirection  
+
+   p = q;   // C4047  
+   p2 = q2;  
+} 示例 Example 下面的示例生成 C4047: The following sample generates C4047: // C4047b.c  
+// compile with: /W1  
+#include <stdio.h>  
+
+int main() {  
+   int i;  
+   FILE *myFile = NULL;  
+   errno_t  err = 0;  
+   char file_name[256];  
+   char *cs = 0;  
+
+   err = fopen_s(&myFile, "C4047.txt", "r");  
+   if ((err != 0) || (myFile)) {  
+      printf_s("fopen_s failed!\n");  
+      exit(-1);  
+    }  
+   i = fgets(file_name, 256, myFile);   // C4047  
+   cs = fgets(file_name, 256, myFile);   // OK  
+}
+
+编译器警告 （等级 1） C4048 Compiler Warning (level 1) C4048 11
+不同的声明数组下标和表达式涉及到不同的大小的数组的指针。指针用于无需转换。如果你显式强制转换为相同或等效类型数组，则可能会修复此警告。
+
+编译器警告 （等级 1） C4049 Compiler Warning (level 1) C4049 11
+编译器限制：显示终止行号该文件包含多个源行。编译器停止在编号。对于在行之后的代码：映像将包含没有调试信息的行号。一些诊断可能会报告与错误的行号。列表可能有不正确的行号。
+
+编译器警告（等级 1）C4052 Compiler Warning (level 1) C4052 11
+函数声明不同；一个包含变量参数函数的一个声明不包含变量参数。它将被忽略。以下示例生成：
+
+编译器警告 （等级 1） C4067 Compiler Warning (level 1) C4067 11
+意外的令牌以下预处理器指令的预期换行符编译器发现，并忽略额外预处理器指令后的字符。仅在兼容性下会出现此警告。若要解决此警告，请尝试以下操作：使用?使用注释分隔符：
+
+编译器警告（等级 1）C4068 Compiler Warning (level 1) C4068 11
+未知的杂注编译器忽略了无法识别的杂注。请确保所使用的的编译器允许使用该杂注。下面的示例生成 C4068： The following sample generates C4068: // C4068.cpp  
+// compile with: /W1  
+#pragma NotAValidPragmaName   // C4068, use valid name to resolve  
+int main()  
+{  
+}
+
+编译器警告 （等级 1） C4074 Compiler Warning (level 1) C4074 11
+初始值设定项放置在编译器保留初始化区域编译器初始化区域中，通过指定，保留。可能的运行库在初始化之前执行此区域中的代码。下面的示例生成 C4074: The following sample generates C4074: // C4074.cpp  
+// compile with: /W1  
+#pragma init_seg( compiler )   // C4074  
+
+// try this line to resolve the warning  
+// #pragma init_seg(user)  
+
+int main() {  
+}
+
+编译器警告（等级 1） C4075 Compiler Warning (level 1) C4075 11
+初始值设定项放置在无法识别的初始化区域中使用无法识别的节名称。编译器忽略命令。以下示例生成：
+
+编译器警告（等级 1）C4076 Compiler Warning (level 1) C4076 11
+“”不能和“”类型一起使用类型修饰符（无论是有符号还是）不能用于非整数类型。将被忽略。示例以下示例生成
+
+编译器警告（等级 1）C4077 Compiler Warning (level 1) C4077 11
+未知的选项旧式杂注与未知的参数一起使用。参数必须为、、、或为空。编译器将忽略杂注，保持堆栈检查不变。示例
+
+编译器警告 （等级 1） C4079 Compiler Warning (level 1) C4079 11
+意外的标记“”杂注自变量列表中出现意外的分隔符标记。已忽略杂注的其余部分。下面的示例生成 C4079: The following sample generates C4079: // C4079.cpp  
+// compile with: /W1  
+#pragma warning(disable : 4081)  
+#pragma pack(c,16)   // C4079  
+
+int main() {  
+}
+
+编译器警告（等级 1）C4080 Compiler Warning (level 1) C4080 11
+应为段名标识符；找到“”中段的名称必须是字符串或标识符。如果找不到有效标识符，则编译器会忽略杂注。下面的示例生成 C4080： The following sample generates C4080: // C4080.cpp  
+// compile with: /W1  
+extern "C" void func(void);  
+
+#pragma alloc_text()   // C4080  
+
+// try this line to resolve the warning  
+// #pragma alloc_text("mysection", func)  
+
+int main() {  
+}  
+
+void func(void) {  
+}
+
+编译器警告（等级 1）C4081 Compiler Warning (level 1) C4081 11
+需要“”；找到“”在此上下文中，编译器需要另一个标记。示例
+
+编译器警告 （等级 1） C4083 Compiler Warning (level 1) C4083 11
+预期找到了标识符标识符出现在错误的位置在语句。示例检查语法指令。
+
+编译器警告（等级 1）C4085 Compiler Warning (level 1) C4085 11
+杂注参数应为“”或者“”杂注需要或参数。将忽略杂注。下面的示例生成 C4085： The following sample generates C4085: // C4085.cpp  
+// compile with: /W1 /LD  
+#pragma optimize( "t", maybe )  // C4085
+
+编译器警告（等级 1）C4086 Compiler Warning (level 1) C4086 11
+杂注参数应为“”、“”、“”、“”或者“”杂注参数不具有要求的值（、、、或）。示例
+
+编译器警告（等级 1）C4087 Compiler Warning (level 1) C4087 11
+“”：用“”参数列表声明函数声明没有形参，而函数调用具有实参。根据该函数的调用约定传递了额外的参数。此警告针对编译器。示例
+
+编译器警告 （等级 1） C4088 Compiler Warning (level 1) C4088 11
+：指针实际参数形参数字中的不匹配相应的形式和实际参数具有不同程度的间接性。实际的参数传递时未经更改。所调用的函数会将其值解释为指针。
+
+编译器警告 （等级 1） C4089 Compiler Warning (level 1) C4089 11
+：不同类型中实际参数形参数字对应的形参和实参参数具有不同的类型。实际的参数传递时未经更改。该函数将转换为函数定义中指定的类型实参。
+
+编译器警告 （等级 1） C4090 Compiler Warning (level 1) C4090 11
+：不同的限定符使用指定修饰符，防止它被修改不检测由编译器定义是在操作中使用的变量。编译表达式时不进行修改。时指向的指针，则可能引发此警告或项分配给未声明为指向指针或。对于程序发出此警告。在程序中，编译器会发出错误：。下面的示例生成 C4090: The following sample generates C4090: // C4090.c  
+// compile with: /W1  
+int *volatile *p;  
+int *const *q;  
+int **r;  
+
+int main() {  
+   p = q;   // C4090  
+   p = r;  
+   q = p;   // C4090  
+   q = r;  
+   r = p;   // C4090  
+   r = q;   // C4090  
+}
+
+编译器警告 （等级 1） C4091 Compiler Warning (level 1) C4091 11
+：未不声明任何变量时忽略左侧的编译器检测到的情况：用户可能想要声明的变量，但编译器无法将该变量声明。示例开头的用户定义的类型声明的特性应用于该类型的变量。指示未声明任何变量。下面的示例生成 C4091。 The following sample generates C4091. // C4091.cpp  
+// compile with: /W1 /c  
+__declspec(dllimport) class X {}; // C4091  
+
+// __declspec attribute applies to varX  
+__declspec(dllimport) class X2 {} varX;  
+
+// __declspec attribute after the class or struct keyword   
+// applies to user defined type  
+class __declspec(dllimport) X3 {}; 示例 Example 如果标识符是的 typedef，它还不能为变量的名称。 If an identifier is a typedef, it cannot also be a variable name. 下面的示例生成 C4091。 The following sample generates C4091. // C4091_b.cpp  
+// compile with: /c /W1 /WX  
+#define LIST 4  
+typedef struct _LIST {} LIST;   // C4091
+
+编译器警告 （等级 1） C4096 Compiler Warning (level 1) C4096 11
+：接口不是一个接口不会发出到你可能应为接口的接口定义未被定义为接口，因此将不会发送到文件。请参阅接口属性指示接口是一个接口的列表属性。下面的示例生成 C4096: The following sample generates C4096: // C4096.cpp  
+// compile with: /W1 /LD  
+#include "windows.h"  
+[module(name="xx")];  
+
+// [object, uuid("00000000-0000-0000-0000-000000000001")]  
+__interface a  
+{  
+};  
+
+[coclass, uuid("00000000-0000-0000-0000-000000000002")]  
+struct b : a  
+{  
+};   // C4096, remove coclass or uncomment object
+
+编译器警告（等级 1）C4097 Compiler Warning (level 1) C4097 11
+杂注参数应是“”或者“”给杂注传递了无效的值。下面的示例生成 C4097： The following sample generates C4097: // C4097.cpp  
+// compile with: /W1  
+#pragma runtime_checks("",test)   // C4097  
+// try the following line instead  
+// #pragma runtime_checks("",off)  
+
+int main() {  
+}
+
+编译器警告 （等级 1） C4098 Compiler Warning (level 1) C4098 11
+函数返回值与返回类型声明的函数具有返回一个值的语句。编译器假定该函数返回类型的值。
+
+编译器警告 （等级 1） C4103 Compiler Warning (level 1) C4103 11
+：包含标头后更改的对齐方式可能是由于缺少封装影响布局的类，并且通常情况下，如果封装在标头文件之间的更改，可能会有问题。使用包之前退出标头文件，若要解决此警告。下面的示例生成 C4103: The following sample generates C4103: // C4103.h  
+#pragma pack(push, 4)  
+
+// defintions and declarations  
+
+// uncomment the following line to resolve  
+// #pragma pack(pop) 然后， And then, // C4103.cpp  
+// compile with: /LD /W1  
+#include "c4103.h"   // C4103
+
+编译器警告（等级 1）C4109 Compiler Warning (level 1) C4109 11
+意外的标识符“”忽略包含意外标识符的杂注。示例
+
+编译器警告 （等级 1） C4113 Compiler Warning (level 1) C4113 11
+与的参数列表中不同函数指针分配给另一个函数指针，但不是一致的函数的形参列表。分配的编译时不进行修改。
+
+编译器警告 （等级 1） C4114 Compiler Warning (level 1) C4114 11
+多次使用同一类型限定符类型声明或定义使用的类型限定符，，签名，或不止一次。这会导致具有扩展警告而是在兼容性下的错误。下面的示例生成 C4114: The following sample generates C4114: // C4114.cpp  
+// compile with: /W1 /c  
+volatile volatile int i;   // C4114 下面的示例生成 C4114: The following sample generates C4114: // C4114_b.cpp  
+// compile with: /W1 /c  
+static const int const * ii;   // C4114  
+static const int * const iii;   // OK
+
+编译器警告 （等级 1） C4116 Compiler Warning (level 1) C4116 11
+在括号中的未命名的类型定义带括号的表达式中定义了结构、联合或枚举的类型没有名称。类型定义是无意义。在函数调用中，定义具有全局作用域。在函数调用中，定义具有与所调用的函数位于同一作用域。
+
+编译器警告（等级 1）C4117 Compiler Warning (level 1) C4117 11
+保留“”宏名；已忽略“”通过检查以下可能的原因进行修复尝试定义或取消定义预定义的宏。尝试定义或取消定义预处理器运算符。以下示例生成：
+
+编译器警告（等级 1）C4119 Compiler Warning (level 1) C4119 11
+指定了不同的基“”和“”两个基指针不兼容，因为它们具有不同的基。编译器不能在它们之间转换。
+
+编译器警告（等级 1）C4120 Compiler Warning (level 1) C4120 11
+基于不基于不匹配编译器无法在两个指针之间转换，因为其中一个有基础和另一个则没有。
+
+编译器警告（等级 1）C4122 Compiler Warning (level 1) C4122 11
+“”仅适用于带链接的函数杂注仅适用于使用声明的函数。它不能与外部函数一起使用。将忽略杂注。
+
+编译器警告 （等级 1） C4124 Compiler Warning (level 1) C4124 11
+与堆栈检查做效率很低关键字与堆栈检查启用一起使用。约定生成更快的代码，但堆栈检查会导致代码较慢。使用时，关闭堆栈检查与杂注或。仅为第一个函数声明在这些情况下发出此警告。
+
+编译器警告 （等级 1） C4129 Compiler Warning (level 1) C4129 11
+：无法识别的字符转义序列以下反斜杠中的字符或字符串常量不识别为有效的转义序列。反斜杠是忽略，并且不打印。对反斜杠后面的字符都将打印。若要打印单个反斜杠，指定使用双反斜杠。标准，节中的讨论了转义序列。下面的示例生成 C4129: The following sample generates C4129: // C4129.cpp  
+// compile with: /W1  
+int main() {  
+   char array1[] = "\/709";   // C4129  
+   char array2[] = "\n709";   // OK  
+}
+
+编译器警告（等级 1）C4138 Compiler Warning (level 1) C4138 11
+在注释外找到“”结束注释分隔符前面没有开始注释分隔符。编译器将假定星号和正斜杠之间留有一个空格。示例此警告可由嵌套注释引起。如果注释掉包含注释的代码段，在块中包含代码，并将控制表达式设置为零，可能会解决此警告：
+
+编译器警告（等级 1）C4141 Compiler Warning (level 1) C4141 11
+“”使用了多次示例
+
+编译器警告 （等级 1） C4142 Compiler Warning (level 1) C4142 11
+良性重定义的类型一种类型中不起作用对已生成代码的方式重新定义。通过检查以下可能的原因进行修复：派生类的成员函数具有不同的返回类型从相应的成员函数的基类。与定义的类型命令重新定义使用不同的语法。下面的示例生成 C4142: The following sample generates C4142: // C4142.c  
+// compile with: /W1  
+float X2;  
+X2 = 2.0 + 1.0;   // C4142  
+
+int main() {  
+   float X2;  
+   X2 = 2.0 + 1.0;   // OK  
+}
+
+编译器警告（等级 1）C4143 Compiler Warning (level 1) C4143 11
+不支持杂注“”；使用分配不再受支持。请改用关键字。
+
+编译器警告 （等级 1） C4144 Compiler Warning (level 1) C4144 11
+：关系表达式用作表达式指定的关系表达式用作的控制表达式切换语句。关联的语句将提供布尔值。下面的示例生成 C4144: The following sample generates C4144: // C4144.cpp  
+// compile with: /W1  
+int main()  
+{  
+   int i = 0;  
+   switch(!i) {   // C4144, remove the ! to resolve  
+      case 1:  
+         break;  
+      default:  
+         break;  
+   }  
+}
+
+编译器警告（等级 1）C4145 Compiler Warning (level 1) C4145 11
+“”关系表达式用作表达式；可能和“”混淆语句使用关系表达式作为其控制表达式，这会导致的语句的布尔值。是否希望使用示例下面的示例生成 C4145: The following sample generates C4145: // C4145.cpp  
+// compile with: /W1  
+int main() {  
+   int i = 0;  
+   switch(i == 1) {   // C4145, use i instead of i == 1 to resolve  
+      case 1:  
+         break;  
+      default:  
+         break;  
+   }  
+}
+
+编译器警告（等级 1）C4153 Compiler Warning (level 1) C4153 11
+表达式中的函数数据指针转换在函数指针与数据指针之间转换。在扩展下允许此类转换，但在下则不允许。
+
+编译器警告 （等级 1） C4154 Compiler Warning (level 1) C4154 11
+删除数组表达式提供的指针转换不能使用上一个数组，因此编译器将数组转换为指针。示例
+
+编译器警告（等级 1）C4155 Compiler Warning (level 1) C4155 11
+未使用数组形式的“”删除数组表达式数组形式应用于删除数组。此警告只会在兼容性情况下出现。示例下面的示例生成 C4155： The following sample generates C4155: // C4155.cpp  
+// compile with: /Za /W1  
+#include <stdio.h>  
+
+int main(void)  
+{  
+    int (*array)[ 10 ] = new int[ 5 ] [ 10 ];  
+    array[0][0] = 8;  
+
+    printf_s("%d\n", array[0][0]);  
+
+   delete array;   // C4155  
+    // try the following line instead  
+    // delete [] array;   // C4155  
+}
+
+编译器警告 （等级 1） C4157 Compiler Warning (level 1) C4157 11
+已由编译器忽略杂注仅编译器可识别。
+
+编译器警告（等级 1）C4158 Compiler Warning (level 1) C4158 11
+假定单多个虚拟未发出则伴随。
+
+编译器警告（等级 1）C4160 Compiler Warning (level 1) C4160 11
+杂注，未找到先前入栈的标识符标识符源代码中的语句试图弹出尚未入栈的标识符。要避免此警告，请确保要弹出的标识符已正确入栈。下面的示例生成 C4160： The following example generates C4160: // C4160.cpp  
+// compile with: /W1  
+#pragma pack(push)  
+
+#pragma pack(pop, id)   // C4160  
+// use identifier when pushing to resolve the warning  
+// #pragma pack(push, id)  
+
+int main() {  
+}
+
+编译器警告 （等级 1） C4162 Compiler Warning (level 1) C4162 11
+：没有找到具有链接的函数具有链接的函数声明，但找不到。若要解决此警告，编译文件中编译器。如果你必须调用编译器，将函数声明之前。下面的示例生成 C4162 The following sample generates C4162 // C4162.cpp  
+// compile with: /c /W1  
+unsigned char _bittest(long* a, long b);  
+#pragma intrinsic (_bittest)   // C4162  
+
+int main() {  
+   bool bit;  
+   long num = 78002;  
+   bit = _bittest(&num, 5);  
+} 可能的解决方法： Possible resolution: // C4162b.cpp  
+// compile with: /c  
+extern "C"  
+unsigned char _bittest(long* a, long b);  
+#pragma intrinsic (_bittest)  
+
+int main() {  
+   bool bit;  
+   long num = 78002;  
+   bit = _bittest(&num, 5);  
+}
+
+编译器警告（等级 1）C4163 Compiler Warning (level 1) C4163 11
+“”：不可用作内部函数指定的函数不能用作函数。编译器将忽略无效的函数名称。以下示例生成：
+
+编译器警告（等级 1）C4164 Compiler Warning (level 1) C4164 11
+“”未声明的内部函数指定内部函数未声明；可能需要对相应的头文件执行操作。
+
+编译器警告 （等级 1） C4165 Compiler Warning (level 1) C4165 11
+要转换为是否确定这是你想得到？使用中的时如果语句，将转换为除非你显式测试作为的变量。默认情况下，此警告处于关闭状态。示例下面的示例生成 C4165 The following sample generates C4165 // C4165.cpp  
+// compile with: /W1  
+#include <windows.h>  
+#pragma warning(1:4165)  
+
+extern HRESULT hr;  
+int main() {  
+   if (hr) {  
+   // try either of the following ...  
+   // if (FAILED(hr)) { // C4165 expected  
+   // if (hr != S_OK) {  
+   }  
+}
+
+编译器警告（等级 1）C4166 Compiler Warning (level 1) C4166 11
+构造函数析构函数的非法调用约定构造函数和析构函数不能具有平台默认以外的调用约定（显式指定的情况除外）。
+
+编译器警告（等级 1）C4167 Compiler Warning (level 1) C4167 11
+函数：仅可用作内部函数函数尝试强制编译器对必须以内部形式使用的函数使用常规调用。将忽略杂注。若要避免此警告，请删除函数。示例
+
+编译器警告（等级 1）C4168 Compiler Warning (level 1) C4168 11
+编译器限制：超出调试器类型，删除程序数据库“”并重新生成必须重新生成程序数据库文件，以在程序中容纳所有类型。
+
+编译器警告 （等级 1） C4172 Compiler Warning (level 1) C4172 11
+返回地址的本地变量或临时函数将返回本地变量或临时对象的地址。本地变量和临时对象会被销毁时函数返回，因此返回的地址无效。重新设计函数，使它不返回本地对象的地址。下面的示例生成 C4172: The following sample generates C4172: // C4172.cpp  
+// compile with: /W1 /LD  
+float f = 10;  
+
+const double& bar() {  
+// try the following line instead  
+// const float& bar() {  
+   return f;   // C4172  
+}
+
+编译器警告（等级 1）C4174 Compiler Warning (level 1) C4174 11
+“”：不可用作示例
+
+编译器警告（等级 1）C4175 Compiler Warning (level 1) C4175 11
+杂注：最初必须在命令行上指定浏览器信息要使用杂注，必须在编译过程中生成浏览信息。
+
+编译器警告（等级 1）C4176 Compiler Warning (level 1) C4176 11
+“”的未知子组件杂注包含无效子组件。若要排除对特定名称的引用，必须在名称前使用选项。示例
+
+编译器警告（等级 1）C4177 Compiler Warning (level 1) C4177 11
+杂注杂注应在全局范围内杂注不应在局部范围内使用。只有在当前范围后遇到全局范围时，杂注才有效。下面的示例生成 C4177： The following sample generates C4177: // C4177.cpp  
+// compile with: /W1  
+// #pragma bss_seg("global")   // OK  
+
+int main() {  
+   #pragma bss_seg("local")    // C4177  
+}
+
+编译器警告（等级 1）C4178 Compiler Warning (level 1) C4178 11
+对于表达式的类型而言，常量“”过大表达式中的常量不符合向其分配的类型。示例
+
+编译器警告（等级 1）C4179 Compiler Warning (level 1) C4179 11
+：分析为和：与标准混淆注释是不正确的注释分隔符。请改用或。
+
+编译器警告（等级 1）C4180 Compiler Warning (level 1) C4180 11
+应用到函数类型的限定符没有意义；已将其忽略已将限定符（如）应用于定义的函数类型。示例
+
+编译器警告（等级 1）C4182 Compiler Warning (level 1) C4182 11
+包括嵌套级别为层可能的无限递归由于嵌套的包含文件数量过多，编译器用尽了堆上的空间。当包含文件包含在另一个包含文件中时，它就是嵌套的。此消息是信息性消息，出现在错误之前。
+
+编译器警告 （等级 1） C4183 Compiler Warning (level 1) C4183 11
+：缺少返回的类型假定是返回的成员函数类或结构中的成员函数的内联定义没有返回类型。假定该成员函数返回类型的默认。下面的示例生成 C4183: The following sample generates C4183: // C4183.cpp  
+// compile with: /W1 /c  
+#pragma warning(disable : 4430)  
+class MyClass1;  
+class MyClass2 {  
+   MyClass1() {};   // C4183  
+};
+
+编译器警告（等级 1）C4185 Compiler Warning (level 1) C4185 11
+忽略未知的特性“”该特性不是有效的特性。它将被忽略。示例
+
+编译器警告（等级 1）C4186 Compiler Warning (level 1) C4186 11
+导入特性需要计数自变量忽略特性的参数数量不正确。示例特性不采用任何参数。特性仅采用两个参数。
+
+编译器警告（等级 1）C4187 Compiler Warning (level 1) C4187 11
+导入特性和不兼容同时忽略语句指定了和特性。忽略这两个特性。
+
+编译器警告 （等级 1） C4190 Compiler Warning (level 1) C4190 11
+具有链接指定，但它返回与不兼容的函数指针具有（用户定义类型，这是类、结构、枚举或联合）用作返回类型和链接。这是合法如果：对此函数的所有调用都发生通过。在函数的定义。示例
+
+编译器警告（等级 1）C4215 Compiler Warning (level 1) C4215 11
+使用的非标准扩展：长浮点默认扩展将长浮点作为。兼容性却没有。使用为了保持兼容性。下面的示例生成 C4215: The following sample generates C4215: // C4215.cpp  
+// compile with: /W1 /LD  
+long float a;   // C4215  
+
+// use the line below to resolve the warning  
+// double a;
+
+编译器警告（等级 1）C4216 Compiler Warning (level 1) C4216 11
+使用的非标准扩展：长浮点默认扩展将长浮点作为。兼容性却没有。使用为了保持兼容性。下面的示例生成 C4216: The following sample generates C4216: // C4216.cpp  
+// compile with: /W1  
+float long a;   // C4216  
+
+// use the line below to resolve the warning  
+// double a;  
+
+int main() {  
+}
+
+编译器警告（等级 1）C4218 Compiler Warning (level 1) C4218 11
+使用的非标准扩展：必须指定至少一个存储类或类型具有默认的扩展中，可以声明一个变量，而不指定某个类型或存储类。默认类型为。示例此类声明是在兼容性无效。
+
+编译器警告（等级 1）C4224 Compiler Warning (level 1) C4224 11
+使用的非标准扩展：形参以前已定义为类型以前使用标识符作为。这将导致在兼容性警告。示例
+
+编译器警告（等级 1）C4226 Compiler Warning (level 1) C4226 11
+使用的非标准扩展关键字是过时关键字的当前版本不使用此关键字。此警告将自动提升为错误。
+
+编译器警告（等级 1）C4227 Compiler Warning (level 1) C4227 11
+使用了记时错误：忽略引用上的限定符使用类似的限定符或与引用是过时的方法。示例
+
+编译器警告（等级 1）C4228 Compiler Warning (level 1) C4228 11
+使用的非标准扩展：限定符在声明符列表中的逗号之后将被忽略利用限定符喜欢或逗号声明变量时是扩展后。示例
+
+编译器警告（等级 1）C4229 Compiler Warning (level 1) C4229 11
+使用了记时错误：在数据上的修饰符将被忽略使用修饰符，如过时的做法是对数据声明。示例
+
+编译器警告（等级 1）C4230 Compiler Warning (level 1) C4230 11
+使用了记时错误：修饰符限定符交织在一起忽略的限定符使用修饰符之前限定符如是过时的做法。示例
+
+编译器警告（等级 1）C4237 Compiler Warning (level 1) C4237 11
+关键字尚不支持，但保留供将来使用在编译器中未实现的规范中的关键字，但关键字不能作为用户定义的符号。下面的示例生成 C4237: The following sample generates C4237: // C4237.cpp  
+// compile with: /W1 /c  
+int export;   // C4237
+
+编译器警告（等级 1）C4251 Compiler Warning (level 1) C4251 11
+：类需要具有的接口用于类的客户端若要导出具有的类时数据损坏的可能性降至（，确保：所有静态数据是通过从导出的函数的访问。你的类没有内联的方法可以修改静态数据。你的类没有内联的方法使用的函数，或使用静态数据其他库函数请参阅潜在错误对象跨边界传递有关详细信息。你的类的任何方法而不考虑内联可以使用类型的和中的实例化其中具有静态数据差异。你可以避免通过定义一个，它定义具有虚函数的类和函数您可以调用来实例化并删除对象类型的导出类。然后，可以只需调用虚函数的类型。导出模板的详细信息，请参阅从中查看。如果你从标准库，编译调试版本中的类型派生，则可以忽略和编译器错误消息，其中表示。
+
+编译器警告（等级 1）C4258 Compiler Warning (level 1) C4258 11
+：从定义忽略循环使用封闭范围中的定义下 yiw和中定义的变量为循环之后超出范围为循环结束。如果在作用域包含再次使用循环变量，但在封闭的循环中，定义与同名的变量，则会发生此警告为循环。例如
+
+编译器警告（等级 1）C4264 Compiler Warning (level 1) C4264 11
+：不重写的基的虚拟成员函数函数将被隐藏后始终生成。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。
+
+编译器警告（等级 1）C4269 Compiler Warning (level 1) C4269 11
+使用编译器生成默认构造函数初始化的自动数据生成不可靠的结果使用编译器生成的默认构造函数初始化非普通类的自动实例。示例由于在堆栈的初始值上生成类的此实例可以是任何内容。此外，由于它是实例的值决不能更改。
+
+编译器警告（等级 1）C4272 Compiler Warning (level 1) C4272 11
+：标记（）导入函数时，必须指定本地调用约定。它是错误导出函数标记有调用约定及编译器发出此警告，如果你尝试导入标记的函数。下面的示例生成 C4272: The following sample generates C4272: // C4272.cpp  
+// compile with: /c /W1 /clr  
+__declspec(dllimport) void __clrcall Test();   // C4272  
+__declspec(dllimport) void Test2();   // OK
+
+编译器警告（等级 1）C4273 Compiler Warning (level 1) C4273 11
+：不一致的链接他们使用的不同文件中的两个定义。示例下面的示例生成 C4273。 The following sample generates C4273. // C4273.cpp  
+// compile with: /W1 /c  
+char __declspec(dllimport) c;  
+char c;   // C4273, delete this line or the line above to resolve 示例 Example 下面的示例生成 C4273。 The following sample generates C4273. // C4273_b.cpp  
+// compile with: /W1 /clr /c  
+#include <stdio.h>  
+extern "C" int printf_s(const char *, ...);   // C4273
+
+编译器警告 （等级 1） C4274 Compiler Warning (level 1) C4274 11
+忽略请参阅文档注释（，）指令，将用户指定的字符串插入的对象或可执行文件中，已弃用。因此，编译器将忽略指令。警告建议您使用注释（，）指令。但是，这一建议已弃用，并且将编译器的未来版本中对其进行修改。如果你使用指令，链接器工具将忽略注释记录生成的指令并发出警告。而不是指令，我们建议在你的应用程序中使用文件版本资源字符串。更正此错误删除字符串指令。请参阅注释（）链接器工具警告使用资源文件
+
+编译器警告（等级 1）C4276 Compiler Warning (level 1) C4276 11
+：不提供原型假定没有参数当你执行与函数的地址调用约定，你必须提供原型，以便编译器可以创建函数的修饰的名称。由于函数不具有任何原型，编译器，创建修饰的名时，假定函数没有任何参数。
+
+编译器警告（等级 1）C4286 Compiler Warning (level 1) C4286 11
+：由基类在行号上捕获指定的异常类型由上一个处理程序处理。第二个的类型派生自的第一个类型。异常的基类捕获异常的派生类。示例
+
+编译器警告（等级 1）C4288 Compiler Warning (level 1) C4288 11
+使用的非标准扩展：在循环中声明的循环控制变量用在循环范围中外它与外层作用域中的声明冲突使用编译时和中声明的变量为之后使用循环已为循环作用域。语言的扩展允许此变量，以保持在范围内，并且提醒您未使用的变量的第一个声明。请参阅有关如何指定中的扩展为使用循环。下面的示例生成 C4288: The following sample generates C4288: // C4288.cpp  
+// compile with: /W1 /c /Zc:forScope-  
+int main() {  
+   int i = 0;    // not used in this program  
+   for (int i = 0 ; ; ) ;  
+   i++;   // C4288 using for-loop declaration of i  
+}
+
+编译器警告（等级 1）C4291 Compiler Warning (level 1) C4291 11
+：找到了不匹配运算符如果初始化引发异常，不会释放内存放置新使用其中没有任何放置删除。当为具有运算符的对象分配内存新，该对象的构造函数中调用。如果构造函数引发了异常，应释放已为对象分配任何内存。这不会发生，除非运算符删除函数存在匹配运算符新。如果使用运算符新不带任何额外自变量与编译，，或选项启用异常处理，编译器将生成代码调用运算符删除在构造函数引发异常。如果你使用的放置形式新运算符（带参数的形式除了大小的分配）和对象的构造函数引发了异常，则编译器仍将生成代码来调用运算符删除但它仅会如果运算符的放置形式删除存在匹配运算符的放置形式新分配内存。例如上面的示例生成警告，因为没有的运算符的放置形式删除已定义匹配运算符的放置形式新。若要解决此问题，插入以下代码上述主要。请注意，所有重载运算符删除函数参数与匹配的重载运算符新，除第一个参数。
+
+编译器警告（等级 1）C4293 Compiler Warning (level 1) C4293 11
+：移动计数负或太大、未定义的行为如果计数为负数或过大，则生成的映像的行为不确定。示例下面的示例生成 C4293: The following sample generates C4293: // C4293.cpp  
+// compile with: /c /W1  
+unsigned __int64 combine (unsigned lo, unsigned hi) {  
+
+   return (hi << 32) | lo;   // C4293  
+
+   // try the following line instead  
+   // return ( (unsigned __int64)hi << 32) | lo;  
+}
+
+编译器警告（等级 1）C4297 Compiler Warning (level 1) C4297 11
+“”假定函数不引发异常，但确实发生了异常函数声明中包含的（可能为隐式）说明符为一个空异常说明符或（属性，而定义包含一个或多个引发语句。若要解决，请不要尝试在声明了、或的函数中引发异常。或者，删除、或规范。默认情况下，编译器为用户定义的析构函数和释放函数以及编译器生成的特殊成员函数生成隐式说明符。这符合标准。若要防止生成隐式说明符，并还原到的非标准行为编译器，请使用编译器选项。有关详细信息，请参阅（隐式异常说明符）。有关异常规范的详细信息，请参阅异常规范。另请参阅（异常处理模型）有关如何修改异常处理在编译时的行为的信息。也会生成此警告函数标记，即使它们是函数。下面的示例生成 C4297： The following sample generates C4297: // C4297.cpp  
+// compile with: /W1 /LD  
+void __declspec(nothrow) f1()   // declared nothrow  
+// try the following line instead  
+// void f1()  
+{  
+   throw 1;   // C4297  
+}
+
+编译器警告（等级 1）C4305 Compiler Warning (level 1) C4305 11
+上下文：从截断到备注当某个值转换为更小的类型进行初始化，或作为构造函数自变量，从而导致信息丢失时，发出此警告。示例此示例演示两种方法可能会看到此警告：若要修复此问题，请使用正确的类型的值初始化，或使用显式强制转换为正确的类型。例如，使用文本而不是如（浮点文本的默认类型）来初始化变量，或要传递给构造函数采用自变量。
+
+编译器警告（等级 1）C4311 Compiler Warning (level 1) C4311 11
+“”从“”到“”的指针截断此警告检测位指针截断问题。例如，如果为位体系结构编译代码，则当指针被分配给（位）时，指针（位）的值将被截断。有关详细信息，请参阅使用指针的规则。有关警告的常见原因的其他信息，请参阅常见编译器错误。为位目标编译后，下列代码示例会生成，然后演示如何修复此问题：
+
+编译器警告（等级 1）C4312 Compiler Warning (level 1) C4312 11
+“”从“”转换到更大的“”此警告检测将位值分配给位指针类型的尝试，例如，将位或强制转换为位指针。这可能是不安全的转换，即使对于在发生符号扩展时适应位的指针值也是如此。如果为位指针类型分配负位整数，则符号扩展会导致指针值引用的内存地址与整数的值不同。仅对位编译目标发出此警告。有关详细信息，请参阅使用指针的规则。以下代码示例在其针对位目标进行编译时将生成：
+
+编译器警告（等级 1）C4313 Compiler Warning (level 1) C4313 11
+“”：格式字符串中的“格式说明符”与类型“”的自变量数量发生冲突指定的格式与要传递的值之间出现冲突。例如，你将位的参数传递给了未经限定的格式说明符（预期为一个位的整数参数）。此警告仅当为位目标编译代码时才会生效。示例以下代码示例在其用于为位目标进行编译时将生成。
+
+编译器警告（等级 1）C4319 Compiler Warning (level 1) C4319 11
+：零扩展到更大的结果（按位求补）运算符是无符号，然后零扩展转换为更大的类型时。示例在下面的示例中，是计算结果为位无符号表达式并且然后通过零扩展转换为位。这会导致意外的运算结果。
+
+编译器警告（等级 1）C4325 Compiler Warning (level 1) C4325 11
+忽略标准节部分忽略你不能更改的标准部分的属性。例如这将覆盖标准部分使用短数据类型，为长数据类型。标准节你不能更改其属性包括：可能在以后添加其他部分。请参阅
+
+编译器警告（等级 1）C4326 Compiler Warning (level 1) C4326 11
+的返回类型应为而不是函数返回的类型以外。例如，使用，未返回。下面的示例生成 C4326: The following sample generates C4326: // C4326.cpp  
+// compile with: /Za /W1  
+char main()  
+{   // C4326 try int main  
+}
+
+编译器警告（等级 1）C4329 Compiler Warning (level 1) C4329 11
+忽略上枚举利用对齐关键字上不允许使用修饰符。下面的示例生成 C4329: The following sample generates C4329: // C4329.cpp  
+// compile with: /W1 /LD  
+enum __declspec(align(256)) TestEnum {   // C4329  
+   TESTVAL1,  
+   TESTVAL2,  
+   TESTVAL3  
+};  
+__declspec(align(256)) enum TestEnum1;
+
+编译器警告（等级 1）C4333 Compiler Warning (level 1) C4333 11
+：右移位运算过大数据丢失右移位时，操作已过大。所有有效位都被移出，结果将始终为零。示例下面的示例生成 C4333。 The following sample generates C4333. // C4333.cpp  
+// compile with: /c /W1  
+unsigned shift8 (unsigned char c) {  
+   return c >> 8;   // C4333  
+
+   // try the following line instead  
+   // return c >> 4;   // OK  
+}
+
+编译器警告（等级 1）C4340 Compiler Warning (level 1) C4340 11
+：值由正值切换为负值值大于最大为负值包装在周围的正数值。
+
+编译器警告（等级 1）C4342 Compiler Warning (level 1) C4342 11
+行为更改函数调用，但在早期版本中调用时是成员运算符在之前的版本中，调用了某个成员，但此行为已更改和编译器现在在命名空间范围中找到最佳匹配。如果找到一个成员运算符，编译器会以前不考虑任何命名空间范围运算符。如果没有在命名空间范围更好的匹配，当前编译器正确调用它，而早期的编译器不予以考虑。你已成功将代码移植到最新版本后，应禁用此警告。编译器可能会误报，生成此警告的代码没有任何行为更改。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。下面的示例生成 C4342: The following sample generates C4342: // C4342.cpp  
+// compile with: /EHsc /W1  
+#include <fstream>  
+#pragma warning(default: 4342)  
+using namespace std;  
+struct X : public ofstream {  
+   X();  
+};  
+
+X::X() {  
+   open( "ofs_bug_ev.txt." );  
+   if ( is_open() ) {  
+      *this << "Text" << "<-should be text" << endl;   // C4342  
+      *this << ' ' << "<-should be space symbol" << endl;   // C4342  
+   }  
+}  
+
+int main() {  
+   X b;  
+   b << "Text" << "<-should be text" << endl;  
+   b << ' ' << "<-should be space symbol" << endl;  
+}
+
+编译器警告（等级 1）C4344 Compiler Warning (level 1) C4344 11
+行为更改的调用中的显式模板自变量结果的使用对使用显式模板自变量函数的调用不会像未指定显式参数一样调用其他函数
+
+编译器警告（等级 1）C4346 Compiler Warning (level 1) C4346 11
+：依赖名称不是类型依赖名称是否被视为一种类型，则需要关键字。对于的所有版本的工作都方式相同的代码，添加到声明。下面的示例生成 C4346: The following sample generates C4346: // C4346.cpp  
+// compile with: /WX /LD  
+template<class T>  
+struct C {  
+   T::X* x;   // C4346  
+   // try the following line instead  
+   // typename T::X* x;  
+}; 下面的示例显示了其他示例其中 typename 则需要使用关键字： The following samples shows other examples where the typename keyword is required: // C4346b.cpp  
+// compile with: /LD /W1  
+template<class T>  
+const typename T::X& f(typename T::Z* p);   // Required in both places  
+
+template<class T, int N>  
+struct L{};  
+
+template<class T>  
+struct M : public L<typename T::Type, T::Value>   
+{   // required on type argument, not on non-type argument  
+   typedef typename T::X   Type;  
+   Type f();   // OK: "Type" is a type-specifer  
+   typename T::X g();   // typename required  
+   operator typename T::Z();   // typename required      
+}; 并且， and this, // C4346c.cpp  
+// compile with: /LD /WX  
+struct Y {  
+   typedef int Y_t;  
+};  
+
+template<class T>  
+struct A {  
+   typedef Y A_t;  
+};  
+
+template<class T>  
+struct B {  
+   typedef /*typename*/ A<T>::A_t B_t;   // C4346 typename needed here  
+   typedef /*typename*/ B_t::Y_t  B_t2;   // typename also needed here  
+};
+
+编译器警告（等级 1）C4348 Compiler Warning (level 1) C4348 11
+：重定义的默认参数：参数号一个模板参数重定义。下面的示例生成 C4348: The following sample generates C4348: // C4348.cpp  
+// compile with: /LD /W1  
+template <class T=int> struct A;   // forward declaration  
+
+template <class T=int> struct A { };   
+// C4348, redefinition of default parameter  
+// try the following line instead  
+// template <class T> struct A { };
+
+编译器警告（等级 1）C4350 Compiler Warning (level 1) C4350 11
+行为更改调用了“”而不是“”右值不能绑定到非引用。在之前的版本，就可以将右值绑定到直接初始化中的非引用。此代码现在会发出警告。为了向后兼容，仍可以将右值绑定到非引用，但只要有可能，是首选标准转换。此警告表示从年编译器的行为的更改。如果启用，此警告可能可能给出的正确代码。例如，它可以为其赋予时使用类模板。如果你收到此警告，检查你的代码，以查看是否它依赖于绑定到非量引用的右值。添加到引用的或提供其他的常量引用重载可能会解决问题。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。下面的示例生成 C4350: The following sample generates C4350: // C4350.cpp  
+// compile with: /W1  
+#pragma warning (default : 4350)  
+class A {};  
+
+class B  
+{  
+public:  
+   B(B&){}  
+   // try the following instead:  
+   // B(const B&){}  
+
+   B(A){}  
+   operator A(){ return A();}  
+};  
+
+B source() { return A(); }  
+
+int main()  
+{  
+   B ap(source());   // C4350  
+}
+
+编译器警告（等级 1）C4353 Compiler Warning (level 1) C4353 11
+使用的非标准扩展：常数作为函数表达式。请改用函数内部函数不能使用函数表达式作为常数零。有关详细信息，请参阅。下面的示例生成 C4353: The following sample generates C4353: // C4353.cpp  
+// compile with: /W1  
+void MyPrintf(void){};  
+#define X 0  
+#if X  
+   #define DBPRINT MyPrint  
+#else  
+   #define DBPRINT 0   // C4353 expected  
+#endif  
+int main(){  
+DBPRINT();  
+}
+
+编译器警告（等级 1）C4358 Compiler Warning (level 1) C4358 11
+：返回组合的委托的类型不是返回的值是未定义两个委托已合并和返回值不是。如果具有非返回值的两个委托结合起来时，编译器不能使用的委托的返回值进行正确分配。下面的示例生成 C4358: The following sample generates C4358: // C4358.cpp  
+// compile with: /clr /W1  
+delegate int D();  
+delegate void E();  
+
+ref class X {  
+   int i;  
+public:  
+   X(int ii) : i(ii) {}  
+   int f() {  
+      return i;  
+   }  
+};  
+
+ref class Y {  
+   int i;  
+public:  
+   Y() {}  
+   void g() {}  
+};  
+
+int main() {  
+   D^ d = gcnew D(gcnew X(1), &X::f);  
+   D^ d2 = gcnew D(gcnew X(2), &X::f);  
+
+   d += d2;   // C4358  
+   int j = d();   // return value indeterminate  
+
+   E^ e = gcnew E(gcnew Y, &Y::g);  
+   E^ e2 = gcnew E(gcnew Y, &Y::g);  
+   e += e2;   // OK  
+}
+
+编译器警告（等级 1）C4364 Compiler Warning (level 1) C4364 11
+使用适用于程序集在不具有属性以前看到的不应用指令重复对于给定的元数据文件，但第一个匹配项中未使用过限定符编译器将忽略第二个。有关详细信息，请参阅友元程序集（）。示例下面的示例创建一个组件。示例下面的示例生成 C4364。 The following sample generates C4364. // C4364_b.cpp  
+// compile with: /clr /W1 /c  
+#using " C4364.dll"  
+#using " C4364.dll" as_friend   // C4364
+
+编译器警告（等级 1）C4369 Compiler Warning (level 1) C4369 11
+枚举：枚举器值不能表示为，值为计算的枚举数大于指定的基础类型的最大值。这会导致溢出，类型的最低可能值的枚举器值。示例下面的示例生成 C4369。 The following sample generates C4369. // C4369.cpp  
+// compile with: /W1  
+int main() {  
+   enum Color: char { red = 0x7e, green, blue };   // C4369  
+   enum Color2: char { red2 = 0x7d, green2, blue2};   // OK  
+}
+
+编译器警告（等级 1）C4374 Compiler Warning (level 1) C4374 11
+：非虚拟方法将不实现接口方法查找虚拟方法定义的关键字。下面的示例生成 C4374: The following sample generates C4374: // C4374.cpp  
+// compile with: /clr /W1 /c /WX  
+public interface class I {  
+   void f();  
+};  
+
+public ref struct B {  
+   void f() {  
+      System::Console::WriteLine("B::f()");  
+   }  
+};  
+
+public ref struct C {  
+   virtual void f() {  
+      System::Console::WriteLine("C::f()");  
+   }  
+};  
+
+public ref struct D : B, I {};   // C4374  
+public ref struct E : C, I {};   // OK
+
+编译器警告（等级 1）C4375 Compiler Warning (level 1) C4375 11
+非公共方法不重写实现另一种类型的类型定义重写方法，但重写不是公共。因此，该方法不重写基类型方法。
+
+编译器警告（等级 1）C4376 Compiler Warning (level 1) C4376 11
+访问说明符不再受支持：请使用改为在元数据中指定类型和成员可访问性的详细信息，请参阅键入可见性和成员的可见性中如何：定义和使用类和结构示例下面的示例生成 C4376。 The following sample generates C4376. // C4376.cpp  
+// compile with: /clr /W1 /c  
+public ref class G {  
+public public:   // C4376  
+   void m2();  
+};  
+
+public ref class H {  
+public:   // OK  
+   void m2();  
+};
+
+编译器警告（等级 1）C4377 Compiler Warning (level 1) C4377 11
+本机类型是私有的默认设置已弃用在以前版本中，在程序集中的本机类型也是公共的默认情况下和一个内部、未记录的编译器选项用于设置为专用。所有类型，本机和，现在是私有默认情况下，在程序集中，因此不再需要。示例下面的示例生成 C4377。 The following sample generates C4377. // C4377.cpp  
+// compile with: /clr /d1PrivateNativeTypes /W1  
+// C4377 warning expected  
+int main() {}
+
+编译器警告（等级 1）C4378 Compiler Warning (level 1) C4378 11
+必须获取函数指针，以便运行初始值设定项请考虑下 yiw，初始值设定项符号包含函数标记，而不是函数指针。你需要将令牌转换为使用指针。示例下面的示例生成 C4378。 The following sample generates C4378. // C4378.cpp  
+// compile with: /W1 /clr /c  
+typedef void (__cdecl *PF)(void);  
+int cxpf = 0;   // number of destructors to call  
+PF pfx[200];   // ptrs to those dtors, watch for overflow  
+
+int myexit (PF pf) {  
+   pfx[cxpf++] = pf;  
+   return 0;  
+}  
+
+struct A {  
+   A() {}  
+   ~A() {}  
+};  
+
+A aaaa;   
+
+#pragma data_seg(".mine$a")  
+PF InitSegStart = (PF)1;  
+#pragma data_seg(".mine$z")  
+PF InitSegEnd = (PF)1;  
+#pragma data_seg()  
+
+void InitializeObjects () {  
+   PF *x = &InitSegStart;  
+   for (++x ; x < &InitSegEnd ; ++x)  
+      if (*x)  
+         (*x)();  
+}  
+
+#pragma init_seg(".mine$m",myexit)   // C4378  
+A bbbb;   // crash  
+
+int main () {  
+   InitializeObjects();  
+} 示例 Example 下面的示例演示如何解决 C4378。 The following sample shows how to resolve C4378. // C4378_b.cpp  
+// compile with: /clr  
+#pragma warning(disable:4378)  
+using namespace System;  
+typedef void (__cdecl *PF)(void);  
+typedef void (__clrcall * CLRPF)(void);  
+
+int cxpf = 0;  // number of destructors we need to call  
+PF pfx[200];   // ptrs to those dtors. Watch out for overflow!  
+
+ref class TypeClassHolder {  
+public:  
+   static TypeClassHolder ^typeClass = gcnew TypeClassHolder();  
+};  
+
+CLRPF FuncTokenToFuncPtr(PF tknFunc) {  
+   ModuleHandle type =   
+      Type::GetTypeFromHandle(Type::GetTypeHandle(TypeClassHolder::typeClass))->Module->ModuleHandle;  
+   return (CLRPF)type.ResolveMethodHandle((int)(size_t)(tknFunc)).GetFunctionPointer().ToPointer();  
+}  
+
+int myexit (PF pf) {  
+   pfx[cxpf++] = pf;  
+   return 0;  
+}  
+
+struct A {  
+   A() {}  
+   ~A() {}  
+};  
+
+A aaaa;   
+
+#pragma data_seg(".mine$a")  
+PF InitSegStart = (PF)1;  
+#pragma data_seg(".mine$z")  
+PF InitSegEnd = (PF)1;  
+#pragma data_seg()  
+
+void InitializeObjects () {  
+   PF *x = &InitSegStart;  
+   for (++x ; x < &InitSegEnd ; ++x)  
+      if(*x) {  
+         CLRPF realppfunc;  
+         realppfunc = FuncTokenToFuncPtr(*x);  
+         (realppfunc)();  
+      }  
+}  
+
+#pragma init_seg(".mine$m",myexit)  
+A bbbb; // constructor call succeeds  
+
+int main () {  
+   InitializeObjects();  
+}
+
+编译器警告（等级 1）C4379 Compiler Warning (level 1) C4379 11
+此编译器不支持版本的公共语言运行时版本。使用此版本可能会导致意外的结果。你具有你的计算机上的公共语言运行时的以前版本但不是当前版本。若要解决，请安装你的编译器附带的公共语言运行时版本。
+
+编译器警告（等级 1）C4381 Compiler Warning (level 1) C4381 11
+：非公共方法将不实现接口方法类必须实现接口中的所有函数。类可以满足这种情况，如果其基类，这些类之一实现函数。但是，该函数必须实现为公共函数。
+
+编译器警告（等级 1）C4382 Compiler Warning (level 1) C4382 11
+引发：具有析构函数或复制构造函数的类型仅可捕获在模块编译器选项在中已弃用。如果使用编译的不，异常处理预计要的本机类型的成员函数而不与成员函数使用的本机类型调用约定不能使用编译的模块中捕获。如果使用编译的模块中，将捕获到异常，则可以忽略此警告。有关详细信息，请参阅（公共语言运行时编译）。示例下面的示例生成 C4382。 The following sample generates C4382. // C4382.cpp  
+// compile with: /clr /W1 /c  
+struct S {  
+   __clrcall ~S() {}  
+};  
+
+struct T {  
+   ~T() {}  
+};  
+
+int main() {  
+   S s;  
+   throw s;   // C4382  
+
+   S * ps = &s;  
+   throw ps;   // OK  
+
+   T t;  
+   throw t;   // OK  
+}
+
+编译器警告（等级 1）C4383 Compiler Warning (level 1) C4383 11
+：取消句柄引用的含义可以时的用户定义运算符存在更改编写作为静态函数进行显式有关操作数的运算符托管类型中添加取消引用运算符的用户定义的实例重写时，可能会重写的类型的取消引用运算符返回的句柄的对象的功能。请考虑编写用户定义的一个静态取消引用运算符。有关详细信息，请参阅对象句柄运算符和跟踪引用运算符。此外，实例运算符不可用于其他语言编译器通过引用的元数据。有关详细信息，请参阅用户定义的运算符。示例下面的示例生成 C4383。 The following sample generates C4383. // C4383.cpp  
+// compile with: /clr /W1  
+
+ref struct S {  
+   int operator*() { return 0; }   // C4383  
+};  
+
+ref struct T {  
+   static int operator*(T%) { return 0; }  
+};   
+
+int main() {  
+   S s;  
+   S^ pS = %s;  
+
+   T t;  
+   T^ pT = %t;  
+   T% rT = *pT;  
+}
+
+编译器警告（等级 1）C4384 Compiler Warning (level 1) C4384 11
+仅应在全局范围内使用杂注杂注未正确应用。示例下面的示例生成 C4384。 The following sample generates C4384. // C4384.cpp  
+// compile with: /c /W1  
+namespace n {  
+   #pragma make_public(N::C)   // C4384  
+   namespace N {  
+      class C {};  
+   }  
+}
+
+编译器警告（等级 1）C4391 Compiler Warning (level 1) C4391 11
+签名：内部函数的返回类型不正确预期编译器内部函数的函数声明具有返回类型错误。生成的图像可能无法正常运行。若要解决此警告，请更正声明，或删除该声明，只需相应的标头文件。下面的示例生成 C4391: The following sample generates C4391: // C4391.cpp  
+// compile with: /W1  
+// processor: x86  
+// uncomment the following line and delete the line that  
+// generated the warning to resolve  
+// #include "xmmintrin.h"  
+
+#ifdef  __cplusplus  
+extern "C" {  
+#endif  
+
+extern void _mm_load_ss(float *p);   // C4391  
+
+#ifdef  __cplusplus  
+}  
+#endif  
+
+int main()  
+{  
+}
+
+编译器警告（等级 1）C4392 Compiler Warning (level 1) C4392 11
+签名：内部函数的参数数目不正确预期自变量编译器内部函数的函数声明具有错误的参数数量。生成的图像可能无法正常运行。若要解决此警告，请更正声明，或删除该声明，只需相应的标头文件。下面的示例生成 C4392: The following sample generates C4392: // C4392.cpp  
+// compile with: /W1  
+// processor: x86  
+// uncomment the following line and delete the line that  
+// generated the warning to resolve  
+// #include "xmmintrin.h"  
+
+#ifdef  __cplusplus  
+extern "C" {  
+#endif  
+
+extern void _mm_stream_pd(double *dp);   // C4392  
+
+#ifdef  __cplusplus  
+}  
+#endif  
+
+int main()  
+{  
+}
+
+编译器警告（等级 1）C4393 Compiler Warning (level 1) C4393 11
+数据成员没有影响忽略文本数据成员还被指定为常量。因为数据成员意味着，你不需要添加到声明。下面的示例生成 C4393: The following sample generates C4393: // C4393.cpp  
+// compile with: /clr /W1 /c  
+ref struct Y1 {  
+   literal const int staticConst = 10;   // C4393  
+   literal int staticConst2 = 10;   // OK  
+};
+
+编译器警告（等级 1）C4395 Compiler Warning (level 1) C4395 11
+：成员函数将调用上一份数据成员成员函数上调用了数据成员。警告数据成员不能由函数修改。下面的示例生成 C4395: The following sample generates C4395: // C4395.cpp  
+// compile with: /W1 /clr  
+public value class V {  
+public:  
+   V(int data) : m_data(data) {}  
+
+   void Mutate() {  
+      System::Console::WriteLine("Enter Mutate: m_data = {0}", m_data);  
+      m_data *= 2;  
+      System::Console::WriteLine("Leave Mutate: m_data = {0}", m_data);  
+   }  
+
+   int m_data;  
+};  
+
+public ref class R {  
+public:  
+   static void f() {  
+      System::Console::WriteLine("v.m_data = {0}", v.m_data);  
+      v.Mutate();   // C4395  
+      System::Console::WriteLine("v.m_data = {0}", v.m_data);  
+   }  
+
+private:  
+   initonly static V v = V(4);  
+};  
+
+int main() {  
+   R::f();  
+}
+
+编译器警告（等级 1）C4397 Compiler Warning (level 1) C4397 11
+忽略编译器会忽略。若要指定字符集，请使用选项。有关详细信息，请参阅使用互操作隐式。示例下面的示例生成 C4397。 The following sample generates C4397. // C4397.cpp  
+// compile with: /W1 /c /clr  
+using namespace System;  
+using namespace System::Runtime::InteropServices;  
+
+[module:DefaultCharSetAttribute(CharSet::Unicode)];   // C4397  
+
+[DllImport("kernel32", EntryPoint="CloseHandle", CharSet=CharSet::Unicode)]   // OK  
+extern "C" bool ImportDefault(IntPtr hObject);  
+
+public ref class MySettingVC {  
+public:  
+   void method() {  
+      ImportDefault(IntPtr::Zero);  
+   }  
+};  
+
+[StructLayout(LayoutKind::Explicit)]  
+public ref struct StructDefault1{};  
+
+public ref class ClassDefault1{};
+
+编译器警告（等级 1）C4399 Compiler Warning (level 1) C4399 11
+：不应与使用进行编译时（）标记为每个进程的符号：纯编译器选项在中已弃用。本机映像或有本机和构造的映像中的数据未导入到纯映像。若要解决此警告，编译与不或删除。示例下面的示例生成 C4399。 The following sample generates C4399. // C4399.cpp  
+// compile with: /clr:pure /doc /W1 /c  
+__declspec(dllimport) __declspec(process) extern const int i;   // C4399
+
+编译器警告（等级 1）C4401 Compiler Warning (level 1) C4401 11
+位域：成员是位域内联程序集代码尝试访问位域成员。内联程序集不能访问位域成员，因此使用位域成员之前的最后一个封装边界。若要避免此警告，请在内联程序集代码中进行引用之前转换为适当类型的位字段。下面的示例生成 C4401: The following sample generates C4401: // C4401.cpp  
+// compile with: /W1  
+// processor: x86  
+typedef struct bitfield {  
+   signed bit : 1;  
+} mybitfield;  
+
+int main() {  
+   mybitfield bf;  
+   bf.bit = 0;  
+   __asm {  
+      mov bf.bit,0;   // C4401  
+   }  
+
+   /* use the following __asm block to resolve the warning  
+   int i = (int)bf.bit;  
+   __asm {  
+      mov i,0;  
+   }  
+   */  
+}
+
+编译器警告（等级 1）C4402 Compiler Warning (level 1) C4402 11
+必须使用运算符在操作数上没有运算符引用或强制转换为内联程序集代码中的类型时使用的类型。编译器将假定运算符。
+
+编译器警告（等级 1）C4403 Compiler Warning (level 1) C4403 11
+非法运算符运算符在内联汇编程序代码中的使用不当。编译器忽略运算符。
+
+编译器警告（等级 1）C4405 Compiler Warning (level 1) C4405 11
+：标识符是保留的字内联程序集的保留的字用作变量名称。这可能导致不可预知的结果。若要解决此警告，避免保留内联程序集的词命名的变量。下面的示例生成 C4405: The following sample generates C4405: // C4405.cpp  
+// compile with: /W1  
+// processor: x86  
+void func1() {  
+   int mov = 0, i = 0;  
+   _asm {  
+      mov mov, 0;   // C4405  
+      // instead, try ..  
+      // mov i, 0;  
+   }  
+}  
+
+int main() {  
+}
+
+编译器警告（等级 1）C4406 Compiler Warning (level 1) C4406 11
+忽略指令上的操作数指令不带任何操作数，但指定了操作数。编译器忽略给定的操作数。
+
+编译器警告（等级 1）C4407 Compiler Warning (level 1) C4407 11
+指向成员表示形式不同的指针之间强制转换，编译器也会生成不正确的代码检测到不正确的转换。由于在年中完成的编译器一致性工作可以生成。指向成员的指针现在需要限定名称和运算符。如果你多个继承指针到成员到单一继承指针到成员之间强制转换，则会发生。有时这种做法，但有时它无法，因为单一继承指向成员的指针表示拥有足够的信息。’’使用编译可能帮助有关详细信息，请参阅、、（通用表示形式）。你还可以尝试重新排列你基类编译器检测信息丢失在转换过程中由于基类是从派生非零偏移量的位置。下面的示例生成 C4407: The following sample generates C4407: // C4407.cpp  
+// compile with: /W1 /c  
+struct C1 {};  
+struct C2 {};  
+struct C3 : C1, C2 {};  
+
+typedef void(C3::*PMF_C3)();  
+typedef void(C2::*PMF_C2)();  
+
+PMF_C2 f1(PMF_C3 pmf) {  
+   return (PMF_C2)pmf;   // C4407, change type of cast,  
+   // or reverse base class inheritance of C3 (i.e. : C2, C1)  
+}
+
+编译器警告（等级 1）C4409 Compiler Warning (level 1) C4409 11
+非法指令大小指令不包含具有指定大小的窗体。使用合法的最小大小。
+
+编译器警告（等级 1）C4410 Compiler Warning (level 1) C4410 11
+非法的操作数大小其中一个操作数指令上具有大小不正确。使用了操作数的最小合法大小。
+
+编译器警告（等级 1）C4411 Compiler Warning (level 1) C4411 11
+：符号将解析为置换寄存器标识符是将解析为置换寄存器并因此可以在与另一个符号操作数一起使用的本地符号。
+
+编译器警告（等级 1）C4420 Compiler Warning (level 1) C4420 11
+：运算符不可用，改为使用运行时检查可能已泄露当你使用时，会生成此警告（矢量检查新删除）并且在发现没有向量形式。在这种情况下，使用非向量窗体。为了使正常工作，编译器应始终调用矢量形式的新删除如果时使用的矢量语法。
+
+编译器警告（等级 1）C4436 Compiler Warning (level 1) C4436 11
+构造函数或析构函数中从虚拟基“”到“”的对于部分构造的对象可能会失败。使用编译或使用生效的定义“”编译器遇到具有以下特征的操作。转换是从基类指针到派生类的指针。派生类虚拟继承基类。派生类没有虚拟基的字段。在派生类或进一步继承派生类的一些类的构造函数或析构函数中发现转换。警告指示在部分构造的对象上操作时，可能执行不正确。如果派生的构造函数析构函数在某些进一步派生对象的子对象上操作时，可能会发生该情况。如果警告中指定的派生类不再进一步派生，可以忽略警告。示例下面的示例生成 C4436 并演示缺少 vtordisp 字段所引发的代码生成问题。 The following sample generates C4436 and demonstrates the code generation issue that arises from the missing vtordisp field. // C4436.cpp  
+// To see the warning and runtime assert, compile with: /W1  
+// To eliminate the warning and assert, compile with: /W1 /vd2  
+//       or compile with: /W1 /DFIX  
+#include <cassert>  
+
+struct A  
+{  
+public:  
+    virtual ~A() {}  
+};  
+
+#if defined(FIX)  
+#pragma vtordisp(push, 2)  
+#endif  
+struct B : virtual A  
+{  
+    B()  
+    {  
+        A* a = static_cast<A*>(this);  
+        B* b = dynamic_cast<B*>(a);     // C4436  
+        assert(this == b);              // assert unless compiled with /vd2  
+    }  
+};  
+#if defined(FIX)  
+#pragma vtordisp(pop)  
+#endif  
+
+struct C : B  
+{  
+    int i;  
+};  
+
+int main()  
+{  
+    C c;  
+} 请参阅 See Also dynamic_cast 运算符 dynamic_cast Operator vtordisp vtordisp 编译器警告（等级 4）C4437 Compiler Warning (level 4) C4437
+
+编译器警告（等级 1）C4440 Compiler Warning (level 1) C4440 11
+重新从到忽略的调用约定定义已忽略尝试更改的调用约定。下面的示例生成 C4440: The following sample generates C4440: // C4440.cpp  
+// compile with: /W1 /LD /clr  
+typedef void __clrcall F();  
+typedef F __cdecl *PFV;   // C4440
+
+编译器警告（等级 1）C4441 Compiler Warning (level 1) C4441 11
+调用约定忽略改用托管的用户定义类型和全局函数泛型中的成员函数必须使用调用约定。所用编译器。示例下面的示例生成 C4441。 The following sample generates C4441. // C4441.cpp  
+// compile with: /clr /W1 /c  
+generic <class ItemType>  
+void __cdecl Test(ItemType item) {}   // C4441  
+// try the following line instead  
+// void Test(ItemType item) {}  
+
+ref struct MyStruct {  
+   void __cdecl Test(){}   // C4441  
+   void Test2(){}   // OK  
+};
+
+编译器警告（等级 1）C4445 Compiler Warning (level 1) C4445 11
+“”在或托管类型中，虚方法不能为私有方法如果虚函数是私有函数，则它无法由派生类型访问。若要修复此错误，请将虚拟成员函数的可访问性更改为受保护或公共。
+
+编译器警告（第 1 级）C4461 Compiler Warning (level 1) C4461 11
+：此类具有终结器但没有析构函数一种类型中的终结器的状态表示要删除资源。除非显式从该类型的析构函数调用终结器，公共语言运行时确定运行终结器中，你的对象超出范围后的时间。如果你在类型中定义的析构函数，并显式从析构函数调用的终结器，你可以确定地运行终结器的时间。有关详细信息，请参阅析构函数和终结器。示例下面的示例生成 C4461。 The following sample generates C4461. // C4461.cpp  
+// compile with: /W1 /clr /c  
+ref class A {  
+protected:  
+   !A() {}   // C4461  
+};  
+
+// OK  
+ref struct B {  
+   ~B() {  
+      B::!B();  
+   }  
+
+   !B() {}  
+};
+
+编译器警告（等级 1）C4462 Compiler Warning (level 1) C4462 11
+无法确定此类型的。程序可能在运行时失败。当作为某个运行时应用程序或组件的类型参数之一的公共具有对封闭类的引用时，该应用程序或组件中将出现警告。此警告将自动提升为错误。如果你想要修改此行为，使用警告。例如，若要使级别警告问题，可以将此行添加到源代码文件上：示例此示例将生成警告有两种解决此错误的方法。一种方法（如下一个示例所示）是为事件提供内部可访问性，使它对同一可执行文件中的代码可用，而不对其他运行时组件中的代码可用。如果事件必须是公共的，则可以使用另一个解决方法，即通过默认接口公开它：仅当类型是从另一个组件访问时，才使用该类型的。在采用第一个解决方法后，该类型只能在自己的组件中进行访问，因而可以解决问题。否则，不假定出现最坏的情况并发出警告。
+
+编译器警告（等级 1）C4470 Compiler Warning (level 1) C4470 11
+忽略在下的浮点控制杂注控件杂注：在没有影响。下面的示例生成 C4470: The following sample generates C4470: // C4470.cpp  
+// compile with: /clr /W1 /LD  
+#pragma float_control(except, on)   // C4470
+
+编译器警告（等级 1）C4486 Compiler Warning (level 1) C4486 11
+类或值类的私有虚拟方法应标记为由于无法访问或重写的托管的类或结构的私有虚拟成员函数，它应标记密封。示例下面的示例生成 C4486。 The following sample generates C4486. // C4486.cpp  
+// compile with: /clr /c /W1  
+ref class B {  
+private:  
+   virtual void f() {}   // C4486  
+   virtual void f1() sealed {}   // OK  
+}; 示例 Example 下面的示例演示一种可能使用专用的密封虚函数。 The following sample shows one possible use of a private sealed, virtual function. // C4486_b.cpp  
+// compile with: /clr /c  
+ref class B {};  
+
+ref class D : B {};  
+
+interface class I {  
+   B^ mf();  
+};  
+
+ref class E : I {  
+private:  
+   virtual B^ g() sealed = I::mf {  
+      return gcnew B;  
+   }  
+
+public:  
+   virtual D^ mf() {  
+      return gcnew D;  
+   }  
+};
+
+编译器警告（等级 1）C4488 Compiler Warning (level 1) C4488 11
+：需要关键字实现接口方法类必须实现它从直接基类继承的接口的所有成员。实现的成员必须具有公共可访问性，并且必须标记为虚拟。示例如果实现的成员不是公共则可能发生。下面的示例生成 C4488。 The following sample generates C4488. // C4488.cpp  
+// compile with: /clr /c /W1 /WX  
+interface struct MyI {  
+   void f1();  
+};  
+
+// implemented member not public  
+ref class B : MyI { virtual void f1() {} };  // C4488  
+
+// OK  
+ref class C : MyI {  
+public:  
+   virtual void f1() {}  
+}; 示例 Example 如果实现的成员未标记为虚拟，可能发生 C4488。 C4488 can occur if an implemented member is not marked virtual. 下面的示例生成 C4488。 The following sample generates C4488. // C4488_b.cpp  
+// compile with: /clr /c /W1 /WX  
+interface struct MyI {  
+   void f1();  
+};  
+
+ref struct B : MyI { void f1() {} };   // C4488  
+ref struct C : MyI { virtual void f1() {} };   // OK
+
+编译器警告（等级 1）C4489 Compiler Warning (level 1) C4489 11
+：不允许对接口方法重写说明符仅可以在类和值类方法在接口方法上不正确地使用说明符关键字。有关详细信息，请参阅重写说明符。示例下面的示例生成 C4489。 The following sample generates C4489. // C4489.cpp  
+// compile with: /clr /c /W1  
+public interface class I {   
+   void f() new;   // C4489  
+   virtual void b() override;   // C4489  
+
+   void g();   // OK  
+};
+
+编译器警告（等级 1）C4490 Compiler Warning (level 1) C4490 11
+重写：重写说明符的不正确使用不匹配的基类类方法未正确使用重写说明符。例如，你不重写接口函数，实现它。有关详细信息，请参阅重写说明符。示例下面的示例生成 C4490。 The following sample generates C4490. // C4490.cpp  
+// compile with: /clr /c /W1  
+
+interface struct IFace {  
+   void Test();  
+};  
+
+ref struct Class1 : public IFace {  
+   virtual void Test() override {}   // C4490  
+   // try the following line instead  
+   // virtual void Test() {}  
+};
+
+编译器警告（等级 1）C4502 Compiler Warning (level 1) C4502 11
+链接规范需要的关键字的使用以及必须前面的所有其他说明符指定链接，但未关键字。链接到非外部类型无关。编译器假定关键字。
+
+编译器警告（等级 1）C4503 Compiler Warning (level 1) C4503 11
+：修饰名的长度超出，名称已被截断修饰的名的长度超出编译器限制，已被截断。若要避免此警告和截断，减少参数的数目或使用标识符名称长度。会发出此警告的一种情况是当你的代码包含模板上专用化模板重复。例如，映射（从标准库）的映射。在此情况下，你可以创建你包含映射的类型（例如结构）。但是，你可能会决定不重构你的代码。可以提供的应用程序生成，但如果在上截断符号链接时错误，它将会更加难以确定错误中的符号的类型。调试将也会更困难调试器也将具有难度就越大映射要键入名称的符号名称。正确的程序，但是，不受截断的名称。下面的示例生成 C4503: The following sample generates C4503: // C4503.cpp  
+// compile with: /W1 /EHsc /c  
+// C4503 expected  
+#include <string>  
+#include <map>  
+
+class Field{};  
+
+typedef std::map<std::string, Field> Screen;  
+typedef std::map<std::string, Screen> WebApp;  
+typedef std::map<std::string, WebApp> WebAppTest;  
+typedef std::map<std::string, WebAppTest> Hello;  
+Hello MyWAT; 下面的示例演示一种方法重写你的代码以解决 c4503 的方法： The following sample shows one way to rewrite your code to resolve C4503: // C4503b.cpp  
+// compile with: /W1 /EHsc /c  
+#include <string>  
+#include <map>  
+
+class Field{};  
+struct Screen2 {  
+   std::map<std::string, Field> Element;  
+};  
+
+struct WebApp2 {  
+   std::map<std::string, Screen2> Element;  
+};  
+
+struct WebAppTest2 {  
+   std::map<std::string, WebApp2> Element;  
+};  
+
+struct Hello2 {  
+   std::map<std::string, WebAppTest2> Element;  
+};  
+
+Hello2 MyWAT2;
+
+编译器警告（等级 1）C4506 Compiler Warning (level 1) C4506 11
+内联函数没有定义声明给定的函数并将其标记为未定义内联，但它。编译器没有内联函数。请确保用声明外部的函数进行内联关键字。
+
+编译器警告（等级 1）C4508 Compiler Warning (level 1) C4508 11
+：函数应返回一个值如果返回类型假定函数具有指定没有返回类型。在这种情况下，也应激发和编译器实现的（默认值为）报告的修复。若要解决此警告，显式声明函数的返回的类型。下面的示例生成 C4508: The following sample generates C4508: // C4508.cpp  
+// compile with: /W1 /c  
+#pragma warning (disable : 4430)  
+func() {}   // C4508  
+void func2() {}   // OK
+
+编译器警告（等级 1）C4518 Compiler Warning (level 1) C4518 11
+：存储类或意外的说明符在此处键入。忽略下面的示例生成 C4518: The following sample generates C4518: // C4518.cpp  
+// compile with: /c /W1  
+_declspec(dllexport) extern "C" void MyFunction();   // C4518  
+
+extern "C" void MyFunction();   // OK
+
+编译器警告（等级 1）C4526 Compiler Warning (level 1) C4526 11
+：静态成员函数不能重写虚函数虚拟忽略，将隐藏虚函数静态成员函数满足要重写虚函数，这使得虚拟和静态成员函数的条件。下面的代码生成以下是可能的修复方法：如果该函数用于重写基类的虚函数，则移除静态说明符。如果该函数本来就是静态成员函数，重命名它，以便它不会冲突与基类虚函数。
+
+编译器警告（等级 1）C4530 Compiler Warning (level 1) C4530 11
+异常处理程序使用，但展开语义未启用。指定已使用异常处理，但未选中。当尚未启用选项时，将不销毁具有自动存储在框架中，执行引发函数和函数与捕捉引发，之间的对象。但是，在创建具有自动存储对象重或捕获块将被销毁。下面的示例生成 C4530: The following sample generates C4530: // C4530.cpp  
+// compile with: /W1  
+int main() {  
+   try{} catch(int*) {}   // C4530  
+} 编译该示例使用 /EHsc 若要解决此警告。 Compile the sample with /EHsc to resolve the warning.
+
+编译器警告（等级 1）C4532 Compiler Warning (level 1) C4532 11
+块中的跳转出现不可确定的行为在终止处理过程编译器遇到以下关键字之一：导致外的跳转或最后期间异常终止的块。如果发生异常，以及时终止处理程序执行期间正在展开堆栈或块，和你的代码跳出之前阻止块结束，行为是不确定。控件可能不返回到展开的代码，因此可能未正确处理异常。如果您必须将跳过外块中，首先检查异常终止。下面的示例生成 C4532;只需注释掉跳转语句以解决此警告。 The following sample generates C4532; simply comment out the jump statements to resolve the warnings. // C4532.cpp  
+// compile with: /W1  
+// C4532 expected  
+int main() {  
+   int i;  
+   for (i = 0; i < 10; i++) {  
+      __try {  
+      } __finally {  
+         // Delete the following line to resolve.  
+         continue;  
+      }  
+
+      __try {  
+      } __finally {  
+         // Delete the following line to resolve.  
+         break;  
+      }  
+   }  
+}
+
+编译器警告（等级 1）C4533 Compiler Warning (level 1) C4533 11
+的初始化已跳过指令你的程序中的指令，更改控制，流，以便不执行初始化变量的指令。下面的示例生成 C4533: The following sample generates C4533: // C4533.cpp  
+// compile with: /W1  
+#include <stdio.h>  
+
+struct A  
+{  
+   int m_data;  
+};  
+
+int main()  
+{  
+   if (1)  
+   {  
+      goto Label;  
+   }  
+
+   A a = { 100 };  
+
+   Label:   // C4533  
+      printf("\n%d", a.m_data);   // prints an uninitialized value  
+}
+
+编译器警告（等级 1）C4537 Compiler Warning (level 1) C4537 11
+应用于非类型已传递的引用，需要的对象（用户定义类型）的位置。引用不是一个对象，但内联汇编程序代码不能使这种差异。编译器将生成代码，如同对象已实例。下面的示例生成 C4537: The following sample generates C4537: // C4537.cpp  
+// compile with: /W1 /c  
+// processor: x86  
+struct S {  
+   int member;  
+};  
+
+void f1(S &s) {  
+   __asm mov eax, s.member;   // C4537  
+   // try the following code instead  
+   // or, make the declaration "void f1(S s)"  
+   /*  
+   mov eax, s  
+   mov eax, [eax]s.member  
+   */  
+}
+
+编译器警告（等级 1）C4540 Compiler Warning (level 1) C4540 11
+用于将转换为无法访问或不明确的基运行时测试将失败如到的你使用将从一种类型转换为另一个。编译器确定该强制转换将始终失败返回因为基类不可访问，例如或不明确（例如类层次结构中出现一次以上）。下面显示此警告的示例。类派生自类。该程序使用将从类强制转换（派生的类）与类，这始终将失败，因为类是，因此无法访问。正在更改的访问权限到公共将解决此警告。
+
+编译器警告（等级 1）C4541 Compiler Warning (level 1) C4541 11
+在多态类型与上使用可能会导致不可预知的行为尝试使用的功能，而不启用运行时类型信息需要运行时类型信息。与重新编译。
+
+编译器警告（等级 1）C4544 Compiler Warning (level 1) C4544 11
+“”：已忽略此模板声明中的默认模板自变量默认模板自变量在错误的位置指定，并且已被忽略。类模板的默认模板参数只能在类模板的声明或定义中指定，不能在类模板的成员上指定。此示例生成，而下一个示例演示如何修复此问题：在此示例中，默认参数应用于类模板：
+
+编译器警告（等级 1）C4545 Compiler Warning (level 1) C4545 11
+逗号前的表达式计算为缺少自变量列表的函数编译器检测到格式不正确逗号表达式。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。下面的示例生成 C4545: The following sample generates C4545: // C4545.cpp  
+// compile with: /W1  
+#pragma warning (default : 4545)  
+
+void f() { }  
+
+int main()  
+{  
+   *(&f), 10;   // C4545  
+   // try the following line instead  
+   // (*(&f))(), 10;  
+}
+
+编译器警告（等级 1）C4546 Compiler Warning (level 1) C4546 11
+逗号前的函数调用缺少自变量列表编译器检测到格式不正确逗号表达式。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。示例下面的示例生成 C4546: The following sample generates C4546: // C4546.cpp  
+// compile with: /W1  
+#pragma warning (default : 4546)  
+void f(int i) {  
+   i++;  
+}  
+
+int main() {  
+   int i = 0, k = 0;  
+
+   if ( f, k )   // C4546  
+   // try the following line instead  
+   // if ( f(i), k )  
+      i++;  
+}
+
+编译器警告（等级 1）C4547 Compiler Warning (level 1) C4547 11
+：逗号不起任何作用前的运算符预期带副作用的运算符编译器检测到格式不正确逗号表达式。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。下面的示例生成 C4547: The following sample generates C4547: // C4547.cpp  
+// compile with: /W1  
+#pragma warning (default : 4547)  
+int i = 0;  
+int j = 1;  
+int main() {  
+   int l = (i != i,0);   // C4547  
+   // try the following line instead  
+   // int l = (i != i);  
+   // or  
+   // int l = ((void)(i != i),0);  
+}
+
+编译器警告（等级 1）C4548 Compiler Warning (level 1) C4548 11
+逗号前的表达式不起任何作用；应输入带副作用的表达式编译器检测到格式不正确逗号表达式。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。下面的示例生成 C4548: The following sample generates C4548: // C4548.cpp  
+// compile with: /W1  
+#pragma warning (default : 4548)  
+int main()  
+{  
+   int i = 0, k = 0;  
+
+   if ( i, k )   // C4548  
+   // try the following line instead  
+   // if ( i = 0, k )  
+      i++;  
+}
+
+编译器警告（等级 1）C4549 Compiler Warning (level 1) C4549 11
+：逗号不起任何作用前的运算符是否要使用？编译器检测到格式不正确逗号表达式。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。下面的示例生成 C4549: The following sample generates C4549: // C4549.cpp  
+// compile with: /W1  
+#pragma warning (default : 4549)  
+
+int main() {  
+   int i = 0, k = 0;  
+
+   if ( i == 0, k )   // C4549  
+   // try the following line instead  
+   // if ( i == 0 )  
+      i++;  
+}
+
+编译器警告（等级 1）C4550 Compiler Warning (level 1) C4550 11
+表达式计算为缺少自变量列表的函数取消引用函数指针为缺少自变量列表。示例
+
+编译器警告（等级 1）C4551 Compiler Warning (level 1) C4551 11
+函数调用缺少参数列表函数调用必须之后的函数名称包含左、右括号，即使函数不采用参数。下面的示例生成 C4551: The following sample generates C4551: // C4551.cpp  
+// compile with: /W1  
+void function1() {  
+}  
+
+int main() {  
+   function1;   // C4551  
+   function1();   // OK  
+}
+
+编译器警告（等级 1）C4552 Compiler Warning (level 1) C4552 11
+：运算符不起任何作用预期带副作用的运算符如果表达式语句作为表达式顶部有一个没有任何副作用的运算符，它可能是一个错误。若要覆盖此警告，请将表达式放在括号中。下面的示例生成 C4552: The following sample generates C4552: // C4552.cpp  
+// compile with: /W1  
+int main() {  
+   int i, j;  
+   i + j;   // C4552  
+   // try the following line instead  
+   // (i + j);  
+}
+
+编译器警告（等级 1）C4553 Compiler Warning (level 1) C4553 11
+：运算符起任何作用是否要使用？如果表达式语句作为表达式顶部有一个没有任何副作用的运算符，它可能是一个错误。下面的示例生成 C4553: The following sample generates C4553: // C4553.cpp  
+// compile with: /W1  
+int func()  
+{  
+   return 0;  
+}  
+
+int main()  
+{  
+   int i;  
+   i == func();   // C4553  
+   // try the following line instead  
+   // i = func();  
+}
+
+编译器警告（等级 1）C4555 Compiler Warning (level 1) C4555 11
+表达式无效；应输入带副作用的表达式此警告，通知你时的表达式具有不起作用。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。例如
+
+编译器警告（等级 1）C4556 Compiler Warning (level 1) C4556 11
+内部函数的即时自变量的值超出了范围下限的上限内部函数匹配硬件指令。硬件指令具有固定的数量的位进行编码常量。如果值是超出范围，它会不编码正确。编译器将截断的额外的位。下面的示例生成 C4556: The following sample generates C4556: // C4556.cpp  
+// compile with: /W1  
+// processor: x86 IPF  
+#include <xmmintrin.h>  
+void test()  
+{  
+   __m64 m;  
+   _m_pextrw(m, 5);   // C4556  
+}  
+int main()  
+{  
+}
+
+编译器警告（等级 1）C4558 Compiler Warning (level 1) C4558 11
+操作数的值超出了范围下限的上限传递给程序集语言指令的值超出了范围的参数指定。值将被截断。下面的示例生成 C4558: The following sample generates C4558: // C4558.cpp  
+// compile with: /W1  
+// processor: x86  
+void asm_test() {  
+   __asm pinsrw   mm1, eax, 8;   // C4558  
+}  
+
+int main() {  
+}
+
+编译器警告（等级 1）C4561 Compiler Warning (level 1) C4561 11
+与不兼容选项：将转换为函数调用约定不能与使用编译器选项。编译器将忽略对的调用。若要解决此警告，或者移除对的调用或编译时不。下面的示例生成 C4561: The following sample generates C4561: // C4561.cpp  
+// compile with: /clr /W1 /c  
+// processor: x86  
+void __fastcall Func(void *p);   // C4561, remove __fastcall to resolve
+
+编译器警告（等级 1）C4566 Compiler Warning (level 1) C4566 11
+通用字符名称所表示的字符不能表示在当前代码页（页）可在你当前的代码页表示不是每个字符。窄字符串（单字节字符）转换为多字节字符，而不是宽字符串（双字节字符）。下面的示例生成 C4566: The following sample generates C4566: // C4566.cpp  
+// compile with: /W1  
+int main() {  
+   char c1 = '\u03a0';   // C4566  
+   char c2 = '\u0642';   // C4566  
+
+   wchar_t c3 = L'\u03a0';   // OK  
+   wchar_t c4 = L'\u0642';   // OK  
+}
+
+编译器警告（等级 1）C4572 Compiler Warning (level 1) C4572 11
+特性弃用在下，请使用改为使用用于指定变量自变量列表的过时的样式。在编译为时，使用省略号语法而不是。有关详细信息，请参阅变量自变量列表（）示例下面的示例生成 C4572。 The following sample generates C4572. // C4572.cpp  
+// compile with: /clr /W1  
+void Func([System::ParamArray] array<int> ^);   // C4572  
+void Func2(... array<int> ^){}   // OK  
+
+int main() {  
+   Func2(1, 2, 3);  
+}
+
+编译器警告（等级 1）C4581 Compiler Warning (level 1) C4581 11
+已否决的行为替换为进程属性此错误可能来自于为年执行的编译器一致性工作：查找特性的参数。在以前版本中，属性值已被接受，无论它们已用引号引起来。如果值是一个枚举，则它不必须被用引号引起来。示例下面的示例生成 C4581。 The following sample generates C4581. // C4581.cpp  
+// compile with: /c /W1  
+#include "unknwn.h"  
+[object, uuid("00000000-0000-0000-0000-000000000001")]  
+__interface IMyI : IUnknown {};  
+
+[coclass, uuid(12345678-1111-2222-3333-123456789012), threading("free")]   // C4581  
+// try the following line instead  
+// [coclass, uuid(12345678-1111-2222-3333-123456789012), threading(free)]  
+class CSample : public IMyI {};
+
+编译器警告（等级 1）C4584 Compiler Warning (level 1) C4584 11
+：已基类的移基类。你定义的类继承自两个类，其中一个继承自其他。例如在这种情况下，将会发出警告类从类和，后者也继承自类。类继承因此此警告充当提醒必须完全限定的成员从这些基类的类的用法，或由于语意不明确，哪个类成员中，你将引用不会生成。
+
+编译器警告（等级 1）C4600 Compiler Warning (level 1) C4600 11
+杂注：应为有效的非空字符串推送或弹出使用宏名称时，不能指定空字符串或。下面的示例生成 C4600: The following sample generates C4600: // C4600.cpp  
+// compile with: /W1  
+int main()  
+{  
+   #pragma push_macro("")   // C4600 passing an empty string  
+}
+
+编译器警告（等级 1）C4602 Compiler Warning (level 1) C4602 11
+杂注此标识符没有以前如果你对于特定的宏使用，你首先必须将宏的名称传递到。例如，以下示例生成：
+
+编译器警告（等级 1）C4603 Compiler Warning (level 1) C4603 11
+标识符：未定义宏或在预编译标头使用后定义发生改变在使用使用预编译器头后，标识符占位符所指定的宏不同，或者不再定义。请参阅创建预编译标头文件
+
+编译器警告（等级 1）C4606 Compiler Warning (level 1) C4606 11
+杂注警告忽略代码分析警告不与警告级别相关联代码分析警告，仅，，和支持警告杂注。示例下面的示例生成 C4606。 The following sample generates C4606. // C4606.cpp  
+// compile with: /c /W1  
+#pragma warning(1: 6001)   // C4606  
+#pragma warning(once: 6001)   // OK
+
+编译器警告（等级 1）C4612 Compiler Warning (level 1) C4612 11
+包含文件名中有错误当文件名不正确或缺失时，此警告与一起出现。自变量语句可以使用引号或尖括号形式，但两者必须使用相同的形式。示例
+
+编译器警告（等级 1）C4613 Compiler Warning (level 1) C4613 11
+“”：无法更改段的类尝试用与编译器所使用的段相同的类名创建段。未创建任何新段类。
+
+编译器警告（等级 1）C4615 Compiler Warning (level 1) C4615 11
+杂注警告：未知的用户警告类型与一起使用无效的警告说明符杂注警告。若要解决此错误，请使用有效的警告说明符。下面的示例生成 C4615: The following sample generates C4615: // C4615.cpp  
+// compile with: /W1 /LD  
+#pragma warning(enable : 4401)   // C4615, 'enable' not valid specifier  
+
+// use the code below to resolve the error  
+// #pragma warning(default : 4401)
+
+编译器警告（等级 1）C4616 Compiler Warning (level 1) C4616 11
+杂注警告：警告编号不是有效的编译器警告中指定的警告数字警告杂注不能重新分配。已忽略杂注。下面的示例生成 C4616: The following sample generates C4616: // C4616.cpp  
+// compile with: /W1 /c  
+#pragma warning( disable : 0 )   // C4616  
+#pragma warning( disable : 999 )   // OK  
+#pragma warning( disable : 4998 )   // OK
+
+编译器警告（等级 1）C4618 Compiler Warning (level 1) C4618 11
+杂注参数包含一个空字符串忽略杂注一个字符串形式的自变量提供。处理杂注，而不使用参数。下面的示例生成 C4618: The following sample generates C4618: // C4618.cpp  
+// compile with: /W1 /LD  
+#pragma code_seg("")   // C4618
+
+编译器警告（等级 1）C4620 Compiler Warning (level 1) C4620 11
+未找到类型“”的“运算符”后缀形式，请使用前缀形式没有为给定的类型定义后缀递增运算符。编译器使用了重载的前缀运算符。可以通过定义后缀运算符来避免此警告。创建的运算符的两个参数版本如下所示：
+
+编译器警告（等级 1）C4621 Compiler Warning (level 1) C4621 11
+找到类型，以使用前缀形式中没有任何后缀窗体为给定的类型定义没有后缀递减运算符。编译器使用了重载的前缀运算符。可以通过定义后缀避免此警告运算符。创建的两个参数版本运算符如下所示：
+
+编译器警告（等级 1）C4624 Compiler Warning (level 1) C4624 11
+“”：析构函数隐式定义为已删除，因为基类析构函数不可访问或已删除基类中的析构函数不可访问或已删除，因而没有为派生类生成析构函数。任何在堆栈上创建此类型对象的尝试都将导致编译器错误。下面的示例生成 C4624，并演示如何修复此错误： The following sample generates C4624 and shows how to fix it: // C4624.cpp  
+// compile with: /W1 /c  
+class B {  
+// Uncomment the following line to fix.  
+// public:  
+   ~B();  
+};  
+
+class D : public B {};   // C4624 B's destructor not public
+
+编译器警告（等级 1）C4627 Compiler Warning (level 1) C4627 11
+标识符：在查找预编译标头使用时跳过在搜索使用预编译标头的位置，编译器遇到了指令标识符包含文件。编译器将忽略指令，但发出警告如果预编译标头不包含标识符包含文件。请参阅创建预编译标头文件
+
+编译器警告（等级 1）C4628 Compiler Warning (level 1) C4628 11
+不支持二合字母。字符序列“”未解释为“”的替换标记在不支持二合字母。此警告将跟一个错误。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4628: The following sample generates C4628: // C4628.cpp  
+// compile with: /WX  
+#pragma warning(default : 4628)  
+int main()  
+<%   // C4628 <% digraph for {  
+}
+
+编译器警告（等级 1）C4630 Compiler Warning (level 1) C4630 11
+外部存储类说明符在成员定义上非法数据成员或成员函数定义为。尽管整个对象可以成员不能是外部。编译器将忽略关键字。下面的示例生成 C4630: The following sample generates C4630: // C4630.cpp  
+// compile with: /W1 /LD  
+class A {  
+   void func();  
+};  
+
+extern void A::func() {   // C4630, remove 'extern' to resolve  
+}
+
+编译器警告（等级 1）C4631 Compiler Warning (level 1) C4631 11
+或不可用，将不会处理文档注释。原因你的公共语言运行时安装没有支持处理文档注释的必要文件。重新安装公共语言运行时。
+
+编译器警告（等级 1）C4632 Compiler Warning (level 1) C4632 11
+文档注释：文件的路径访问被拒绝：原因文件的路径无效，且不创建任何文件。下面的示例生成 C4632: The following sample generates C4632: // C4632.cpp  
+// compile with: /clr /docv:\\falsedir /LD /W1  
+// C4632 expected  
+
+/// Text for class MyClass.  
+public ref class MyClass {};
+
+编译器警告（等级 1）C4650 Compiler Warning (level 1) C4650 11
+不在预编译标头调试信息将可仅全局符号从标头预编译的头文件不是使用符号化调试信息编译的。当链接时，生成的可执行文件或动态链接库文件将不包括调试信息包含在预编译标头中的本地符号。通过重新编译预编译标头文件，可以避免此警告命令行选项。
+
+编译器警告（等级 1）C4651 Compiler Warning (level 1) C4651 11
+指定有关预编译标头而不是当前的编译的定义在生成预编译标头，但不是在此编译中指定的定义。定义将实际上内部预编译标头，而不是在代码的其余部分。如果使用生成预编译标头时，编译器将生成此警告，如果编译不具有。将添加到命令行可解决此警告。
+
+编译器警告（等级 1）C4652 Compiler Warning (level 1) C4652 11
+编译器选项与预编译标头不一致当前的命令行选项将重写预编译标头中定义给定的命令行选项不同于创建预编译标头时提供。使用当前的命令行中指定的选项。可以通过重新生成预编译标头与给定的命令行选项避免此警告。
+
+编译器警告（等级 1）C4655 Compiler Warning (level 1) C4655 11
+“符号：变量类型是新自上次生成，或在其他地方以不同方式定义自上次成功生成后你更改或添加了新的数据类型。“编辑并继续”不支持对现有数据类型的更改。此警告后跟错误。有关详细信息，请参阅受支持的代码更改。若要在不结束当前调试会话的情况下删除此警告将数据类型改回其在发生错误前的状态。在“调试”菜单中选择“应用代码更改”。若要在不更改源代码的情况下删除此警告在“调试”菜单上，选择“停止调试”。在“生成”菜单上，选择“生成”。
+
+编译器警告（等级 1）C4656 Compiler Warning (level 1) C4656 11
+：数据类型是新或自从上次生成，或在其他地方以不同方式定义你添加或更改了数据类型，使其成为自上次成功生成后的源代码中的新类型。“编辑并继续”不支持对现有数据类型的更改。此警告将始终后跟错误。有关详细信息，请参阅受支持的代码更改。若要在不结束当前调试会话的情况下删除此警告将数据类型改回其在发生错误前的状态。在“调试”菜单中选择“应用代码更改”。若要在不更改源代码的情况下删除此错误在“调试”菜单上，选择“停止调试”。在“生成”菜单上，选择“生成”。
+
+编译器警告（等级 1）C4657 Compiler Warning (level 1) C4657 11
+表达式涉及一种数据类型，该数据类型为自最后生成以来的新类型你添加或更改了数据类型，使其成为自上次成功生成后的源代码中的新类型。“编辑并继续”不支持对现有数据类型的更改。此警告将始终后跟错误。有关详细信息，请参阅受支持的代码更改。若要在不结束当前调试会话的情况下删除此警告将数据类型改回其在发生错误前的状态。在“调试”菜单中选择“应用代码更改”。若要在不更改源代码的情况下删除此错误在“调试”菜单上，选择“停止调试”。在“生成”菜单上，选择“生成”。
+
+编译器警告（等级 1）C4659 Compiler Warning (level 1) C4659 11
+杂注杂注：使用保留的段领域具有未定义的行为，请使用注释（链接器，）选项已用于传递到链接器选项。改为使用杂注注释传递链接器选项。
+
+编译器警告（等级 1）C4661 Compiler Warning (level 1) C4661 11
+：提供显式模板实例化请求没有适当的定义未定义的模板类成员。示例
+
+编译器警告（等级 1）C4662 Compiler Warning (level 1) C4662 11
+显式实例化；模板类“”无用于专用化“”的定义已声明但未定义指定的模板类。示例
+
+编译器警告（等级 1）C4667 Compiler Warning (level 1) C4667 11
+：没有匹配的函数模板定义强制实例化无法实例化未声明的函数模板。下面的示例将导致若要避免此警告，首先声明的函数模板：
+
+编译器警告（等级 1）C4669 Compiler Warning (level 1) C4669 11
+“”不安全的转换“”是托管的或类型对象转换包含运行时或托管类型。编译器通过执行到一个指针到另一个指针的按位复制完成转换，但不提供其他检查。若要解决此警告，请不要转换包含托管成员或运行时类型的类。下面的示例生成 C4669，并演示如何修复此错误： The following sample generates C4669 and shows how to fix it: // C4669.cpp  
+// compile with: /clr /W1  
+ref struct A {  
+   int i;  
+   Object ^ pObj;   // remove the managed member to fix the warning  
+};  
+
+ref struct B {  
+   int j;  
+};  
+
+int main() {  
+   A ^ a = gcnew A;  
+   B ^ b = reinterpret_cast<B ^>(a);   // C4669  
+}
+
+编译器警告（等级 1）C4674 Compiler Warning (level 1) C4674 11
+“方法”应声明为“静态”，而且只能有一个参数转换运算符的签名不正确。该方法不被视为用户定义的转换。有关定义运算符的详细信息，请参阅用户定义的运算符和用户定义的转换。示例下面的示例生成 C4674。 The following sample generates C4674. // C4674.cpp  
+// compile with: /clr /WX /W1 /LD  
+ref class G {  
+   int op_Implicit(int i) {   // C4674  
+      return 0;  
+   }  
+};
+
+编译器警告（等级 1）C4677 Compiler Warning (level 1) C4677 11
+：非私有成员的签名包含程序集私有类型具有程序集外部的公共可访问性的类型使用具有程序集外部的私有访问权限的类型。引用公共程序集类型的组件将不能使用类型成员或成员引用的程序集私有类型。示例下面的示例生成 C4677。 The following sample generates C4677. // C4677.cpp  
+// compile with: /clr /c /W1  
+delegate void TestDel();  
+public delegate void TestDel2();  
+
+public ref class MyClass {  
+public:  
+   static event TestDel^ MyClass_Event;   // C4677  
+   static event TestDel2^ MyClass_Event2;   // OK  
+};
+
+编译器警告（等级 1）C4678 Compiler Warning (level 1) C4678 11
+基类“”的可访问性比“”低某个公共类型是从私有类型派生的。如果在引用的程序集中实例化该公共类型，将无法访问私有基类型的成员。才可访问使用过时的编译器选项。使用时，则会出错来获得可访问性的基类，其派生的类。
+
+编译器警告（等级 1）C4679 Compiler Warning (level 1) C4679 11
+编译器遇到它不能支持，无法从元数据导入的构造。“成员：无法导入成员不要尝试使用构造。
+
+编译器警告（等级 1）C4683 Compiler Warning (level 1) C4683 11
+“函数：事件源具有输出的参数慎重操作时将多个事件处理程序挂钩如果多个事件接收器正在侦听的事件源，则可能会忽略输出参数的值。请注意会在以下情况中发生内存泄漏：如果方法具有输出参数内部分配，例如。如果该事件具有多个处理程序（是多路广播的事件）泄漏的原因是，将设置多个处理程序，但只能由最后一个处理程序返回到调用站点的输出参数。下面的示例生成 C4683: The following sample generates C4683: // C4683.cpp  
+// compile with: /W1 /LD  
+#define _ATL_ATTRIBUTES 1  
+#include "atlbase.h"  
+#include "atlcom.h"  
+
+[ module(name="xx") ];  
+
+[ object ]  
+__interface I {  
+   HRESULT f([out] int* pi);  
+   // try the following line instead  
+   // HRESULT f(int* pi);  
+};  
+
+[ coclass, event_source(com) ]  
+struct E {  
+   __event __interface I;   // C4683  
+};
+
+编译器警告（等级 1）C4684 Compiler Warning (level 1) C4684 11
+：警告属性可能会导致无效的代码生成：谨慎使用使用通常不应使用的属性。下面的示例生成 C4684: The following sample generates C4684: // C4684.cpp  
+// compile with: /W1 /LD  
+ [module(name="xx")]; // C4684 expected  
+[no_injected_text];
+
+编译器警告（等级 1）C4685 Compiler Warning (level 1) C4685 11
+分析模板参数时需要“”，却找到了“”未正确终止模板定义。
+
+编译器警告（等级 1）C4688 Compiler Warning (level 1) C4688 11
+“”：约束列表包含程序集私有类型“”约束列表中有程序集私有类型，这意味着从程序集外部访问类型时，它将不可用。有关详细信息，请参阅泛型。示例以下示例生成。
+
+编译器警告（等级 1）C4691 Compiler Warning (level 1) C4691 11
+：在未引用程序集，而是使用了当前翻译单元中定义的类型应引用的类型不引用包含原始的类型定义的元数据文件，且编译器使用局部类型定义。在这种情况，在重新生成其中文件，可以忽略或关闭了杂注警告。也就是说，如果要生成的文件同名编译器需要找到的类型定义的文件，你可以忽略。但是，如果编译器使用不是来自同一元数据中引用的程序集的定义发生意外的行为可以类型被类型以及类型的名称，不仅能还由程序集。即，从程序集类型是不同的程序集中的类型。示例此示例包含原始的类型定义。示例此示例引用并声明类型的字段。示例下面的示例生成 C4691。 The following sample generates C4691. 请注意此示例包含一个定义 Original_Type 并不引用 C4691a.dll。 Notice this sample contains a definition for Original_Type and does not reference C4691a.dll. 若要解决，引用包含原始的类型定义的元数据文件并删除本地声明和定义。 To resolve, reference the metadata file that contains the original type definition and remove the local declaration and definition. // C4691_c.cpp  
+// compile with: /clr /LD /W1  
+// C4691 expected  
+
+// Uncomment the following line to resolve.  
+// #using "C4691_a.dll"  
+#using "C4691_b.dll"  
+
+// Delete the following line to resolve.  
+ref class Original_Type;  
+
+public ref class MyClass : Client {};
+
+编译器警告（等级 1）C4692 Compiler Warning (level 1) C4692 11
+“”非私有成员的签名包含程序集私有本机类型“”程序集外部可见类型包含其签名包含不是程序集外部可见的本机类型的成员函数。因此，不应如果其包含类型实例化的程序集外部调用成员函数。有关详细信息，请参阅键入可见性。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。示例下面的示例生成 C4692。 The following sample generates C4692. // C4692.cpp  
+// compile with: /W1 /c /clr  
+#pragma warning(default:4692)  
+class Private_Native_Class {};  
+public class Public_Native_Class {};  
+public ref class Public_Ref_Class {  
+public:  
+   void Test(Private_Native_Class *) {}   // C4692  
+   void Test2(Public_Native_Class *) {}   // OK  
+};
+
+编译器警告（等级 1）C4711 Compiler Warning (level 1) C4711 11
+为内联展开选定了函数“”执行给定的函数，尽管它未标记为内联。如果启用指定。在由执行内联。此警告为信息性。默认情况下，此警告处于关闭状态。若要启用警告，请使用警告。请参阅默认情况下处于关闭状态的
+
+编译器警告 了解详细信息。 See Compiler Warnings That Are Off by Default for more information.
+
+
+编译器警告（等级 1）C4715 Compiler Warning (level 1) C4715 11
+：并非所有控制路径都返回值指定的函数可以可能不返回值。示例若要防止此警告，请修改代码，以便所有路径都分配给该函数的返回值：很可能你的代码可能包含对永远不会返回，如以下示例所示的函数的调用：此代码还会生成一个警告，因为道永不返回。若要防止此代码生成一条错误消息，声明使用（。
+
+编译器警告（等级 1）C4716 Compiler Warning (level 1) C4716 11
+“”必须返回值给定的函数未返回一个值。只有函数的返回类型为可以使用不随附的返回值返回的命令。调用此函数时，将返回未定义的值。此警告将自动提升为错误。如果你想要修改此行为，使用警告。下面的示例生成 C4716: The following sample generates C4716: // C4716.cpp  
+// compile with: /c /W1  
+// C4716 expected  
+#pragma warning(default:4716)  
+int test() {  
+   // uncomment the following line to resolve  
+   // return 0;  
+}
+
+编译器警告（等级 1）C4717 Compiler Warning (level 1) C4717 11
+：所有控制路径的递归，函数将导致运行时堆栈溢出通过函数的每个路径包含对函数的调用。由于没有无法退出而不本身的第一个调用函数以递归方式，将永远不会退出该函数。下面的示例生成 C4717: The following sample generates C4717: // C4717.cpp  
+// compile with: /W1 /c  
+// C4717 expected  
+int func(int x) {  
+   if (x > 1)  
+      return func(x - 1); // recursive call  
+   else {  
+      int y = func(0) + 1; // recursive call  
+      return y;  
+   }  
+}  
+
+int main(){  
+   func(1);  
+}
+
+编译器警告（等级 1）C4722 Compiler Warning (level 1) C4722 11
+“”：析构函数永远不会返回，可能会发生内存泄漏控制流在析构函数中终止。该线程或整个程序将终止且分配的资源可能不会发布。此外，如果在异常处理期间为堆栈展开调用了析构函数，则无法确定可执行文件的行为。若要解决，请删除导致析构函数不能返回的函数调用。示例下面的示例生成 C4722： The following sample generates C4722: // C4722.cpp  
+// compile with: /O1 /W1 /c  
+#include <stdlib.h>  
+class C {  
+public:  
+   C();  
+   ~C() { exit(1); };   // C4722  
+};  
+
+extern void func (C*);  
+
+void Test(){  
+   C x;  
+   func(&x);  
+   // control will not leave Test because destructor will exit  
+}
+
+编译器警告（等级 1）C4727 Compiler Warning (level 1) C4727 11
+相同的时间戳和中找到的名为。使用第一个。编译与多个编译单位时发生，和编译器已可以将标记所有具有相同的时间戳的文件。若要解决，编译一个源文件（创建）和其他使用单独编译（使用），然后将它们链接在一起。因此，如果未以下并生成你将执行以下操作改为：有关详细信息，请参见（创建预编译标头文件）（使用预编译标头文件）
+
+编译器警告（等级 1）C4729 Compiler Warning (Level 1) C4729 11
+根据警告，函数对于流图形太大当函数太大，不能用可靠的方法（如检查是否有将生成警告的情况）进行编译时生成此警告。仅在使用编译器选项时生成此警告。若要解决此警告，请将函数拆成较小的函数。
+
+编译器警告（等级 1）C4730 Compiler Warning (Level 1) C4730 11
+：混合和浮点表达式可能会导致代码不正确函数使用和类型。因为的和浮点寄存器共享相同的物理寄存器空间（不能同时使用），使用和中相同的类型函数可以导致数据损坏，可能会导致异常。要安全地使用类型和相同的函数中的浮点类型，都使用一种类型的每个指令应该用隔开（适用于或（适用于！内部函数。下面的示例生成 C4730: The following sample generates C4730: // C4730.cpp  
+// compile with: /W1  
+// processor: x86  
+#include "mmintrin.h"  
+
+void func(double)  
+{  
+}  
+
+int main(__m64 a, __m64 b)  
+{  
+   __m64 m;  
+   double f;  
+   f = 1.0;  
+   m = _m_paddb(a, b);  
+   // uncomment the next line to resolve C4730  
+   // _m_empty();  
+   func(f * 3.0);   // C4730  
+}
+
+编译器警告（等级 1）C4731 Compiler Warning (Level 1) C4731 11
+指针：帧指针寄存器注册修改通过内联程序集代码已修改帧指针寄存器。你必须保存和还原的寄存器在内联程序集块或框架变量（本地或参数，具体取决于修改的寄存器），或你的代码可能无法正常工作。下面的示例生成 C4731: The following sample generates C4731: // C4731.cpp  
+// compile with: /W1 /LD  
+// processor: x86  
+// C4731 expected  
+void bad(int p) {  
+   __asm  
+   {  
+      mov ebp, 1  
+   }  
+
+   if (p == 1)  
+   {  
+      // ...  
+   }  
+} EBP 为帧指针 （不允许 FPO），并且对其进行修改。 EBP is the frame pointer (FPO is disallowed) and it is being modified. 当 p 晚引用，它引用相对于 EBP 。 When p is later referenced, it is referenced relative to EBP . 但 EBP 已被覆盖的代码，所以程序将无法正常工作，甚至可能出现故障。 But EBP has been overwritten by the code, so the program will not work properly and may even fault.
+
+编译器警告（等级 1）C4733 Compiler Warning (Level 1) C4733 11
+内联将分配给未注册为安全的处理程序的处理程序修改要添加新的异常处理程序的处的值的函数可能无法用于安全异常，因为该处理程序可能未注册为有效的异常处理程序请参阅。若要解决此警告，请删除定义或关闭此警告，然后使用。来指定安全异常处理程序。下面的示例生成 C4733: The following sample generates C4733: // C4733.cpp  
+// compile with: /W1 /c  
+// processor: x86  
+#include "stdlib.h"  
+#include "stdio.h"  
+void my_handler()  
+{  
+   printf("Hello from my_handler\n");  
+   exit(1);  
+}  
+
+int main()  
+{  
+   _asm {  
+      push    my_handler  
+      mov     eax, DWORD PTR fs:0  
+      push    eax  
+      mov     DWORD PTR fs:0, esp   // C4733  
+   }  
+
+   *(int*)0 = 0;  
+}
+
+编译器警告（等级 1）C4739 Compiler Warning (Level 1) C4739 11
+对变量“”的引用超过了其存储空间将值赋给了变量，但是该值的大小超过变量的大小。内存将写入变量的内存位置之外，并且可能丢失数据。要消除此警告，仅需将值赋给其大小可容纳该值的变量。下面的示例生成 C4739： The following sample generates C4739: // C4739.cpp  
+// compile with: /RTCs /Zi /W1 /c  
+char *pc;  
+int main() {  
+   char c;  
+   *(int *)&c = 1;   // C4739  
+
+   // OK  
+   *(char *)&c = 1;  
+}
+
+编译器警告（等级 1）C4742 Compiler Warning (Level 1) C4742 11
+具有和中的不同对齐方式：编号和编号已在两个文件中定义或引用的外部变量，这些文件中具有不同的对齐方式。当编译器发现时，发出此警告中为变量区别中为变量。这可以通过在不同文件中声明变量时使用不兼容的类型或使用不匹配造成在不同的文件。若要解决此警告，请使用相同的类型定义，或使用不同的变量名称。有关详细信息，请参阅包和运算符。示例这是定义的类型的第一个文件。示例下面的示例生成 C4742。 The following sample generates C4742. // C4742b.c  
+// compile with: C4742a.c /W1 /GL  
+// C4742 expected  
+extern struct X {  
+   int a;  
+} global;  
+
+int main() {  
+   global.a = 0;  
+}
+
+编译器警告（等级 1）C4743 Compiler Warning (Level 1) C4743 11
+类型中具有不同的大小和数和数字节在两个文件中定义或引用的外部变量，这些文件中具有不同类型和中变量的大小中的变量的大小不同可以为发出此警告时重要的用例。如果你声明具有相同名称在两个不同的文件相同的类型，如果这些声明包含虚函数，并且如果声明不相同，发出警告虚函数表。因为存在两个不同大小的虚函数表为同一类型，并且链接器必须选择其中一个来将合并到可执行文件，会出现的警告。很可能这可能会导致程序调用错误的虚拟函数。若要解决此警告，请使用相同的类型定义，或使用不同的类型或变量的名称。示例此示例包含一个定义的类型。示例下面的示例生成 C4743。 The following sample generates C4743. // C4743b.cpp  
+// compile with: C4743a.cpp /W1 /GL /O2  
+// C4743 expected  
+class C {  
+public:  
+    virtual void f1(void);  
+    virtual void f2(void);  
+    virtual void f3(void);  
+    virtual void f4(void);  
+    virtual void f5(void);  
+};  
+
+void C::f4(void) {}  
+void C::f5(void) {}  
+C x;  
+
+int main() {}
+
+编译器警告（等级 1）C4744 Compiler Warning (Level 1) C4744 11
+具有和中的不同类型和在两个文件中定义或引用的外部变量，这些文件中具有不同的类型。若要解决，请将类型定义相同，或者更改之一中的文件的变量名称。仅当文件使用进行出有关详细信息，请参阅（全程序优化）。通常是在（不）文件中，因为中的变量名称修饰，使用类型信息。（下面）的示例是，你会获得链接器错误。’示例此示例包含的第一个定义。示例下面的示例生成 C4744。 The following sample generates C4744. // C4744b.c  
+// compile with: C4744.c /GL /W1  
+// C4744 expected  
+#include <stdio.h>  
+
+extern unsigned global;  
+
+main()   
+{  
+    printf_s("%d\n", global);  
+}
+
+编译器警告（等级 1）C4747 Compiler Warning (level 1) C4747 11
+调用托管入口点：不会在有加载程序锁，包括入口点和调用从入口点达到运行托管的代码一个（可能）的入口点。由于加载的的入口点的潜在问题，你已从入口点函数，强烈建议不要使用。有关详细信息，请参阅初始化混合程序集的和链接器工具错误。更正此错误对模块进行不。将标记与入口点函数。示例下面的示例生成 C4747。 The following sample generates C4747. // C4747.cpp  
+// compile with: /clr /c /W1  
+// C4747 expected  
+#include <windows.h>  
+
+// Uncomment the following line to resolve.  
+// #pragma unmanaged  
+
+BOOL WINAPI DllMain(HANDLE hInstance, ULONG Command, LPVOID Reserved) {  
+   return TRUE;  
+};
+
+编译器警告（等级 1）C4750 Compiler Warning (level 1) C4750 11
+“”：函数内嵌到循环中“”函数在循环内强制进行函数的内联扩展，这在执行此循环时会引起堆栈溢出。更正此错误确保“”函数未使用说明符进行修改。确保“”函数不包含内含在循环中的函数。不要指定、、或请将函数置于会捕获堆栈溢出的语句。示例下面的代码示例在循环中调用，并且调用函数。修饰符导致函数内联扩展。请参阅
+
+编译器警告（等级 1）C4772 Compiler Warning (level 1) C4772 11
+导入从缺少的类型库引用了类型缺少类型用作占位符类型库引用与指令。但是，类型库包含对另一个使用未被引用的类型库的引用。由编译器找不到此其他文件。请注意，编译器将不到类型库的不同目录是否你使用（附加包含目录）编译器选项来指定这些目录。如果你想要在不同的目录中查找类型库编译器，则将这些目录添加到环境变量。默认情况下作为错误发出此警告。不能用取消显示被取消。示例这是再现所需的第一个类型库。这是再现所需的第二个类型库。下面的示例生成 C4772: The following sample generates C4772: // C4772.cpp
+// assumes that C4772a.tlb is not available to the compiler
+// #import "C4772a.tlb"
+#import "C4772b.tlb"   // C4772 uncomment previous line to resolve
+                       // and make sure c4772a.tlb is on disk
+
+编译器警告（等级 1）C4788 Compiler Warning (Level 1) C4788 11
+：标识符被截断为个字符程序函数名称中允许的最大长度。当代码时，程序集的名称形成通过预先计算函数名称加上一些文本，例如，，或另一个字符串。生成的名称可以是太长，并且其截断，并生成。若要解决此警告，请缩短原始函数名称。如果该函数的模板函数或方法，将用于名称的一部分。例如可以替换为：此警告仅在生。
+
+编译器警告（等级 1）C4789 Compiler Warning (Level 1) C4789 11
+缓冲区“”大小为字节将溢出；字节将在偏移时开始写入在使用特定运行时函数、传递参数以及执行赋值时针对缓冲区溢出进行警告，以便在编译时知道数据大小。此警告针对那些可能会避开典型数据大小不匹配检测的情况。将编译时已知其长度的数据复制并放入其大小在编译时已知太小、无法容纳数据的数据块时，会出现该警告。必须通过使用以下 yiw函数之一的内部形式完成复制：，当使用强制转换使参数数据类型不匹配时，也会出现警告，然后尝试从左值引用进行复制赋值。可能会对不曾执行的代码路径生成此警告。可以使用临时禁用该警告，如此示例中所示：这可防止对该特定代码块生成警告。会在更改现有状态之前保留该状态。会还原压入的状态，并移除的效果。有关预处理器指令的详细信息，请参阅警告和杂注指令和关键字。示例以下示例生成。示例以下示例也生成。
+
+编译器警告（等级 1）C4794 Compiler Warning (level 1) C4794 11
+线程本地存储区变量“”的段由“”改为“”你使用了向未以开始的节中放置变量。节将出现在定义了变量的对象文件中。或中的节将从这些节中产生。示例下面的示例生成 C4794： The following sample generates C4794: // C4794.cpp  
+// compile with: /W1 /c  
+#pragma data_seg(".someseg")  
+__declspec(thread) int i;   // C4794  
+
+// OK  
+#pragma data_seg(".tls$9")  
+__declspec(thread) int j;
+
+编译器警告（等级 1）C4799 Compiler Warning (level 1) C4799 11
+在函数末尾没有函数该函数具有至少一个指令，但不具有指令。当使用多媒体指令时，指令或内部函数还应该使用清除代码的结尾处的多媒体标记字。当使用，，该值指示代码不正确使用执行指令在返回之前，可能受到。这是这些标头的警告。你可以打开这些通过定义中。但是，请注意，这还将给出此类型的正确警告来保留编译器。有关相关信息，请参阅的指令集。
+
+编译器警告（等级 1）C4803 Compiler Warning (level 1) C4803 11
+：引发方法具有不同的存储类，该事件，从事件方法必须具有与事件声明相同的存储类。编译器调整事件的方法，以便对存储类相同。如果你有实现来自接口的事件的类，则会出现此警告。编译器不隐式生成的事件引发方法在接口中。当类中实现该接口时，编译器隐式生成引发方法，该方法将不会虚拟的因此该警告。有关事件的详细信息，请参阅事件。请参阅警告如何关闭一条警告信息的杂注。示例下面的示例生成 C4803。 The following sample generates C4803. // C4803.cpp  
+// compile with: /clr /W1  
+using namespace System;  
+
+public delegate void Del();  
+
+ref struct E {  
+   Del ^ _pd1;  
+   event Del ^ E1 {  
+      void add (Del ^ pd1) {  
+         _pd1 = dynamic_cast<Del ^>(Delegate::Combine(_pd1, pd1));  
+      }  
+
+      void remove(Del^ pd1) {  
+         _pd1 = dynamic_cast<Del^> (Delegate::Remove(_pd1, pd1));  
+      }  
+
+      virtual void raise() {   // C4803 warning (remove virtual)  
+         if (_pd1)  
+            _pd1();  
+      }  
+   }  
+
+   void func() {  
+      Console::WriteLine("In E::func()");  
+   }  
+};  
+
+int main() {  
+   E ^ ep = gcnew E;  
+   ep->E1 += gcnew Del(ep, &E::func);  
+   ep->E1();  
+   ep->E1 -= gcnew Del(ep, &E::func);  
+   ep->E1();  
+}
+
+编译器警告（等级 1）C4804 Compiler Warning (level 1) C4804 11
+：类型为操作中的不安全地使用在使用时，此警告为变量或以意外方式的值。例如，如果你使用运算符，例如负一元运算符生成或补数运算符。编译器计算的表达式。示例下面的示例生成 C4804: The following sample generates C4804: // C4804.cpp  
+// compile with: /W1  
+
+int main()  
+{  
+   bool i = true;  
+   if (-i)   // C4804, remove the '-' to resolve  
+   {  
+      i = false;  
+   }  
+}
+
+编译器警告（等级 1）C4805 Compiler Warning (level 1) C4805 11
+“”在操作中将类型“”与类型“”混合不安全对于与之间的比较操作，会生成此警告。下面的示例生成 C4805： This warning is generated for comparison operations between bool and int . The following sample generates C4805: // C4805.cpp  
+// compile with: /W1  
+int main() {  
+   int i = 1;  
+   bool b = true;  
+
+   if (i == b) {   // C4805, comparing bool and int variables  
+   }  
+}
+
+编译器警告（等级 1） C4806 Compiler Warning (level 1) C4806 11
+“”：不安全的操作：提升到类型“”的类型“”没有值与给定的常量相等此消息警告针对代码如，其中具有类型。提升规则使被提升为。这是合法的但绝不为真。以下示例生成：
+
+编译器警告（等级 1）C4807 Compiler Warning (level 1) C4807 11
+“”类型“”与类型“”的有符号位域的混合不安全在将一位有符号位域与变量进行比较时生成此警告。因为一位有符号位域只能包含值或，所以将其与比较很危险。将与一位无符号位域进行混合不生成警告，因为它们与相同，只包含或。示例下面的示例生成 C4807： The following sample generates C4807: // C4807.cpp  
+// compile with: /W1  
+typedef struct bitfield {  
+   signed mybit : 1;  
+} mybitfield;  
+
+int main() {  
+   mybitfield bf;  
+   bool b = true;  
+
+   // try..  
+   // int b = true;  
+
+   bf.mybit = -1;  
+   if (b == bf.mybit) {   // C4807  
+      b = false;  
+   }  
+}
+
+编译器警告（等级 1）C4810 Compiler Warning (level 1) C4810 11
+杂注的值当你使用杂注的“显示”选项时，将发出此警告。是当前的值。例如，下面的代码演示警告如何处理杂注：
+
+编译器警告（等级 1）C4811 Compiler Warning (level 1) C4811 11
+杂注的值你使用杂注的“显示”选项，将发出此警告。为当前的值。
+
+编译器警告（等级 1）C4812 Compiler Warning (level 1) C4812 11
+过时的声明样式：请改用“”的当前版本仍支持显式构造函数专用化，但未来版本可能不支持它。下面的示例生成 C4812： The following sample generates C4812: // C4812.cpp  
+// compile with: /W1 /c  
+template <class T>   
+class MyClass;  
+
+template<class T>  
+class MyClass<T*> {  
+   MyClass();  
+};  
+
+template<class T>  
+MyClass<T*>::MyClass<T*>() {}   // C4812  
+// try the following line instead  
+// MyClass<T*>::MyClass() {}
+
+编译器警告（等级 1）C4813 Compiler Warning (level 1) C4813 11
+“”：局部类的友元函数必须之前已经声明内部类中的友元函数未在外部类中声明。以下示例生成：
+
+编译器警告（等级 1）C4817 Compiler Warning (level 1) C4817 11
+“”：非法使用“”访问该成员；编译器已将其替换为“”使用了错误的成员访问运算符。示例以下示例生成：
+
+编译器警告（等级 1）C4819 Compiler Warning (level 1) C4819 11
+该文件包含不能在当前代码页（数字）中表示的字符。以格式保存该文件防止数据丢失。在具有不能表示文件中所有字符的代码页的系统上编译源文件时，出现。若要解决，请以格式保存该文件。在中，选择文件，高级保存选项。在高级保存选项对话框框中，选择可以表示该文件中的所有字符编码例如，，然后选择确定。——
+
+编译器警告（等级 1）C4821 Compiler Warning (level 1) C4821 11
+无法确定编码类型，请保存签名清单文件编译器无法确定文件的编码类型。若要解决此警告，请通过字节顺序标记保存该文件。请参阅管理带编码的文件有关详细信息。
+
+编译器警告（等级 1）C4822 Compiler Warning (level 1) C4822 11
+“”：局部类成员函数没有函数体在类中声明了某个局部类成员函数，但并未定义。若要使用局部类成员函数，必须在类中定义。不能在类中声明而在类外定义。在类外定义局部类成员函数将出现错误。以下示例生成：
+
+编译器警告（等级 1）C4829 Compiler Warning (level 1) C4829 11
+函数的参数可能不正确。请考虑某些函数（如）不能采用引用类型参数。虽然编译会成功，但是生成的图像可能不会运行。以下示例生成：
+
+编译器警告（等级 1）C4835 Compiler Warning (level 1) C4835 11
+：在宿主程序集首次执行托管的代码之前，不会运行导出的数据的初始值设定项在访问托管组件之间的数据时，建议不使用本机导入和导出机制。相反，声明在托管类型的内部数据成员，并引用元数据与在客户端。有关详细信息，请参阅指令。示例下面的示例生成 C4835。 The following sample generates C4835. // C4835.cpp  
+// compile with: /W1 /clr /LD  
+int f() { return 1; }  
+int n = 9;  
+
+__declspec(dllexport) int m = f();   // C4835  
+__declspec(dllexport) int *p = &n;   // C4835 示例 Example 下面的示例使用在前面的示例，显示的变量的值不按预期方式构建的组件。 The following sample consumes the component built in the previous sample, showing that the value of the variables is not as expected. // C4835_b.cpp  
+// compile with: /clr C4835.lib  
+#include <stdio.h>  
+__declspec(dllimport) int m;  
+__declspec(dllimport) int *p;  
+
+int main() {  
+   printf("%d\n", m);  
+   printf("%d\n", p);  
+} 0  
+268456008
+
+编译器警告 （等级 1） C4838 Compiler Warning (level 1) C4838 11
+从类型到转换需要收缩转换使用聚合或列表初始化时找到的隐式收缩转换。语言允许在分配和初始化，隐式收缩转换和遵循适合，即使意外收缩是许多代码错误的原因。若要使代码更加安全，标准需要收缩转换发生在初始化列表中时诊断消息。在，诊断是编译器错误使用统一初始化语法时支持从开始。编译器将生成警告时使用的列表或支持的的聚合初始化语法。当你知道目标中可以容纳该值可能的转换后的值范围时，可以认为可以收缩转换。在这种情况下，你知道个以上的编译器执行的操作。如果你有意进行收缩转换，你的意图显式使用进行静态强制转换。否则，此警告消息几乎始终指示在代码中出现了。可以通过确保你初始化的对象具有足够大以处理输入的类型，从而修复此错误。下面的示例生成 C4838，并演示修复此错误的一种方法： The following sample generates C4838 and shows one way to fix it: // C4838.cpp -- C++ narrowing conversion diagnostics  
+// Compile by using: cl /EHsc C4838.cpp  
+
+struct S1 {  
+    int m1;  
+    double m2, m3;  
+};  
+
+void function_C4838(double d1) {  
+    double ad[] = { 1, d1 }; // OK  
+    int ai[] = { 1, d1 };    // warning C4838  
+    S1 s11 = { 1, 2, d1 };   // OK  
+    S1 s12 { d1, 2, 3 };     // warning C4838  
+    S1 s13 { static_cast<int>(d1), 2, 3 }; // possible fix for C4838  
+}
+
+编译器警告（等级 1）C4900 Compiler Warning (level 1) C4900 11
+“”版本“”和“”版本“”之间的中间语言不匹配和中使用的中间语言不匹配。检查是否已安装各工具的最新版本。
+
+编译器警告（等级 1）C4905 Compiler Warning (level 1) C4905 11
+宽字符串强制转换为“”编译器检测到不安全的强制转换。该强制转换未成功，但你应使用的转换例程。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4905。 The following sample generates C4905. // C4905.cpp  
+// compile with: /W1  
+#pragma warning(default : 4905)  
+#include <windows.h>  
+#include <stdlib.h>  
+#include <stdio.h>  
+
+int main()  
+{  
+    LPSTR y = (LPSTR)L"1234";   // C4905  
+
+    // try the following lines instead  
+    // wchar_t y[128];  
+    // size_t  sizeOfConverted;  
+    // errcode err = 0;  
+    //  
+    // err = mbstowcs_s(&sizeOfConverted, &y[0], 128, "12345", 4);  
+    // if (err != 0)  
+    // {  
+    //     printf_s("mbstowcs_s failed!");  
+    //     exit (-1);  
+    // }  
+    // wprintf(L"%s\n", y);  
+
+    return 0;  
+}
+
+编译器警告（等级 1）C4906 Compiler Warning (level 1) C4906 11
+字符串强制转换为“”编译器检测到不安全的强制转换。该强制转换未成功，但你应使用的转换例程。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4906: The following sample generates C4906: // C4906.cpp  
+// compile with: /W1  
+#pragma warning(default : 4906)  
+#include <windows.h>  
+#include <stdlib.h>  
+#include <stdio.h>  
+
+int main()  
+{  
+    LPWSTR x = (LPWSTR)"1234";   // C4906  
+
+    // try the following lines instead  
+    // char y[128];  
+    // size_t numberOfCharConverted = 0;  
+    // errcode err = 0;  
+    // err = wcstombs_s(&numberOfCharConverted , &y[0], 128,  
+    //                  L"12345", 4);  
+    // if (err != 0)  
+    // {  
+    //     printf_s("wcstombs_s failed!");  
+    //     return -1;  
+    // }  
+    // printf_s("%s\n", y);  
+
+    return 0;  
+}
+
+编译器警告（等级 1）C4910 Compiler Warning (level 1) C4910 11
+标识符（）和不兼容的显式实例化上名为的显式模板实例化标识符修改两个和关键字。但是，这些关键字互斥。关键字表示实例化模板类，而关键字表示不要自动实例化模板类。请参阅显式实例化、一般规则和限制
+
+编译器警告（等级 1）C4912 Compiler Warning (level 1) C4912 11
+“”：在嵌套上，特性有未定义的行为可以忽略应用于嵌套（用户定义的类型，这可能为、或）的特性。下面的代码演示了将如何生成此警告：
+
+编译器警告（等级 1）C4917 Compiler Warning (level 1) C4917 11
+只能与类、接口或命名空间关联以外的其他用户定义的结构类，接口，或命名空间不能有一个。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的代码示例生成
+
+编译器警告（等级 1）C4920 Compiler Warning (level 1) C4920 11
+在中被视为如果传递到的具有在两个或更多的枚举中定义的相同符号，则此警告指示后续的相同符号被忽略，且会在文件中被注释掉。假定包含：以下示例生成，
+
+编译器警告（等级 1）C4925 Compiler Warning (level 1) C4925 11
+“”：不能从脚本调用调度接口方法脚本语言不能创建“”参数，只能创建“”参数。解决此警告的另一种方法是不令该参数（在定义和实现中）为指针类型。下面的示例生成 C4925： The following sample generates C4925: // C4925.cpp  
+// compile with: /LD /W1  
+#define _ATL_ATTRIBUTES 1  
+#include <atlbase.h>  
+#include <atlcom.h>  
+[ module(name="Test")];  
+
+[ dispinterface, uuid("00000000-0000-0000-0000-000000000001") ]  
+__interface IDisp {  
+   [id(9)] void f([in] int*);  
+};  
+
+[ coclass, uuid("00000000-0000-0000-0000-000000000002")  ]  
+struct CDisp : IDisp {   // C4925  
+   void f(int*) {}  
+};
+
+编译器警告（等级 1）C4926 Compiler Warning (level 1) C4926 11
+“”：已定义符号：忽略特性已找到前向声明，但已存在具有相同名称的特性化的构造。忽略前向声明的特性。下面的示例生成 C4926： The following sample generates C4926: // C4926.cpp  
+// compile with: /W1  
+[module(name="MyLib")];  
+
+[coclass]  
+struct a {  
+};  
+
+[coclass]  
+struct a;   // C4926  
+
+int main() {  
+}
+
+编译器警告（等级 1）C4927 Compiler Warning (level 1) C4927 11
+非法转换则隐式应用了多个用户定义的转换多个用户定义的转换隐式应用于单个值编译器未找到显式转换，但未找到的转换，使用它。下面的示例生成 C4927: The following sample generates C4927: // C4927.cpp  
+// compile with: /W1  
+struct B  
+{  
+   operator int ()  
+   {  
+      return 0;  
+   }  
+};  
+
+struct A  
+{  
+   A(int i)  
+   {  
+   }  
+
+   /*  
+   // uncomment this constructor to resolve  
+   A(B b)  
+   {  
+   }  
+   */  
+};  
+
+A f1( B& b)  
+{  
+   return A(b);  
+}  
+
+B& f2( B& b)  
+{  
+   return b;  
+}  
+
+A f()  
+{  
+   B b;  
+   return A(b);   // ok  
+   return f1(b);  // ok  
+   return b;      // C4927  
+   return B(b);   // C4927  
+   return f2(b);  // C4927  
+}  
+
+int main()  
+{  
+   B b;  
+   A a = b;  
+   A a2(b);  
+}
+
+编译器警告（等级 1）C4928 Compiler Warning (level 1) C4928 11
+副本初始化非法；隐式应用了多个用户定义的转换找到多个用户定义的转换例程。编译器在所有此类例程中执行代码。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4928: The following sample generates C4928: // C4928.cpp  
+// compile with: /W1  
+#pragma warning(default: 4928)  
+
+struct I  
+{  
+};  
+
+struct I1 : I  
+{  
+};  
+
+struct I2 : I  
+{  
+};  
+
+template <class T>  
+struct Ptr  
+{  
+   operator T*()  
+   {  
+      return 0;  
+   }  
+
+   Ptr()  
+   {  
+   }  
+
+   Ptr(I*)  
+   {  
+   }  
+};  
+
+int main()  
+{  
+   Ptr<I1> p1;  
+   Ptr<I2> p2 = p1;   // C4928  
+   // try one of the following two lines to resolve this error  
+   // Ptr<I2> p2(p1);  
+   // Ptr<I2> p2 = (I1*) p1;  
+}
+
+编译器警告（等级 1）C4929 Compiler Warning (level 1) C4929 11
+：类型库包含联合忽略限定符特性无法应用到类型库因为联合类型库中存在。若要解决此警告，不要使用。示例下面的示例定义一个组件。示例下面的示例生成 C4929。 The following sample generates C4929. // C4929b.cpp  
+// compile with: /c /W1  
+#import "C4929a.tlb" embedded_idl   // C4929
+
+编译器警告（等级 1）C4930 Compiler Warning (level 1) C4930 11
+原型：未调用原型函数（是有意用变量定义？）到未使用的函数原型。如果原型有意将作为变量声明，删除左右括号。下面的示例生成 C4930: The following sample generates C4930: // C4930.cpp  
+// compile with: /W1  
+class Lock {  
+public:  
+   int i;  
+};  
+
+void f() {  
+   Lock theLock();   // C4930  
+   // try the following line instead  
+   // Lock theLock;  
+}  
+
+int main() {  
+} 编译器无法区分函数原型声明和函数调用时，也会发生 C4930。 C4930 can also occur when the compiler cannot distinguish between a function prototype declaration and a function call. 下面的示例生成 C4930: The following sample generates C4930: // C4930b.cpp  
+// compile with: /EHsc /W1  
+
+class BooleanException  
+{  
+   bool _result;  
+
+public:  
+   BooleanException(bool result)  
+      : _result(result)  
+   {  
+   }  
+
+   bool GetResult() const  
+   {  
+      return _result;  
+   }  
+};  
+
+template<class T = BooleanException>  
+class IfFailedThrow  
+{  
+public:  
+   IfFailedThrow(bool result)  
+   {  
+      if (!result)  
+      {  
+         throw T(result);  
+      }  
+   }  
+};  
+
+class MyClass  
+{  
+public:  
+   bool MyFunc()  
+   {  
+      try  
+      {  
+         IfFailedThrow<>(MyMethod()); // C4930  
+
+         // try one of the following lines instead  
+         // IfFailedThrow<> ift(MyMethod());  
+         // IfFailedThrow<>(this->MyMethod());  
+         // IfFailedThrow<>((*this).MyMethod());  
+
+         return true;  
+      }  
+      catch (BooleanException e)  
+      {  
+         return e.GetResult();  
+      }  
+   }  
+
+private:  
+   bool MyMethod()  
+   {  
+      return true;  
+   }  
+};  
+
+int main()  
+{  
+   MyClass myClass;  
+   myClass.MyFunc();  
+} 在上面的示例中，采用零个参数的方法的结果会向未命名的本地类变量的构造函数传递作为自变量。 In the above sample, the result of a method that takes zero arguments is passed as an argument to the constructor of an unnamed local class variable. 调用可以会产生歧义： 命名本地变量或前缀与以及适当的指向成员的指针运算符的对象实例的方法调用。 The call can be disambiguated by either naming the local variable or prefixing the method call with an object instance along with the appropriate pointer-to-member operator.
+
+编译器警告（等级 1）C4935 Compiler Warning (level 1) C4935 11
+程序集访问说明符已从“”修改已修改一个类型的程序集可见性。用它所遇到的最后一个说明符。例如，前向声明的程序集可见性可能与类定义的程序集可见性不同。才可访问使用过时的。
+
+编译器警告（等级 1）C4939 Compiler Warning (level 1) C4939 11
+杂注已弃用，将的未来版本中删除将从将来的版本中删除杂注。示例下面的示例生成 C4939。 The following sample generates C4939. // C4939.cpp  
+// compile with: /c /W1  
+#pragma vtordisp(off)   // C4939
+
+编译器警告（等级 1）C4944 Compiler Warning (level 1) C4944 11
+“”：无法从“”导入符号，因为当前范围内已存在“”在源代码文件中定义了符号，然后语句引用了也已定义该符号的程序集。程序集中的符号将被忽略。示例下面的示例使用一个名为类型创建了一个组件。示例以下示例生成。
+
+编译器警告（等级 1）C4945 Compiler Warning (level 1) C4945 11
+：无法导入中的符号：如具有已导入从另一个程序集从引用的程序集导入符号，但该符号从另一个引用的程序集导入。请勿引用某个程序集，或者获取更改其中一个程序集的符号名称。以下示例生成。然后然后
+
+编译器警告（等级 1）C4946 Compiler Warning (level 1) C4946 11
+在相关类之间使用“”和“”不要使用相关类型之间强制转换。使用相反，或对于多态类型，使用。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。以下代码示例生成：
+
+编译器警告（等级 1）C4947 Compiler Warning (level 1) C4947 11
+“”：标记为过时使用类将成员或类型标记为过时。示例以下示例生成：
+
+编译器警告（等级 1）C4951 Compiler Warning (level 1) C4951 11
+收集配置文件数据后已编辑过“函数”，没有使用函数配置文件数据在输入模块中已将函数编辑为，因此配置文件数据现在无效。在后已重新编译输入模块并且有一个函数（函数），使用的控制流不是在执行操作时模块中的控制流。此警告为信息性。若要解决此警告，请运行，重做所有测试，并运行。如果已使用，此警告将替换为一个错误。
+
+编译器警告（等级 1）C4952 Compiler Warning (level 1) C4952 11
+“”：在程序数据库“”中未找到配置文件数据当使用时，编译器检测到一个在后被重新编译且具有一个新的函数存在的输入模块。此警告为信息性。若要解决此警告，请运行，重做所有测试，并运行。如果已使用，此警告将替换为一个错误。
+
+编译器警告（等级 1）C4953 Compiler Warning (level 1) C4953 11
+在收集配置文件数据后已编辑过内联“”，没有使用配置文件数据当使用时，编译器检测到在之后重新编译的一个输入模块，该模块具有编辑过的函数，在该模块内，现有测试运行将该函数标识为内联的候选项。但是，重新编译该模块后，此函数不再是内联的候选项。此警告为信息性。若要解决此警告，请运行，重做所有测试，并运行。如果已使用，此警告将替换为一个错误。
+
+编译器警告（等级 1）C4964 Compiler Warning (level 1) C4964 11
+未不指定任何优化选项将不会收集配置文件信息和已指定，但无法使用优化了请求，因此会生成任何对应的文件，并且因此，可以不按配置优化。如果你想要运行你的应用程序时生成的文件，指定其中一个编译器选项。下面的示例生成 C4964: The following sample generates C4964: // C4964.cpp  
+// compile with: /W1 /GL /link /ltcg:pgi  
+// C4964 expected  
+// Add /O2, for example, to the command line to resolve this warning.  
+int main() {  
+   int i;  
+}
+
+编译器警告（等级 1）C4965 Compiler Warning (level 1) C4965 11
+隐式框中的整数使用或显式强制转换功能值类型的隐式的装箱。导致现在使用的托管扩展赋值的指令将成为赋值为装箱的整数。有关详细信息，请参阅装箱。示例下面的示例生成 C4965。 The following sample generates C4965. // C4965.cpp  
+// compile with: /clr /W1  
+int main() {  
+   System::Object ^o = 0;   // C4965  
+
+   // the previous line is the same as the following line  
+   // using Managed Extensions for C++  
+   // System::Object *o = __box(0);  
+
+   // OK  
+   System::Object ^o2 = nullptr;  
+   System::Object ^o3 = safe_cast<System::Object^>(0);  
+}
+
+编译器警告（等级 1）C4997 Compiler Warning (level 1) C4997 11
+“”：组件类不实现接口或伪接口以特性标记的类不实现接口。以下示例生成：
+
+编译器警告（等级 1） C4999 Compiler Warning (level 1) C4999 11
+来自“帮助”菜单的未知警告选择技术支持命令，或打开技术支持帮助文件了解详细信息注意错误的情况，可尝试隔离问题并创建可重现的测试用例，然后联系产品支持服务。
+
+编译器警告 （等级 2） C4007 Compiler Warning (level 2) C4007 11
+：必须是属性未显式指定的函数所需的属性。例如，函数主要必须具有属性。编译器强制属性。
+
+编译器警告（等级 2）C4051 Compiler Warning (level 2) C4051 11
+类型转换；可能丢失数据表达式包含具有不同的基类型的两个数据项。转换一个类型导致数据项被截断。如果将数据项强制转换为适当的类型，则可能会修复此警告。
+
+编译器警告 （等级 2） C4056 Compiler Warning (level 2) C4056 11
+浮点常量算法中的溢出浮点常数的算法生成的结果超出允许的最大值。此警告可能引起常数算法期间执行的编译器优化。你可以放心地忽略此警告如果消失时关闭优化。下面的示例生成 C4056: The following sample generates C4056: // C4056.cpp  
+// compile with: /W2 /LD  
+#pragma warning (default : 4056)  
+float fp_val = 1.0e300 * 1.0e300;   // C4056
+
+编译器警告 （等级 2） C4094 Compiler Warning (level 2) C4094 11
+未标记未声明符号编译器检测到使用标记的结构、联合或类的空声明。声明将被忽略。示例这种情况会生成在兼容性错误。
+
+编译器警告 （等级 2） C4099 Compiler Warning (level 2) C4099 11
+：首先被使用现在了解了使用的类型名称作为一种结构声明的对象定义为类，或作为类声明的对象定义为结构。编译器使用给定定义中的类型。示例下面的示例生成 C4099。 The following sample generates C4099. // C4099.cpp  
+// compile with: /W2 /c  
+struct A;  
+class A {};   // C4099, use different identifer or use same object type
+
+编译器警告 （等级 2） C4146 Compiler Warning (level 2) C4146 11
+一元减号运算符应用于无符号类型，结果仍未签名无符号的类型可以保存仅非负值，因此，在一元负运算（求反）没有通常意义时应用于无符号类型。操作数和结果为非负值。实际上，当程序员试图表达最小整数值，该值是介于发生此问题。不能作为介于写入此值，因为表达式处理分两个阶段：数字进行计算。因为它是大于的最大整数值，的类型不是，但。一元负应用于的值，与无符号的结果，也会发生要。结果的无符号的类型可能导致意外的行为。如果在比较中，使用该结果，则可能会使用的无符号的比较，例如，当另一个操作数是。本部分说明为什么下面的示例程序将打印只需编写一行。预期的第二个行，，未输出，因为为。你可以通过从，具有类型使用避免带符号整型。示例下面的示例生成 C4146: The following sample generates C4146: // C4146.cpp  
+// compile with: /W2  
+#include <stdio.h>  
+
+void check(int i)   
+{  
+    if (i > -2147483648)   // C4146  
+        printf_s("%d is greater than the most negative int\n", i);  
+}  
+
+int main()   
+{  
+    check(-100);  
+    check(1);  
+}
+
+编译器警告 （等级 2） C4150 Compiler Warning (level 2) C4150 11
+删除的不完整类型的指针没有调用的析构函数删除调用运算符来删除类型已声明但未定义，因此编译器无法找到析构函数。下面的示例生成 C4150: The following sample generates C4150: // C4150.cpp  
+// compile with: /W2  
+class  IncClass;  
+
+void NoDestruct( IncClass* pIncClass )  
+{  
+   delete pIncClass;  
+} // C4150, define class to resolve  
+
+int main()  
+{  
+}
+
+编译器警告 （等级 2） C4156 Compiler Warning (level 2) C4156 11
+使用数组表达式，而无需使用删除数组形式的删除替换数组形式非数组形式的删除无法删除数组。编译器转换删除到数组窗体。仅在扩展下出现此警告。示例
+
+编译器警告（等级 2）C4244 Compiler Warning (level 2) C4244 11
+自变量：从到，可能丢失数据的转换一个浮点类型转换为整数类型。可能发生了数据丢失。如果收到，则应将程序更改为使用兼容类型，或向代码添加一些逻辑，以确保可能值的范围将始终与你使用的类型兼容。也可以激发在级别和请参阅编译器警告（等级和）有关详细信息。示例下面的示例生成 C4244： The following sample generates C4244: // C4244_level2.cpp  
+// compile with: /W2  
+
+int f(int x){ return 0; }  
+int main() {  
+   double x = 10.1;  
+   int i = 10;  
+   return (f(x));   // C4244  
+   // try the following line instead  
+   // return (f(i));  
+}
+
+编译器警告（等级 2）C4250 Compiler Warning (level 2) C4250 11
+：继承通过域控制两个或多个成员具有相同的名称。中的一个因为它是包含此成员的其他类的基类继承。若要禁止，请使用警告杂注。虚拟基类多个派生类之间共享的因为派生类中的名称可控制在基类中的名称。例如，给定以下类层次结构，有两个定义的在菱形中继承的：通过弱的类中和大多数通过主导类实例。通过菱形类对象，的非限定的调用始终调用主要实例。如果弱类引入的实例，既不定义将控制，并调用将会被标记为不明确。示例下面的示例生成 C4250。 The following sample generates C4250. // C4250_b.cpp  
+// compile with: /W2 /EHsc  
+#include <iostream>  
+using namespace std;  
+class A {  
+public:  
+   virtual operator int () {  
+      return 2;  
+   }  
+};  
+
+class B : virtual public A {  
+public:  
+   virtual operator int () {  
+      return 3;  
+   }  
+};  
+
+class C : virtual public A {};  
+
+class E : public B, public C {};   // C4250  
+
+int main() {  
+   E eObject;  
+   cout << eObject.operator int() << endl;  
+} 示例 Example 此示例演示更复杂的情况。 This sample shows a more complex situation. 下面的示例生成 C4250。 The following sample generates C4250. // C4250_c.cpp  
+// compile with: /W2 /EHsc  
+#include <iostream>  
+using namespace std;  
+
+class V {  
+public:  
+   virtual int f() {  
+      return 1024;  
+   }  
+};  
+
+class B : virtual public V {  
+public:  
+   int b() {  
+      return f(); // B::b() calls V::f()  
+   }  
+};  
+
+class M : virtual public V {  
+public:  
+   int f() {  
+      return 7;  
+   }  
+};  
+
+// because of dominance, f() is M::f() inside D,  
+// changing the meaning of B::b's f() call inside a D  
+class D : public B, public M {};   // C4250  
+
+int main() {  
+   D d;  
+   cout << "value is: " << d.b();   // invokes M::f()  
+}
+
+编译器警告（等级 2）C4275 Compiler Warning (level 2) C4275 11
+非接口具有用作基接口具有导出的类派生自不导出的类。若要导出具有的类时数据损坏的可能性降至（，确保：通过从导出的函数访问所有静态数据。你的类没有内联的方法可以修改静态数据。你的类没有内联的方法使用的函数，或使用静态数据其他库函数。没有内联的类函数使用函数或其他库函数，其中，例如，访问静态数据。你的类的任何方法而不考虑内联可以使用类型的和中的实例化其中具有静态数据差异。你可以避免通过定义一个，它定义具有虚函数的类和函数您可以调用来实例化并删除对象类型的导出类。然后，可以只需调用虚函数的类型。导出模板的详细信息，请参阅从中查看。如果你从标准库，本中的类型派生，可以在中忽略和消息，其中表示。
+
+编译器警告（等级 2）C4285 Compiler Warning (level 2) C4285 11
+返回类型辍为递归如果应用使用中缀表示法指定运算符（函数不能返回的类型其定义或对为其定义的类型的引用。下面的示例生成 C4285: The following sample generates C4285: // C4285.cpp  
+// compile with: /W2  
+class C  
+{  
+public:  
+    C operator->();   // C4285  
+   // C& operator->();  C4285, also  
+};  
+
+int main()  
+{  
+}
+
+编译器警告（等级 2）C4302 Compiler Warning (level 2) C4302 11
+：从的截断编译器检测到从更大的类型转换为更小的类型。信息可能会丢失。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4302: The following sample generates C4302: // C4302.cpp  
+// compile with: /W2  
+#pragma warning(default : 4302)  
+int main() {  
+   int i;  
+   char c = (char) &i;     // C4302  
+   short s = (short) &i;   // C4302  
+}
+
+编译器警告（等级 2）C4307 Compiler Warning (level 2) C4307 11
+：整型常数溢出导致溢出为其分配的空间的整数常量表达式中使用的运算符。你可能需要使用更大的类型常量。带符号整型包含比值小因为带符号整型使用一位来表示符号。下面的示例生成 C4307: The following sample generates C4307: // C4307.cpp  
+// compile with: /W2  
+int i = 2000000000 + 2000000000;   // C4307  
+int j = (unsigned)2000000000 + 2000000000;   // OK  
+
+int main()  
+{  
+}
+
+编译器警告（等级 2）C4308 Compiler Warning (level 2) C4308 11
+负整型常数转换为无符号类型表达式将负整数常量转换为无符号类型。该表达式的结果是可能无意义。示例
+
+编译器警告（等级 2）C4309 Compiler Warning (level 2) C4309 11
+：常量值的截断类型转换会导致要超过为其分配的空间的常量。你可能需要使用更大的类型常量。下面的示例生成 C4309: The following sample generates C4309: // C4309.cpp  
+// compile with: /W2  
+int main()  
+{  
+   char c = 128;   // C4309  
+}
+
+编译器警告（等级 2）C4356 Compiler Warning (level 2) C4356 11
+：不能通过派生类中初始化静态数据成员静态数据成员的初始化格式不正确。编译器已接受该初始化。若要避免此警告，初始化通过基类的成员。使用警告杂注来禁止显示此警告。下面的示例生成 C4356: The following sample generates C4356: // C4356.cpp  
+// compile with: /W2 /EHsc  
+#include <iostream>  
+
+template <class T>  
+class C {  
+   static int n;  
+};  
+
+class D : C<int> {};  
+
+int D::n = 0; // C4356  
+// try the following line instead  
+// int C<int>::n = 0;  
+
+class A {  
+public:  
+   static int n;  
+};  
+
+class B : public A {};  
+
+int B::n = 10;   // C4356  
+// try the following line instead  
+// int A::n = 99;  
+
+int main() {  
+   using namespace std;  
+   cout << B::n << endl;  
+}
+
+编译器警告（等级 2）C4396 Compiler Warning (level 2) C4396 11
+“”：友元声明引用函数模板的专用化时，无法使用内联说明符函数模板的专用化不能指定任何内联说明符。编译器发出警告并忽略内联说明符。更正此错误从友元函数声明中删除、，或说明符。示例下面的代码示例演示了一个带有说明符的无效友元函数声明。
+
+编译器警告（等级 2）C4412 Compiler Warning (level 2) C4412 11
+：函数签名包含类型对象是不安全的时间间隔纯代码和混合或本机。编译器选项在中已弃用。如果你有必须是纯粹的代码，我们建议你向移植它。编译器检测到的可能不安全的情况下，可能会导致运行时错误：正在进行从调用：纯对已导入通过和函数签名的函数编译单位包含不安全类型一种类型是不安全的如果它包含的成员函数，或者包含不安全类型或间接寻址上的不同、不安全类型的数据成员。这是不安全由于中的默认调用约定纯代码和本机代码之间的差异（或混合本机和托管）。导入时通过函数导入到编译单位，确保签名中的每种类型的声明中导出的函数（要特别小心编译单位相同中的差异隐式调用约定）。虚拟成员函数是特别容易产生意外的结果。但是，应测试甚至非虚拟函数，以确保获得正确的结果。如果您确信您处于正确的结果，你可以忽略此警告。默认情况下，处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告和、有关详细信息。若要解决此警告，请从类型中删除所有函数。示例下面的示例生成 C4412。 The following sample generates C4412. // C4412.cpp  
+// compile with: /c /W2 /clr:pure  
+#pragma warning (default : 4412)  
+
+struct Unsafe {  
+   virtual void __cdecl Test();  
+};  
+
+struct Safe {  
+   int i;  
+};  
+
+__declspec(dllimport) Unsafe * __cdecl func();  
+__declspec(dllimport) Safe * __cdecl func2();  
+
+int main() {  
+   Unsafe *pUnsafe = func();   // C4412  
+   // pUnsafe->Test();  
+
+   Safe *pSafe = func2();   // OK  
+} 示例 Example 下面的示例是声明了两种类型的标头文件。 The following sample is a header file that declares two types. Unsafe 类型是不安全的因为它有一个成员函数。 The Unsafe type is unsafe because it has a member function. // C4412.h  
+struct Unsafe {  
+   // will be __clrcall if #included in pure compilation  
+   // defaults to __cdecl in native or mixed mode compilation  
+   virtual void Test(int * pi);  
+
+   // try the following line instead  
+   // virtual void __cdecl Test(int * pi);  
+};  
+
+struct Safe {  
+   int i;  
+}; 示例 Example 此示例使用头文件中定义的类型中导出函数。 This sample exports functions with the types defined in the header file. // C4412_2.cpp  
+// compile with: /LD  
+#include "C4412.h"  
+
+void Unsafe::Test(int * pi) {  
+   *pi++;  
+}  
+
+__declspec(dllexport) Unsafe * __cdecl func() { return new Unsafe; }  
+__declspec(dllexport) Safe * __cdecl func2() { return new Safe; } 示例 Example 默认调用约定 /clr: pure 编译是不同的本机编译。 The default calling convention in a /clr:pure compilation is different from a native compilation. 包括 C4412.h 时， Test 默认为 __clrcall 。 When C4412.h is included, Test defaults to __clrcall . 如果编译和运行此程序 (不使用 /c )，该程序将引发异常。 If you compile and run this program (do not use /c ), the program will throw an exception. 下面的示例生成 C4412。 The following sample generates C4412. // C4412_3.cpp  
+// compile with: /W2 /clr:pure /c /link C4412_2.lib  
+#pragma warning (default : 4412)  
+#include "C4412.h"  
+
+__declspec(dllimport) Unsafe * __cdecl func();  
+__declspec(dllimport) Safe * __cdecl func2();  
+
+int main() { ...
+
+编译器警告（等级 2）C4653 Compiler Warning (level 2) C4653 11
+编译器选项与预编译标头不一致忽略当前命令行选项使用预编译标头指定的选项选项不一致的预编译标头创建时指定的选项。此编译使用预编译标头创建时指定的选项。当包结构选项的不同值时，会出现此警告的预编译标头在编译期间指定。
+
+编译器警告（等级 2）C4756 Compiler Warning (level 2) C4756 11
+常量的算术溢出编译器生成在编译期间执行常数算法时出现异常。下面的示例生成 C4756: The following sample generates C4756: // C4756.cpp  
+// compile with: /W2 /Od  
+int main()  
+{  
+   float f = 1e100+1e100;   // C4756  
+}
+
+编译器警告（等级 2）C4948 Compiler Warning (level 2) C4948 11
+的返回类型与相应的的最后一个参数类型不匹配编译器发现何种数据类型在获取和设置为索引的属性之间不匹配。才可访问使用过时的编译器选项。
+
+编译器警告 （等级 3） C4013 Compiler Warning (level 3) C4013 11
+未定义假设返回编译器遇到对未定义的函数的调用。通过检查以下可能的原因进行修复函数名称拼写不正确不原型的外部函数
+
+编译器警告 （等级 3） C4018 Compiler Warning (level 3) C4018 11
+：有符号无符号不匹配比较有符号和无符号数量要求编译器将有符号的值转换为无符号。如果测试签名和未签名的类型时，会转换的两种类型之一，可能会修复此警告。下面的示例生成 C4018: The following sample generates C4018: // C4018.cpp  
+// compile with: /W3  
+int main() {  
+   unsigned int uc = 0;  
+   int c = 0;  
+   unsigned int c2 = 0;  
+
+   if (uc < c) uc = 0;   // C4018  
+
+   // OK  
+   if (uc == c2) uc = 0;  
+}
+
+编译器警告（等级 3）C4023 Compiler Warning (level 3) C4023 11
+“”：基指针传递到非原型函数：参数数目将基指针传递给非原型函数会导致该指针被正常化，并产生不可预知的结果。如果你使用传递基指针的原型函数，则可能会修复此警告。
+
+编译器警告（等级 3）C4066 Compiler Warning (level 3) C4066 11
+宽字符常量的第一个字符之外的字符被忽略编译器仅处理宽字符常量的第一个字符。
+
+编译器警告 （等级 3） C4073 Compiler Warning (level 3) C4073 11
+初始值设定项放置在库初始化区域仅第三方库开发人员应使用库初始化区域中，通过指定。下面的示例生成 C4073: The following sample generates C4073: // C4073.cpp  
+// compile with: /W3  
+#pragma init_seg(lib)   // C4073  
+
+// try this line to resolve the warning  
+// #pragma init_seg(user)  
+
+int main() {  
+}
+
+编译器警告 （等级 3） C4101 Compiler Warning (level 3) C4101 11
+：未引用的本地变量永远不会使用的本地变量。明显的情况下将出现此警告：但是，此警告将在调用时也发生静态通过类的实例的成员函数：在此情况下，用的有关的信息访问静态函数，但类的实例时不需要调用静态函数因此警告。若要解决此警告，你可以：添加一个构造函数，其中使用的实例对的调用中。删除静态关键字的定义从。调用静态函数显式：。
+
+编译器警告（等级 3）C4102 Compiler Warning (level 3) C4102 11
+“”未引用的标签定义了标签，但从未引用过。编译器忽略该标签。下面的示例生成 C4102： The following sample generates C4102: // C4102.cpp  
+// compile with: /W3  
+int main() {  
+   int a;  
+
+   test:   // C4102, remove the unreferenced label to resolve  
+
+   a = 1;  
+}
+
+编译器警告 （等级 3） C4133 Compiler Warning (level 3) C4133 11
+：不兼容的类型从到尝试减去两个不同类型的指针可能导致此警告。若要避免此警告，提供适当的类型转换。
+
+编译器警告 （等级 3） C4159 Compiler Warning (level 3) C4159 11
+杂注：具有弹出先前入栈的标识符你的源代码包含推送带有杂注标识符与指令跟指令不含标识符。因此，标识符的弹出，和后续用于标识符可能导致意外的行为。若要避免此警告，请提供一个标识符指令。例如
+
+编译器警告（等级 3）C4161 Compiler Warning (level 3) C4161 11
+杂注：详细栈比入因为对于，源代码中出栈比入栈多一个，堆栈可能无法正常工作。若要避免此警告，请确保出栈数不超过入栈数。示例下面的示例生成 C4161: The following example generates C4161: // C4161.cpp  
+// compile with: /W3 /LD  
+#pragma pack(push, id)  
+#pragma pack(pop, id)  
+#pragma pack(pop, id)   // C4161, an extra pop  
+
+#pragma bss_seg(".my_data1")  
+int j;  
+
+#pragma bss_seg(push, stack1, ".my_data2")     
+int l;  
+
+#pragma bss_seg(pop, stack1)  
+int m;  
+
+#pragma bss_seg(pop, stack1)   // C4161
+
+编译器警告（等级 3）C4191 Compiler Warning (level 3) C4191 11
+“”：从“”到“”的不安全转换涉及函数指针的几个操作被视为不安全：具有不同调用约定的函数类型。具有不同返回约定的函数类型。具有不同的大小、类型类别或分类的参数或返回类型。不同的参数列表长度（在上，仅在从较长列表到较短列表的强制转换中，即使较短的列表为）。指向数据的指针而不的函数指针作为别名。任何其他将在上产生错误或警告的类型差异。通过结果指针调用此函数可能会导致程序故障。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。以下示例生成：
+
+编译器警告 （等级 3） C4192 Compiler Warning (level 3) C4192 11
+自动导入类型库库时排除库包含的项，名称，即也在系统标头文件中定义。由于类型库的限制，等名称或通常定义在类型库中，复制从系统标头的定义。将检测这些项，并拒绝将它们合并在和标头文件中。若要重写此行为，使用属性和（。
+
+编译器警告 （等级 3） C4197 Compiler Warning (level 3) C4197 11
+：忽略在转换中的顶级易失性编译器检测到强制转换为右值类型用限定易失性，或右值类型到用易失性限定某些类型的强制转换。根据标准，与限定类型关联的属性只对有意义的左值表达式。下面的示例生成 C4197: The following sample generates C4197: // C4197.cpp  
+// compile with: /W3  
+#include <stdio.h>  
+#include <signal.h>  
+#include <stdlib.h>  
+
+void sigproc(int);  
+struct S  
+{  
+   int i;  
+} s;  
+
+int main()  
+{  
+   signal(SIGINT, sigproc);  
+   s.i = 1;  
+   S *pS = &s;  
+   for ( ; (volatile int)pS->i ; )   // C4197  
+      break;  
+   // for ( ; *(volatile int *)&pS->i ; )   // OK  
+   //    break;  
+}  
+
+void sigproc(int) // ctrl-C  
+{  
+   signal(SIGINT, sigproc);  
+   s.i = 0;  
+}
+
+编译器警告（等级 3）C4240 Compiler Warning (level 3) C4240 11
+使用的非标准扩展：访问现在定义为访问说明符，而以前它被定义为访问说明符在兼容性，不能对嵌套类更改的访问权限。在默认的扩展中，可以对，并发出以下警告。示例
+
+编译器警告（等级 3）C4243 Compiler Warning (level 3) C4243 11
+转换转换存在从到，但无法访问指向派生类的指针转换为指向基类，但派生的类继承的基类具有私有或受保护的访问权限。下面的示例生成 C4243: The following sample generates C4243: // C4243.cpp  
+// compile with: /W3  
+// C4243 expected  
+struct B {  
+   int f() {  
+      return 0;  
+   };  
+};  
+
+struct D : private B {};  
+struct E : public B {};  
+
+int main() {  
+   // Delete the following 2 lines to resolve.  
+   int (D::* d)() = (int(D::*)()) &B::f;   
+   d;  
+
+   int (E::* e)() = (int(E::*)()) &B::f; // OK  
+   e;  
+}
+
+编译器警告（等级 3）C4265 Compiler Warning (level 3) C4265 11
+：类具有虚函数，但析构函数不是虚拟当类具有虚函数，但非虚拟析构函数时，类型的对象可能不正确时销毁类被销毁通过基类指针。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4265: The following sample generates C4265: // C4265.cpp  
+// compile with: /W3 /c  
+#pragma warning(default : 4265)  
+class B  
+{  
+public:  
+   virtual void vmf();  
+
+   ~B();  
+   // try the following line instead  
+   // virtual ~B();  
+};   // C4265  
+
+int main()  
+{  
+   B b;  
+}
+
+编译器警告（等级 3）C4267 Compiler Warning (level 3) C4267 11
+“”：从“”转换到“”，可能丢失数据编译器检测到从到更小类型的转换。若要解决此警告，请使用而不是。或者，使用至少与一样大的整型类型。示例下面的示例生成 C4267。 The following example generates C4267. // C4267.cpp  
+// compile by using: cl /W4 C4267.cpp  
+void Func1(short) {}  
+void Func2(int) {}  
+void Func3(long) {}  
+void Func4(size_t) {}  
+
+int main() {  
+   size_t bufferSize = 10;  
+   Func1(bufferSize);   // C4267 for all platforms  
+   Func2(bufferSize);   // C4267 only for 64-bit platforms  
+   Func3(bufferSize);   // C4267 only for 64-bit platforms  
+   Func4(bufferSize);   // OK for all platforms  
+}
+
+编译器警告（等级 3）C4278 Compiler Warning (level 3) C4278 11
+：类型库中的标识符已宏使用重命名限定符使用时，您要导入类型库中的标识符尝试声明标识符标识符。但是，这已是有效的符号。使用重命名属性要分配给对类型库中的符号的别名。
+
+编译器警告（等级 3）C4280 Compiler Warning (level 3) C4280 11
+是自递归通过类型你的代码错误地允许调用自身。下面的示例生成 C4280: The following sample generates C4280: // C4280.cpp  
+// compile with: /W3 /WX  
+struct A  
+{  
+   int z;  
+   A& operator ->();  
+};  
+
+void f(A y)  
+{  
+   int i = y->z; // C4280  
+}
+
+编译器警告（等级 3）C4281 Compiler Warning (level 3) C4281 11
+的递归发生通过类型你的代码允许调用自身。下面的示例生成 C4281: The following sample generates C4281: // C4281.cpp  
+// compile with: /W3 /WX  
+struct A;  
+struct B;  
+struct C;  
+
+struct A  
+{  
+   int z;  
+   B& operator->();  
+};  
+
+struct B  
+{  
+   C& operator->();  
+};  
+
+struct C  
+{  
+   A& operator->();  
+};  
+
+void f(A p)  
+{  
+   int i = p->z; // C4281  
+}
+
+编译器警告（等级 3）C4282 Compiler Warning (level 3) C4282 11
+然后通过类型警告此延续的调用自身通过。
+
+编译器警告（等级 3）C4283 Compiler Warning (level 3) C4283 11
+和通过类型警告此延续表明调用自身通过。
+
+编译器警告（等级 3）C4287 Compiler Warning (level 3) C4287 11
+：无符号负常量不匹配在使用负数操作中使用了无符号的变量。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4287: The following sample generates C4287: // C4287.cpp  
+// compile with: /W3  
+#pragma warning(default : 4287)  
+#include <stdio.h>  
+
+int main()  
+{  
+    unsigned int u = 1;  
+    if (u < -1)   // C4287  
+        printf_s("u LT -1");  
+    else  
+        printf_s("u !LT -1");  
+    return 0;  
+}
+
+编译器警告（等级 3）C4290 Compiler Warning (level 3) C4290 11
+异常规范忽略除指示函数不是（）使用异常规范，接受，但不实现声明的函数。代码与异常在编译过程中忽略的规范可能需要重新编译和链接要重复使用在将来版本支持异常规范。有关详细信息，请参阅异常规范。你可以通过使用来避免此警告警告杂注：下面的代码示例生成
+
+编译器警告（等级 3）C4306 Compiler Warning (level 3) C4306 11
+“标识符：从转换收件人更大的标识符的类型强制转换为更大的指针。未填充的新类型的高位将用零填充。此警告可能指示不需要的转换。生成的指针可能不是有效的。
+
+编译器警告（等级 3）C4310 Compiler Warning (level 3) C4310 11
+强制转换截断常量值常量值被强制转换为更小的类型。编译器将执行转换，将截断数据。下面的示例生成 C4310: The following sample generates C4310: // C4310.cpp  
+// compile with: /W4  
+int main() {  
+   long int a;  
+   a = (char) 128;   // C4310, use value 0-127 to resolve  
+}
+
+编译器警告 （等级 3） C4316 Compiler Warning (level 3) C4316 11
+没有可能对此类型对齐在堆上分配的对象。通过使用分配的过度对齐的对象可能没有指定的对齐方式。重写运算符和运算符的过度对齐类型，以便他们使用对齐的分配例程—例如，和。—下面的示例生成 C4316: The following sample generates C4316: // C4316.cpp  
+// Test: cl /W3 /c C4316.cpp  
+
+__declspec(align(32)) struct S {}; // C4324  
+
+int main() {  
+    new S; // C4316  
+}
+
+编译器警告（等级 3）C4334 Compiler Warning (level 3) C4334 11
+：结果的位隐式转换为位（是否位位移？）位位移的结果已隐式转换为位和位本来编译器怀疑。若要解决此警告，请使用位或显式将结果转换为位。示例下面的示例生成 C4334。 The following sample generates C4334. // C4334.cpp  
+// compile with: /W3 /c  
+void SetBit(unsigned __int64 *p, int i) {  
+   *p |= (1 << i);   // C4334  
+   *p |= (1i64 << i);   // OK  
+}
+
+编译器警告（等级 3）C4357 Compiler Warning (level 3) C4357 11
+数组自变量形式自变量列表中的委托忽略时生成属性将被忽略，和不能使用变量自变量调用。下面的示例生成 C4357: The following sample generates C4357: // C4357.cpp  
+// compile with: /clr /W3 /c  
+using namespace System;  
+public delegate void f(int i, ... array<Object^>^ varargs);   // C4357  
+
+public delegate void g(int i, array<Object^>^ varargs);   // OK
+
+编译器警告（等级 3）C4359 Compiler Warning (level 3) C4359 11
+：实际对齐方式大于中指定的值指定类型的对齐方式小于某个数据成员的类型的对齐方式。有关详细信息，请参阅对齐。示例下面的示例生成 C4359。 The following sample generates C4359. // C4359.cpp  
+// compile with: /W3 /c  
+struct __declspec(align(8)) C8 { __int64 i; };  
+struct __declspec(align(4)) C4  { C8 m8; };   // C4359  
+struct __declspec(align(8)) C8_b  { C8 m8; };   // OK  
+struct __declspec(align(16)) C16  { C8 m8; };   // OK
+
+编译器警告（等级 3）C4373 Compiler Warning (level 3) C4373 11
+“”虚函数重写“”，当参数只在限定符上有差异时，早期版本的编译器未进行重写应用程序在派生类中包含一个方法，可重写基类中的虚拟方法，在重写方法中的参数中，只有或限定符与虚拟方法中的参数不同。这就意味着编译器必须将函数引用绑定到基类或派生类中的方法。之前版本的编译器将函数绑定到基类中的方法，然后发出一条警告消息。后续版本的编译器忽略或限定符，将函数绑定到派生类中的方法，然后发出警告。后一种行为符合标准。示例下面的代码示例将生成警告。
+
+编译器警告（等级 3）C4390 Compiler Warning (level 3) C4390 11
+：空的受控的语句找到这是意图？不包含任何指令的控制语句后找到分号。如果你收到宏，则应使用警告杂注来禁用中包含宏的模块。下面的示例生成 C4390: The following sample generates C4390: // C4390.cpp  
+// compile with: /W3  
+int main() {  
+   int i = 0;  
+   if (i);   // C4390  
+      i++;  
+}
+
+编译器警告（等级 3）C4398 Compiler Warning (level 3) C4398 11
+：每个进程的全局对象可能无法正确使用多个请考虑使用具有虚拟函数本机类型中调用约定将导致创建每个应用程序域。在多个应用程序域中使用时，可能无法正确解决此类变量。通过显式标记变量就可以解决此警告。在之前的版本中，则可以通过使用进行编译解决此警告，默认情况下生成每个的全局变量。有关详细信息，请参阅和应用程序域和。示例下面的示例生成 C4398。 The following sample generates C4398. // C4398.cpp  
+// compile with: /clr /W3 /c  
+struct S {  
+   virtual void f( System::String ^ );   // String^ parameter makes function __clrcall  
+};  
+
+S glob_s;   // C4398  
+__declspec(appdomain) S glob_s2;   // OK
+
+编译器警告（等级 3）C4404 Compiler Warning (level 3) C4404 11
+忽略指令上的段指令前面的可选期间将被忽略。
+
+编译器警告（等级 3）C4414 Compiler Warning (level 3) C4414 11
+：短跳转到函数转换到接近短跳转生成指令从指令分支到限制范围之内的地址。该指令包括短的偏移量表示该跳转的目标地址，函数定义之间的距离。在链接期间函数可能会导致函数退出访问的范围从短的偏移量的移动或进行链接时优化。编译器必须生成的跳转，这需要近或远指令的特殊记录。编译器进行了此转换。例如，下面的代码生成
+
+编译器警告（等级 3）C4511 Compiler Warning (level 3) C4511 11
+：无法生成复制构造函数编译器无法生成默认复制构造函数类基的类可能具有一个私有复制构造函数。
+
+编译器警告（等级 3）C4521 Compiler Warning (level 3) C4521 11
+：多个指定的复制构造函数此类具有单个类型的多个复制构造函数。此警告为信息性构造函数是可在程序中调用。使用警告杂注来禁止显示此警告。示例下面的示例生成 C4521。 The following sample generates C4521. // C4521.cpp  
+// compile with: /EHsc /W3  
+#include <iostream>  
+
+using namespace std;  
+class A {  
+public:  
+   A() { cout << "A's default constructor" << endl; }  
+   A( A &o ) { cout << "A&" << endl; }  
+   A( const A &co ) { cout << "const A&" << endl; }   // C4521  
+};  
+
+int main() {  
+   A o1;         // Calls default constructor.  
+   A o2( o1 );   // Calls A( A& ).  
+   const A o3;   // Calls default constructor.  
+   A o4( o3 );   // Calls A( const A& ).  
+}
+
+编译器警告（等级 3）C4522 Compiler Warning (level 3) C4522 11
+：多个指定的赋值运算符此类具有单个类型的多个赋值运算符。此警告为信息性构造函数是可在程序中调用。使用警告杂注来禁止显示此警告。示例下面的示例生成 C4522。 The following sample generates C4522. // C4522.cpp  
+// compile with: /EHsc /W3  
+#include <iostream>  
+
+using namespace std;  
+class A {  
+public:  
+   A& operator=( A & o ) { cout << "A&" << endl; return *this; }  
+   A& operator=( const A &co ) { cout << "const A&" << endl; return *this; }   // C4522  
+};  
+
+int main() {  
+   A o1, o2;  
+   o2 = o1;  
+   const A o3;  
+   o1 = o3;  
+}
+
+编译器警告（等级 3）C4523 Compiler Warning (level 3) C4523 11
+：指定的多个析构函数此类具有多个析构函数。
+
+编译器警告（等级 3）C4534 Compiler Warning (level 3) C4534 11
+将不会类由于默认自变量的默认构造函数非托管的类可以具有具有默认值的参数的构造函数并编译器将使用此默认构造函数。类用来标记关键字将不使用构造函数使用默认值为其参数作为默认构造函数。有关详细信息，请参阅类和结构。下面的示例生成 C4534: The following sample generates C4534: // C4534.cpp  
+// compile with: /W3 /clr /WX  
+value class MyClass {  
+public:  
+   int ii;  
+   MyClass(int i = 9) {   // C4534, will not be the default constructor  
+      i++;  
+   }  
+};  
+
+int main() {  
+   MyClass ^ xx = gcnew MyClass;  
+   xx->ii = 0;  
+}
+
+编译器警告（等级 3）C4535 Compiler Warning (level 3) C4535 11
+调用需要使用需要编译器选项和。示例下面的示例生成 C4535。 The following sample generates C4535. // C4535.cpp  
+// compile with: /W3 /EHsc /c  
+// C4535 expected  
+// to fix, compile with /EHa instead  
+#include <stdio.h>  
+#include <windows.h>  
+#include <eh.h>  
+
+void SEFunc();  
+void trans_func( unsigned int, EXCEPTION_POINTERS* );  
+
+class SE_Exception {  
+private:  
+   unsigned int nSE;  
+public:  
+   SE_Exception() {}  
+   SE_Exception( unsigned int n ) : nSE( n ) {}  
+   ~SE_Exception() {}  
+   unsigned int getSeNumber() { return nSE; }  
+};  
+
+int main() {  
+   try {  
+      _set_se_translator( trans_func );  
+      SEFunc();  
+   }  
+   catch( SE_Exception e ) {  
+      printf_s( "Caught a __try exception with SE_Exception.\n" );  
+   }  
+}  
+
+void SEFunc() {  
+   __try {  
+      int x, y=0;  
+      x = 5 / y;  
+   }  
+   __finally {  
+      printf_s( "In finally\n" );  
+   }  
+}  
+
+void trans_func( unsigned int u, EXCEPTION_POINTERS* pExp ) {  
+   printf_s( "In trans_func.\n" );  
+   throw SE_Exception();  
+}
+
+编译器警告（等级 3）C4538 Compiler Warning (level 3) C4538 11
+：不支持在此类型上的限定符限定符关键字未正确应用到一个数组。有关详细信息，请参阅数组。下面的示例生成 C4538: The following sample generates C4538: // C4538.cpp  
+// compile with: /clr /W3 /LD  
+const array<int> ^f1();   // C4538  
+array<const int> ^f2();   // OK
+
+编译器警告（等级 3）C4543 Compiler Warning (level 3) C4543 11
+抑制的属性插入的文本属性出现在源代码中，这意味着编译器将阻止属性注入代码。此警告是提醒属性将无法注入代码。
+
+编译器警告（等级 3）C4554 Compiler Warning (level 3) C4554 11
+：检查可能存在的错误运算符优先级使用括号以阐明优先级下面的示例生成 C4554: The following sample generates C4554: // C4554.cpp  
+// compile with: /W3 /WX  
+int main() {  
+   int a = 0, b = 0, c = 0;  
+   a = a << b + c;   // C4554  
+   // probably intended (a << b) + c,  
+   // but will get a << (b + c)  
+}
+
+编译器警告（等级 3）C4557 Compiler Warning (level 3) C4557 11
+“”包含效果“”传递给值已修改。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4557: The following sample generates C4557: // C4557.cpp  
+// compile with: /W3  
+#pragma warning(default : 4557)  
+int main()  
+{  
+   int i;  
+   __assume(i++);   // C4557  
+}
+
+编译器警告（等级 3）C4570 Compiler Warning (level 3) C4570 11
+：没有显式声明为抽象的但具有抽象函数包含的类型抽象函数应本身标记为抽象。示例下面的示例生成 C4570。 The following sample generates C4570. // C4570.cpp  
+// compile with: /clr /W3 /c  
+ref struct X {   // C4570  
+// try the following line instead  
+// ref class X abstract {  
+   virtual void f() abstract;  
+};
+
+编译器警告（等级 3）C4580 Compiler Warning (level 3) C4580 11
+已弃用；改为指定或作为基类属性不再是创建用户定义的特性的首选的语法。有关详细信息，请参阅。对于代码，请从派生特性。对于运行时代码，请从派生特性。示例下面的示例将生成，并演示如何修复此错误。
+
+编译器警告（等级 3）C4608 Compiler Warning (level 3) C4608 11
+“”已被初始值设定项列表中的另一个联合成员“”初始化初始化列表中同一联合中的两个成员被初始化。只能访问联合中的一个成员。下面的示例生成 C4608： The following sample generates C4608: // C4608.cpp  
+// compile with: /W3 /c  
+class X {  
+public:  
+   X(char c) : m_i( c + 1), m_c(c) {}   // C4608  
+   // try the following line instead  
+   // X(char c) : m_c(c) {}  
+
+private:  
+   union {  
+      int m_i;  
+      char m_c;  
+   };  
+};  
+
+union Y {  
+public:  
+   Y(char * name) : m_number(0.3), m_string( name ) {} // C4608  
+
+private:  
+   double m_number;  
+   char * m_string;  
+};
+
+编译器警告（等级 3）C4619 Compiler Warning (level 3) C4619 11
+杂注警告：没有任何警告编号尝试禁用不存在的警告。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4619: The following sample generates C4619: // C4619.cpp  
+// compile with: /W3 /c  
+#pragma warning(default : 4619)  
+#pragma warning(disable : 4354)   // C4619, C4354 does not exist
+
+编译器警告（等级 3）C4622 Compiler Warning (level 3) C4622 11
+覆盖创建对象文件的预编译头期间生成的调试信息：“”当使用（使用预编译头）选项编译时，指定文件中的信息丢失。当创建或使用预编译头文件时（使用）重命名对象文件，并使用新对象文件进行链接。
+
+编译器警告（等级 3）C4633 Compiler Warning (level 3) C4633 11
+文档注释目标：错误：原因名称传递给由编译器找不到标记。下面的示例生成 C4633: The following sample generates C4633: // C4633.cpp  
+// compile with: /clr /doc /LD /W3  
+
+/// Text for class MyClass.  
+public ref class MyClass {  
+   // C4633 remove line for Int3  
+   /// <param name="Int1">Used to indicate status.</param>  
+   /// <param name="Int3">Used to indicate status.</param>  
+   void MyMethod(int Int1) {  
+      Int1 = 0;  
+      Int1++;  
+   }  
+};
+
+编译器警告（等级 3）C4635 Compiler Warning (level 3) C4635 11
+文档注释目标格式不正确原因编译器发现此标记存在一些问题。解决该问题并重新编译下面的示例生成 C4635： The following sample generates C4635: // C4635.cpp  
+// compile with: /doc /clr /W3 /c  
+/// <summary>     
+/// The contents of the folder have changed.  
+/// <summary/>   // C4635  
+
+// try the following line instead  
+// /// </summary>  
+public ref class Test {}; 请注意，此示例的输出显示： 结束标记“member”与开始标记“summary”不匹配。 Notice that the output for this sample says: End tag 'member' does not match the start tag 'summary'. 此示例的问题是结束标记<摘要 > 格式不正确，并且编译器不识别其作为<摘要 > 结束标记。 The problem with this sample is that the end tag for <summary> is poorly formed, and the compiler does not recognize it as the <summary> end tag. <成员 > 标记嵌入到.xdc 文件中每个 /doc 编译中的编译器。 The <member> tag is embedded in the .xdc file by the compiler in every /doc compilation. 因此，此处问题是结束标记</member >，不匹配编译器处理的前一个开始标记 (<摘要 >。 So, the problem here is that the end tag </member>, does not match the previous start tag that the compiler processed (<summary>.
+
+编译器警告（等级 3）C4636 Compiler Warning (level 3) C4636 11
+应用于“”标记的文档注释需要非空特性。标记（如）没有值。示例以下示例生成。
+
+编译器警告（等级 3）C4637 Compiler Warning (level 3) C4637 11
+文档注释目标：包括丢弃的标记。原因语法包括标记的不正确。下面的示例生成 C4637： The following sample generates C4637: // C4637.cpp  
+// compile with: /clr /doc /LD /W3  
+using namespace System;  
+
+/// Text for class MyClass.  
+public ref class MyClass {   
+public:  
+   /// <include file="c:\davedata\jtest\xml_include.doc"/>  
+   // Try the following line instead:  
+   // /// <include file='xml_include.doc' path='MyDocs/MyMembers/*' />  
+   void MyMethod() {  
+   }  
+};   // C4637
+
+编译器警告（等级 3）C4638 Compiler Warning (level 3) C4638 11
+文档注释目标：引用未知符号“”编译器无法解析符号。该符号在编译中必须有效。下面的示例生成 C4638： The following sample generates C4638: // C4638.cpp  
+// compile with: /clr /doc /LD /W3  
+using namespace System;  
+
+/// Text for class MyClass.  
+public ref class MyClass {   
+public:  
+   /// <summary> Text </summary>  
+   /// <see cref="aSymbolThatAppearsNowhereInMyProject"/>  
+   // Try the following line instead:  
+   // /// <see cref="System::Console::WriteLine"/>  
+   void MyMethod() {}  
+};   // C4638
+
+编译器警告（等级 3）C4640 Compiler Warning (level 3) C4640 11
+：本地静态对象的构造不是线程安全一个对象的静态实例不是线程安全。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4640: The following sample generates C4640: // C4640.cpp  
+// compile with: /W3  
+#pragma warning(default:4640)  
+
+class X {  
+public:  
+   X() {  
+   }  
+};  
+
+void f() {  
+   static X aX;   // C4640  
+}  
+
+int main() {  
+   f();  
+}
+
+编译器警告（等级 3）C4641 Compiler Warning (level 3) C4641 11
+文档注释含有不明确的交叉引用。编译器无法明确地解析的引用。若要解决此警告，请指定明确引用所需的参数信息。有关更多信息，请参见。示例下面的示例生成 C4641。 The following sample generates C4641. // C4641.cpp  
+// compile with: /W3 /doc /clr /c  
+
+/// <see cref="f" />   // C4641  
+// try the following line instead  
+// /// <see cref="f(int)" />  
+public ref class GR {  
+public:  
+   void f( int ) {}  
+   void f( char ) {}  
+};
+
+编译器警告（等级 3）C4645 Compiler Warning (level 3) C4645 11
+用声明的函数有返回语句返回语句已将标有的函数中找到修饰符。忽略语句。下面的示例生成 C4645： The following sample generates C4645: // C4645.cpp  
+// compile with:  /W3  
+void __declspec(noreturn) func() {  
+   return;   // C4645, delete this line to resolve  
+}  
+
+int main() {  
+}
+
+编译器警告（等级 3）C4646 Compiler Warning (level 3) C4646 11
+用声明的函数有非返回类型标记有修饰符的函数应有返回类型。下面的示例生成 C4646： The following sample generates C4646: // C4646.cpp  
+// compile with: /W3 /WX  
+int __declspec(noreturn) TestFunction()  
+{   // C4646  make return type void  
+}
+
+编译器警告（等级 3）C4686 Compiler Warning (level 3) C4686 11
+“用户定义类型：行为可能有更改，中的更改返回调用约定类模板专用化未返回类型中使用它之前定义。实例化类的任何内容将解决此警告声明一个实例或访问成员任何内容也是选项。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。相反，请尝试以下 yiw
+
+编译器警告（等级 3）C4723 Compiler Warning (level 3) C4723 11
+潜在的被除计算结果为零编译时，给出了未定义的结果操作中的第二个操作数。仅在使用时，将发出此警告或暗指的优化选项。编译器可能生成的零个操作数。
+
+编译器警告（等级 3）C4724 Compiler Warning (level 3) C4724 11
+潜在的以求模余数运算中的第二个操作数在编译时计算结果为零，给出了未定义的结果。
+
+编译器警告（等级 3）C4738 Compiler Warning (Level 3) C4738 11
+将位浮点型结果存储在内存中，可能会降低性能警告或赋值、强制转换时，结果传递自变量，或其他操作可能需要进行舍入操作用尽了寄存器，并且需要使用（将溢出）的内存。这可能导致性能损失。若要解决此警告，并避免舍入，编译与或使用而不是。若要解决此警告，并避免不足寄存器，更改计算顺序，并修改的使用内联默认情况下，此警告处于关闭状态。有关详细信息，请参阅。示例下面的示例生成 C4738: The following sample generates C4738: // C4738.cpp  
+// compile with: /c /fp:precise /O2 /W3  
+// processor: x86  
+#include <stdio.h>  
+
+#pragma warning(default : 4738)  
+
+float func(float f)  
+{  
+    return f;  
+}  
+
+int main()  
+{  
+    extern float f, f1, f2;  
+    double d = 0.0;  
+
+    f1 = func(d);  
+    f2 = (float) d;  
+    f = f1 + f2;   // C4738  
+    printf_s("%f\n", f);  
+}
+
+编译器警告（等级 3）C4792 Compiler Warning (level 3) C4792 11
+函数“”使用声明并从本机代码引用；需要链接导入库从非托管函数调用通过导入到程序中的本机函数。因此，你必须链接到该的导入库。无法在代码中解决该警告，也无法通过改变编译方式来解决。请使用警告杂注禁用此警告。以下示例生成：
+
+编译器警告（等级 3）C4800 Compiler Warning (level 3) C4800 11
+类型或（性能警告）到强制值值时，不会生成此警告分配或强制转换为类型。通常情况下，此消息由分配到变量变量其中变量仅包含值和，并且可能重新声明为类型。如果你不能重写要使用类型的表达式，然后可以将添加到表达式中，它会为提供的表达式类型。强制转换表达式类型不会禁用警告，这是设计使然。在不再生成此警告。示例下面的示例生成 C4800，并演示如何修复此错误： The following sample generates C4800 and shows how to fix it: // C4800.cpp  
+// compile with: /W3  
+int main() {  
+   int i = 0;  
+
+   // To fix, instead try:  
+   // bool i = 0;  
+
+   bool j = i;   // C4800  
+   j++;  
+}
+
+编译器警告（等级 3）C4823 Compiler Warning (level 3) C4823 11
+：使用钉住指针但展开语义不会启用。请考虑使用要解锁的块范围中声明钉住指针指向托管堆上的对象，编译器将模拟伪装钉住指针具有析构函数，使该指针无效的本地类的析构函数的行为。若要启用对析构函数的调用引发异常后，你必须启用对象展开，则你可以通过使用。可以手动取消固定对象也可以忽略该警告。示例下面的示例生成 C4823。 The following sample generates C4823. // C4823.cpp  
+// compile with: /clr /W3 /EHa-  
+using namespace System;  
+
+ref struct G {  
+   int m;  
+};  
+
+void f(G ^ pG) {  
+   try {  
+      pin_ptr<int> p = &pG->m;  
+      // manually unpin, ignore warning  
+      // p = nullptr;  
+      throw gcnew Exception;  
+   }  
+   catch(Exception ^) {}  
+}   // C4823 warning  
+
+int main() {  
+   f( gcnew G );  
+}
+
+编译器警告 （等级 3） C4995 Compiler Warning (level 3) C4995 11
+：名称被标记为弃用编译器遇到标记有杂注的函数弃用。在未来版本中可能不再支持此函数。你可以关闭此警告与警告杂注（例所示）。示例下面的示例生成 C4995: The following sample generates C4995: // C4995.cpp  
+// compile with: /W3  
+#include <stdio.h>  
+
+// #pragma warning(disable : 4995)  
+void func1(void)  
+{  
+    printf("\nIn func1");  
+}  
+
+int main()   
+{  
+    func1();  
+    #pragma deprecated(func1)  
+    func1();   // C4995  
+}
+
+编译器警告 （等级 3） C4996 Compiler Warning (level 3) C4996 11
+编译器遇到弃用声明。此警告始终是故意消息从库或附带的头文件，不应在不了解后果的情况下使用不推荐使用的符号的作者。由弃用修饰符或在声明的站点的属性指定实际的警告消息。这些是生成的运行库和标准库，但不是一个详尽的列表的一些常见消息。访问下列链接或阅读以获取的方法可以解决此问题，或者若要关闭该警告。此项的名称已弃用。请改用和一致的名称：。请参阅联机帮助了解详细信息。此函数或变量可能不安全。请考虑使用相反。若要禁用弃用，请使用否警告。请参阅联机帮助了解详细信息。未选中迭代器调用具有参数，参数可能不安全的此调用依赖于调用方检查传递的值正确。若要禁用此警告，请使用。有关如何使用检查迭代器，请参阅文档此函数或变量已被较新的库或操作系统功能取代。请考虑使用相反。请参阅联机帮助了解详细信息。原因当编译器遇到函数或被标记为的变量，则会发生弃用使用修饰符，或当你尝试访问函数、类成员或具有的弃用属性。你可以使用修饰符或属性自己库或标头文件来警告你有关已弃用的函数、变量、成员或的客户端中。备注许多函数、成员函数，模板函数和中的库中的全局变量标记为弃用。这些函数被弃用，因为它们可能具有不同的首选的名称，可能不安全或具有更加安全的变体，或可能已过时。许多弃用消息包括不推荐使用的函数或全局变量的建议的替换。若要解决此问题，我们通常建议你更改代码以改为使用建议的更安全的或更新函数和全局变量。如果你需要使用现有的函数或变量，可移植性原因，可以关闭该警告。若要将关闭的警告，而无需解决的问题你可以通过将关闭的警告的代码的特定行警告杂注，。你还可以启用警告文件中使用警告杂注，。你可以关闭该警告全局在命令行版本中使用命令行选项。若要关闭的警告的中的整个项目：
+
+编译器警告 （等级 4） C4001 Compiler Warning (level 4) C4001 11
+使用非标准扩展单行注释此警告是在版本中删除，这是因为单行注释在标准。单行注释中是标准中开头标准。在严格兼容性，文件包含单行注释，因非标准扩展的使用情况而生成。由于单行注释都是标准中，包含单行注释文件不会生成编译具有扩展时。示例若要禁用警告，请取消注释。
+
+编译器警告（等级 4）C4019 Compiler Warning (level 4) C4019 11
+全局范围内的空语句全局范围内的分号前面没有语句。如果删除额外的分号，则可能会修复此警告。示例
+
+编译器警告 （等级 4） C4032 Compiler Warning (level 4) C4032 11
+形参数字具有不同的类型提升时参数类型不兼容，通过默认提升，与以前的声明中的类型。这是中的错误和扩展下的警告。示例
+
+编译器警告（等级 4）C4053 Compiler Warning (level 4) C4053 11
+“”的一个操作数为运算符提供了类型的表达式。未定义操作数的值。
+
+编译器警告（等级 4）C4057 Compiler Warning (level 4) C4057 11
+“”“”与“”在稍微不同的基类型间接寻址上不同两个指针表达式引用不同的基类型。使用表达式时无需转换。通过检查以下可能的原因进行修复混合签名和未签名的类型。混合和类型。
+
+编译器警告 （等级 4） C4061 Compiler Warning (level 4) C4061 11
+枚举器标识符中的枚举的交换机枚举没有被标签显式处理枚举数已没有关联的处理程序语句。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4061;添加缺少的枚举器，若要修复用例： The following sample generates C4061; add a case for the missing enumerator to fix: // C4061.cpp
+// compile with: /W4
+#pragma warning(default : 4061)
+
+enum E { a, b, c };
+void func ( E e )
+{
+   switch(e)
+   {
+      case a:
+      case b:
+      default:
+         break;
+   }   // C4061 c' not handled
+}
+
+int main()
+{
+}
+
+编译器警告（等级 4）C4062 Compiler Warning (level 4) C4062 11
+未处理枚举“”的开关中的枚举器“”在语句中，枚举没有任何相关联的处理程序，并且没有任何默认标签。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4062： The following sample generates C4062: // C4062.cpp  
+// compile with: /W4  
+#pragma warning(default : 4062)  
+enum E { a, b, c };  
+void func ( E e ) {  
+   switch(e) {  
+      case a:  
+      case b:  
+      break;   // no default label  
+   }   // C4062, enumerate 'c' not handled  
+}  
+
+int main() {  
+}
+
+编译器警告 （等级 4） C4092 Compiler Warning (level 4) C4092 11
+返回操作数运算符已非常大，因此返回无符号长。在扩展下会出现此警告。在兼容性，则结果将截断相反。
+
+编译器警告（等级 4）C4100 Compiler Warning (level 4) C4100 11
+：未引用的形式参数形式的参数未引用的函数体中。忽略未引用的参数。当代码在调用析构函数，还可以发出否则未引用的基元类型的参数。这是编译器的限制。下面的示例生成 C4100: The following sample generates C4100: // C4100.cpp  
+// compile with: /W4  
+void func(int i) {   // C4100, delete the unreferenced parameter to  
+                     //resolve the warning  
+   // i;   // or, add a reference like this  
+}  
+
+int main()  
+{  
+   func(1);  
+}
+
+编译器警告 （等级 4） 了 C4121 Compiler Warning (level 4) C4121 11
+“符号”：成员的对齐方式对封装敏感编译器添加了填充以在封装边界对齐结构成员，但封装值小于该成员的大小。例如，以下代码片段生成了：若要修复此问题，请作出以下更改之一：将封装大小更改为导致警告的成员的大小或更大。例如，在此代码片段中，将更改为或。按大小对成员声明进行重新排序（从大到小）。在代码片段中，反转结构成员的顺序，使位于前面，并使位于前面。仅当据成员前添加填充时，此警告才出现。当封装已在没有针对数据类型对齐的内存位置放置数据，但数据成员前没有放置填充时，将出现此警告。如果某些边界的大小是某个数据在大小的倍数，但该数据未在这些边界上对齐，则性能可能会降低。未对齐的数据的读取和写入会导致某些体系结构中出现处理器错误，可能需要多用两三个数量级的时间来解决该错误。未对齐的数据访问无法移植到某些体系结构。你可以使用包或指定结构的对齐方式。生成此警告指定。
+
+编译器警告（等级 4）C4125 Compiler Warning (level 4) C4125 11
+十进制数字终止八进制转义序列编译器未用十进制数求八进制数，并假定十进制数字是一个字符。示例如果数字作为一个字符，请如下更正示例：
+
+编译器警告（等级 4）C4127 Compiler Warning (level 4) C4127 11
+条件表达式是常量某个语句或循环的控制表达式的计算结果为常量。由于其常见惯例用法，如普通常量或不触发此警告，除非它们是在表达式中的操作的结果。如果的控制表达式的循环是常量，因为在中间退出循环，请考虑替换循环循环。可以省略的初始化、终止测试和循环增量循环，这会导致循环是无限的就像，并可以从的正文中退出循环语句。下面的示例演示两种方式生成的并演示如何使用循环以避免此警告：
+
+编译器警告（等级 4）C4130 Compiler Warning (level 4) C4130 11
+“”：字符串常量地址的逻辑操作使用具有字符串文本地址的运算符会产生意外的代码。下面的示例生成 C4130： The following sample generates C4130: // C4130.cpp  
+// compile with: /W4  
+int main()  
+{  
+   char *pc;  
+   pc = "Hello";  
+   if (pc == "Hello") // C4130  
+   {  
+   }  
+} if 语句会将指针 pc 中存储的值与字符串“Hello”的地址进行比较，每次代码中出现该字符串时，都将单独分配该值。 The if statement compares the value stored in the pointer pc to the address of the string "Hello", which is allocated separately each time the string occurs in code. if 语句不会将 pc 所指向的字符串与字符串“Hello”进行比较。 The if statement does not compare the string pointed to by pc with the string "Hello". 若要比较字符串，请使用 strcmp 函数。 To compare strings, use the strcmp function.
+
+编译器警告（等级 4）C4131 Compiler Warning (level 4) C4131 11
+“函数”：使用旧样式的声明符指定的函数声明不是原型形式。旧样式的函数声明应转换为原型形式。下面的示例展示一个旧样式的函数声明：下面的示例展示一个原型形式：
+
+编译器警告（等级 4）C4132 Compiler Warning (level 4) C4132 11
+“”：应初始化对象未初始化常量。在对具有“”属性的符号进行定义后，不能更改它的值，应向它提供一个初始化值。
+
+编译器警告（等级 4）C4152 Compiler Warning (level 4) C4152 11
+非标准扩展表达式中的函数数据指针转换在函数指针与数据指针之间转换。在扩展下允许此类转换，但在下则不允许。
+
+编译器警告（等级 4）C4189 Compiler Warning (level 4) C4189 11
+“”：局部变量已初始化但未引用已声明并初始化变量，但未使用。下面的示例生成 C4189： The following sample generates C4189: // C4189.cpp  
+// compile with: /W4  
+int main() {  
+   int a = 1;   // C4189, remove declaration to resolve  
+}
+
+编译器警告（等级 4）C4201 Compiler Warning (level 4) C4201 11
+使用的非标准扩展：无名称结构联合在扩展中，可以指定没有声明符的结构，作为另一个结构或联合的成员。这些结构生成在兼容性错误。示例
+
+编译器警告（等级 4）C4202 Compiler Warning (level 4) C4202 11
+使用的非标准扩展：原型中的参数名称列表非法旧式函数定义包含变量自变量。这些定义生成在兼容性错误。示例
+
+编译器警告（等级 4）C4204 Compiler Warning (level 4) C4204 11
+使用的非标准扩展：非常量聚合初始值设定项具有扩展，你可以初始化聚合类型（数组、结构、联合和类）不是常量的值。示例此类初始化操作是在兼容性无效。
+
+编译器警告（等级 4）C4205 Compiler Warning (level 4) C4205 11
+使用的非标准扩展：函数范围中的静态函数声明具有扩展静态可以在另一个函数内声明函数。该函数具有全局作用域。示例此类初始化操作是在兼容性无效。
+
+编译器警告（等级 4）C4206 Compiler Warning (level 4) C4206 11
+使用的非标准扩展：翻译单元为空在预处理后，该文件为空。此扩展可以防止你的代码移植到其他编译器。将生成在兼容性错误和仅适用于源代码。
+
+编译器警告（等级 4）C4207 Compiler Warning (level 4) C4207 11
+使用的非标准扩展：扩展初始值设定项窗体使用扩展，您可以初始化数组未确定大小的使用大括号内的字符串。示例此类初始化操作是在兼容性无效。
+
+编译器警告（等级 4）C4208 Compiler Warning (level 4) C4208 11
+使用的非标准扩展：删除计算但忽略具有扩展，你可以删除数组使用括号内的某个值运算符。忽略的值。此类值均无效兼容性。
+
+编译器警告（等级 4）C4210 Compiler Warning (level 4) C4210 11
+使用的非标准扩展：提供文件范围内函数与默认扩展，函数声明具有文件范围。此扩展可以防止你的代码移植到其他
+
+编译器警告（等级 4）C4211 Compiler Warning (level 4) C4211 11
+使用的非标准扩展：重新定义为静态具有默认的扩展中，您可以重新定义标识符，则为静态。示例此类重新定义是在兼容性无效。请参阅
+
+编译器警告（等级 4）C4212 Compiler Warning (level 4) C4212 11
+使用的非标准扩展：使用省略号的函数声明函数原型有数目可变的参数。没有为函数定义。下面的示例生成 C4212: The following sample generates C4212: // C4212.c  
+// compile with: /W4 /Ze /c  
+void f(int , ...);  
+void f(int i, int j) {}
+
+编译器警告（等级 4）C4213 Compiler Warning (level 4) C4213 11
+使用的非标准扩展：上左值的类型转换具有默认的扩展中，可以在赋值语句的左侧使用强制转换。示例此类强制转换时在兼容性无效。
+
+编译器警告（等级 4）C4214 Compiler Warning (level 4) C4214 11
+使用的非标准扩展：位以外的字段类型具有默认的扩展中，位域结构成员可以是任何整数类型。示例此类位域是在兼容性无效。
+
+编译器警告（等级 4）C4220 Compiler Warning (level 4) C4220 11
+匹配其余参数在默认的扩展中，指向函数的指针与指向具有类似，但变量，自变量的函数的指针相匹配。示例此类指针不匹配在兼容性。
+
+编译器警告（等级 4）C4221 Compiler Warning (level 4) C4221 11
+使用的非标准扩展：无法使用自动变量的地址初始化使用默认的扩展中，您可以初始化聚合类型数组，，或联合使用本地（自动）变量的地址。示例此类初始化操作是在兼容性无效。
+
+编译器警告（等级 4）C4232 Compiler Warning (level 4) C4232 11
+使用的非标准扩展地址不是静态的的标识不能保证在扩展中，您可以赋予非静态值，像使用声明的函数地址修饰符。在兼容性，这将导致错误。下面的示例生成 C4232: The following sample generates C4232: // C4232.c  
+// compile with: /W4 /Ze /c  
+int __declspec(dllimport) f();  
+int (*pfunc)() = &f;   // C4232
+
+编译器警告（等级 4）C4233 Compiler Warning (level 4) C4233 11
+使用的非标准扩展关键字仅支持在，不中的关键字编译器将编译为，而不是，你的源代码，并且你使用仅在中有效的关键字。编译器将源代码文件编译成如果源文件的扩展名是也使用。此警告将自动提升为错误。如果你想要修改此行为，使用警告。例如，若要使级别警告问题，可以将此行添加到源代码文件上：
+
+编译器警告（等级 4）C4234 Compiler Warning (level 4) C4234 11
+使用的非标准扩展：保留供将来使用的关键字编译器不尚未实现您使用的关键字。此警告将自动提升为错误。如果你想要修改此行为，使用警告。例如，若要使一个级别警告问题，在你的源代码文件。
+
+编译器警告（等级 4）C4235 Compiler Warning (level 4) C4235 11
+使用的非标准扩展关键字不支持这种体系结构编译器不支持您使用的关键字。此警告将自动提升为错误。如果你想要修改此行为，使用警告。例如，若要使等级警告，可使用以下代码行在你的源代码文件。
+
+编译器警告（等级 4）C4238 Compiler Warning (level 4) C4238 11
+使用的非标准扩展：类右值用作左值与以前版本的，扩展的兼容性允许你使用的类类型，如在上下文中的为右值的隐式或显式采用其地址。在某些情况下，如以下示例中，这可能是危险。示例这种用法会导致在兼容性错误。
+
+编译器警告（等级 4）C4239 Compiler Warning (level 4) C4239 11
+使用的非标准扩展：从到的转换此类型转换不允许通过标准，但它允许此处作为扩展。此警告始终后跟至少一个行的说明，以描述违反语言规则。示例下面的示例生成 C4239。 The following sample generates C4239. // C4239.cpp  
+// compile with: /W4 /c  
+struct C {  
+   C() {}  
+};  
+
+void func(void) {  
+   C & rC = C();   // C4239  
+   const C & rC2 = C();   // OK  
+   rC2;  
+} 示例 Example 严格不允许从整数类型转换为枚举类型。 Conversion from integral type to enum type is not strictly allowed. 下面的示例生成 C4239。 The following sample generates C4239. // C4239b.cpp  
+// compile with: /W4 /c  
+enum E { value };   
+struct S {   
+   E e : 2;   
+} s = { 5 };   // C4239   
+// try the following line instead  
+// } s = { (E)5 };
+
+编译器警告（等级 4）C4242 Compiler Warning (level 4) C4242 11
+：从到，可能丢失数据的转换类型是不同的。类型转换可能会导致数据丢失。编译器进行类型转换。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。的其他信息，请参阅常见编译器错误。下面的示例生成 C4242: The following sample generates C4242: // C4242.cpp  
+// compile with: /W4  
+#pragma warning(4:4242)  
+int func() {  
+   return 0;  
+}  
+
+int main() {  
+   char a;  
+   a = func();   // C4242, return type and variable type do not match  
+}
+
+编译器警告（等级 4）C4245 Compiler Warning (level 4) C4245 11
+：从转换到，有符号无符号不匹配你尝试转换一个已签名具有负值到。下面的示例生成 C4245: The following sample generates C4245: // C4245.cpp  
+// compile with: /W4 /c  
+const int i = -1;  
+unsigned int j = i; // C4245  
+
+const int k = 1;  
+unsigned int l = k; // okay  
+
+int m = -1;  
+unsigned int n = m; // okay  
+
+void Test(size_t i) {}  
+
+int main() {  
+   Test( -19 );   // C4245  
+}
+
+编译器警告（等级 4）C4254 Compiler Warning (level 4) C4254 11
+：从到，可能丢失数据的转换更大的位字段被赋予较小的位字段。可能有数据丢失。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4254: The following sample generates C4254: // C4254.cpp  
+// compile with: /W4  
+#pragma warning(default: 4254)  
+
+struct X {  
+   int a : 20;  
+   int b : 12;  
+};  
+
+int main() {  
+   X *x = new X();  
+   x->b = 10;  
+   x->a = 4;  
+   x->a = x->b;    // OK  
+   x->b = x->a;    // C4254  
+};
+
+编译器警告（等级 4）C4255 Compiler Warning (level 4) C4255 11
+：函数原型给定：转换到的（）编译器未找到函数自变量的明确列表。此警告是适用于编译器。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4255: The following sample generates C4255: // C4255.c  
+// compile with: /W4 /WX  
+#pragma warning (default : 4255)  
+
+void f()  { // C4255  
+// try the following line instead  
+//void f(void) {  
+}  
+
+int main(int argc, char *argv[]) {  
+   f();  
+}
+
+编译器警告（等级 4）C4256 Compiler Warning (level 4) C4256 11
+已具有虚拟基的类的构造函数调用可能不兼容与旧版本的可能不兼容。请考虑以下代码示例。如果定义的构造函数，使用的版本之前的编译器版本编译但下面的示例使用编译的当前版本，对的构造函数的调用将无法由于正常工作特殊情况调用约定发生了更改。如果两者都是使用编译的，该调用也无法完全正常工作，除非不为省略号传递任何参数。若要修复此警告请勿在构造函数中使用省略号。请确保在其项目中的所有组件都生成与当前版本（包括任何库，可以定义或引用此类），然后禁用警告使用警告杂注。下面的示例生成 C4256: The following sample generates C4256: // C4256.cpp  
+// compile with: /W4  
+// #pragma warning(disable : 4256)  
+struct S1  
+{  
+};  
+
+struct S2: virtual public S1  
+{  
+   S2( int i, ... )    // C4256  
+   {  
+      i = 0;  
+   }  
+   /*  
+   // try the following line instead  
+   S2( int i)  
+   {  
+      i = 0;  
+   }  
+   */  
+};  
+
+void func1()  
+{  
+   S2 S3( 2, 1, 2 );   // C4256  
+   // try the following line instead  
+   // S2 S3( 2 );  
+}  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4263 Compiler Warning (level 4) C4263 11
+：成员函数不重写任何基类虚拟成员函数一个类函数定义具有与基但不是相同数量的类或类型自变量中的虚函数相同的名称。这实际上会隐藏基类中的虚函数。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4263: The following sample generates C4263: // C4263.cpp  
+// compile with: /W4  
+#pragma warning(default:4263)  
+#pragma warning(default:4264)  
+class B {  
+public:  
+   virtual void func();  
+};  
+
+class D : public B {  
+   void func(int);   // C4263  
+};  
+
+int main() {  
+}
+
+编译器警告（等级 4）C4266 Compiler Warning (level 4) C4266 11
+：不重写的基的虚拟成员函数函数将被隐藏派生的类未重写虚函数的所有重载。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4266: The following sample generates C4266: // C4266.cpp  
+// compile with: /W4 /c  
+#pragma warning (default : 4266)  
+class Engine {  
+public:  
+   virtual void OnException(int&,int);  
+   virtual void OnException(int&,int&,int);  
+};  
+
+class LocalBinding : private Engine {  
+   virtual void OnException(int&,int);  
+};   // C4266 可能的解决方法： Possible resolution: // C4266b.cpp  
+// compile with: /W4 /c  
+#pragma warning (default : 4266)  
+class Engine {  
+public:  
+   virtual void OnException(int&,int);  
+   virtual void OnException(int&,int&,int);  
+};  
+
+class LocalBinding : private Engine {  
+   virtual void OnException(int&,int);  
+   virtual void OnException(int&, int&, int);  
+};
+
+编译器警告（等级 4）C4268 Compiler Warning (level 4) C4268 11
+全局静态数据使用编译器生成默认构造函数初始化填充零的对象使用编译器生成的默认构造函数初始化全局或静态的重要类的实例。示例类的此实例原样的值不能更改。
+
+编译器警告（等级 4）C4289 Compiler Warning (level 4) C4289 11
+使用了非标准扩展“”在循环中声明的循环控制变量用在了循环范围外使用编译时和中声明的变量为之后使用循环已为循环作用域。请参阅有关如何指定标准行为中的为循环也。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4289: The following sample generates C4289: // C4289.cpp  
+// compile with: /W4 /Zc:forScope-  
+#pragma warning(default:4289)  
+int main() {  
+   for (int i = 0 ; ; )   // C4289  
+      break;  
+   i++;  
+}
+
+编译器警告（等级 4）C4295 Compiler Warning (level 4) C4295 11
+数组：数组是太小，无法包括终止字符已初始化数组，但数组中的最后一个字符不为访问作为字符串数组可能产生意外的结果。示例下面的示例生成 C4295。 The following sample generates C4295. 若要解决此问题，你可以声明数组大小更大，以保存终止 null 的初始值设定项字符串，或者也可以使用数组初始值设定项列表进行的意图更明显，这是数组的 char ，不以 null 结尾的字符串。 To fix this issue, you could declare the array size larger, to hold a terminating null from the initializer string, or you could use an array initializer list to make the intent clear that this is an array of char , not a null-terminated string. // C4295.c
+// compile with: /W4
+
+
+int main() {
+   char a[3] = "abc";           // C4295
+   char b[3] = {'d', 'e', 'f'}; // No warning
+   a[0] = b[2];
+}
+
+编译器警告（等级 4）C4296 Compiler Warning (level 4) C4296 11
+：表达式始终为值为零的比较操作中使用了无符号的变量。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4296: The following sample generates C4296: // C4296.cpp  
+// compile with: /W4  
+#pragma warning(default : 4296)  
+int main()  
+{  
+   unsigned int u = 9;  
+   if (u < 0)    // C4296  
+      u++;  
+   if (u >= 0)   // C4296  
+      u++;  
+}
+
+编译器警告（等级 4）C4324 Compiler Warning (level 4) C4324 11
+：结构已填充由于因为你指定在结构的末尾添加填充值。例如，下面的代码生成
+
+编译器警告（等级 4）C4336 Compiler Warning (level 4) C4336 11
+导入交叉引用的类型库在导入之前类型库引用与指令。但是，类型库包含对另一个使用未被引用的类型库的引用。编译器发现了此其他文件。从以下两个文件（使用编译）创建的磁盘上的给定两个类型库：第二个类型库：下面的示例生成 C4336: The following sample generates C4336: // C4336.cpp  
+// compile with: /W4 /LD  
+// #import "C4336a.tlb"  
+#import "C4336b.tlb"   // C4336, uncomment previous line to resolve
+
+编译器警告（等级 4）C4337 Compiler Warning (level 4) C4337 11
+在的交叉引用的类型库是要自动导入特性指令导致隐式要导入类型库。从以下两个文件（使用ǖ拇排躺系母礁隼嘈涂猓?然后与第二个文件下面的示例生成 C4337: The following sample generates C4337: // C4337.cpp  
+// compile with: /W4 /LD  
+#import "c4337b.tlb" auto_search   // C4337  
+// explicitly #import all type libraries to resolve  
+// #import "C4337a.tlb"  
+// #import "C4337b.tlb"
+
+编译器警告（等级 4）C4339 Compiler Warning (level 4) C4339 11
+“”在或元数据中检测到使用了未定义的类型使用此类型可能导致运行时异常类型未在针对运行时或公共语言运行时中定义。定义类型以避免可能的运行时异常。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的
+
+编译器警告 了解详细信息。 See Compiler Warnings That Are Off by Default for more information. 下面的示例将生成 C4339，并演示如何修复此错误： The following sample generates C4339 and shows how to fix it: // C4339.cpp  
+
+
+编译器警告（等级 4）C4343 Compiler Warning (level 4) C4343 11
+杂注重写选项此警告（仅在处理器系列编译器中有效）报告重写编译器选项。下面的示例生成 C4343： The following sample generates C4343: // C4343.cpp  
+// compile with: /Og /W4 /LD  
+// processor: IPF  
+#pragma optimize ("g", off)   // C4343
+
+编译器警告（等级 4）C4365 Compiler Warning (level 4) C4365 11
+操作：从类型到，有符号无符号不匹配的转换例如，你试图将无符号的值转换为带符号值。默认情况下，处于关闭状态。有关详细信息，请参阅。示例下面的示例生成 C4365。 The following sample generates C4365. // C4365.cpp  
+// compile with: /W4  
+#pragma warning(default:4365)  
+
+int f(int) { return 0; }  
+void Test(size_t i) {}  
+
+int main() {  
+   unsigned int n = 10;  
+   int o = 10;  
+   n++;  
+   f(n);   // C4365  
+   f(o);   // OK  
+
+   Test( -19 );   // C4365  
+}
+
+编译器警告（等级 4）C4366 Compiler Warning (level 4) C4366 11
+一元运算符的结果可能是未对齐如果由于装箱，结构成员曾经可能是未对齐，编译器将发出警告时该成员的地址将分配给非对齐的指针。默认情况下，所有指针都被都对齐。若要解决，请更改结构的对齐方式，或声明指针关键字。有关详细信息，请参阅和包。示例下面的示例生成 C4366。 The following sample generates C4366. // C4366.cpp  
+// compile with: /W4 /c  
+// processor: IPF x64  
+#pragma pack(1)  
+struct X {  
+   short s1;  
+   int s2;  
+};  
+
+int main() {  
+   X x;  
+   short * ps1 = &x.s1;   // OK  
+   int * ps2 = &x.s2;   // C4366  
+}
+
+编译器警告（等级 4）C4389 Compiler Warning (level 4) C4389 11
+：有符号无符号不匹配运算涉及有符号和无符号变量。这可能导致数据丢失。下面的示例生成 C4389: The following sample generates C4389: // C4389.cpp  
+// compile with: /W4  
+#pragma warning(default: 4389)  
+
+int main()  
+{  
+   int a = 9;  
+   unsigned int b = 10;  
+   if (a == b)   // C4389  
+      return 0;  
+   else  
+      return 0;  
+};
+
+编译器警告（等级 4）C4400 Compiler Warning (level 4) C4400 11
+：不支持在此类型上的限定符和易失性限定符不会使用公共语言运行时类型的变量。示例下面的示例生成 C4400。 The following sample generates C4400. // C4400.cpp  
+// compile with: /clr /W4  
+// C4401 expected  
+using namespace System;  
+#pragma warning (disable : 4101)  
+int main() {  
+   const String^ str;   // C4400  
+   volatile String^ str2;   // C4400  
+}
+
+编译器警告（等级 4）C4408 Compiler Warning (level 4) C4408 11
+或联合不声明任何数据成员匿名结构或联合必须具有至少一个数据成员。以下示例生成：
+
+编译器警告（等级 4）C4429 Compiler Warning (level 4) C4429 11
+可能不完整或格式不正确通用字符名称编译器检测到可能格式不正确的通用字符名称的字符序列。通用字符名称是跟四个十六进制数字，或跟八个十六进制数字。下面的示例生成 C4429: The following sample generates C4429: // C4429.cpp  
+// compile with: /W4 /WX  
+int \ug0e4 = 0;   // C4429  
+// Try the following line instead:  
+// int \u00e4 = 0;   // OK, a well-formed universal character name.
+
+编译器警告（等级 4）C4431 Compiler Warning (level 4) C4431 11
+缺少类型说明符假定为。注意不再支持默认的此错误可能来自于为年执行的编译器一致性工作：不再将非类型化的标识符创建为，默认情况下。必须显式指定标识符的类型。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4431。 The following sample generates C4431. // C4431.c  
+// compile with: /c /W4  
+#pragma warning(default:4431)  
+i;   // C4431  
+int i;   // OK
+
+编译器警告（等级 4）C4434 Compiler Warning (level 4) C4434 11
+类构造函数必须具有私有可访问性将更改为私有访问指示编译器更改静态构造函数的可访问性。静态构造函数必须具有私有可访问性，因为它们仅应由公共语言运行时调用。有关详细信息，请参阅静态构造函数。示例下面的示例生成 C4434。 The following sample generates C4434. // C4434.cpp  
+// compile with: /W4 /c /clr  
+public ref struct R {  
+   static R(){}   // C4434  
+};
+
+编译器警告（等级 4）C4435 Compiler Warning (level 4) C4435 11
+“”下的对象布局将因虚拟基“”而更改默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。在的默认编译选项下，派生类没有指示的虚拟基的字段。如果或有效，字段将存在，并更改对象布局。如果使用不同的设置编译交互的模块，这可能导致二进制兼容性问题。示例下面的示例生成 C4435。 The following sample generates C4435. // C4435.cpp  
+// compile with: /c /W4  
+#pragma warning(default : 4435)  
+class A  
+{  
+public:  
+    virtual ~A() {}  
+};  
+
+class B : public virtual A  // C4435  
+{}; 请参阅 See Also vtordisp vtordisp /vd （禁用构造置换） /vd (Disable Construction Displacements)
+
+编译器警告（等级 4）C4437 Compiler Warning (level 4) C4437 11
+从虚拟基到的无法在与某些上下文中编译失败或实际上定义与默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。编译器遇到具有以下特征的操作。转换是从基类指针到派生类的指针。派生类虚拟继承基类。派生类没有虚拟基的字段。构造函数或析构函数的派生类中找不到该强制转换或进一步的某个类继承自派生类（否则为编译器警告将颁发）。此警告表明部分构造的对象上操作时可能无法执行正确。从构造函数或析构函数的类的继承警告中指定的派生的类调用封闭函数时发生这种情况。如果警告中指定的派生的类不再进一步派生，或将封闭函数不调用在对象构造或析构期间，可以忽略此警告。示例下面的示例生成 C4437 并演示缺少的代码生成问题 vtordisp 字段。 The following sample generates C4437 and demonstrates the code generation issue that arises from the missing vtordisp field. // C4437.cpp  
+// To see the warning and runtime assert, compile with: /W4  
+// To eliminate the warning and assert, compile with: /W4 /vd2  
+//       or compile with: /W4 /DFIX  
+#pragma warning(default : 4437)  
+#include <cassert>  
+
+struct A  
+{  
+public:  
+    virtual ~A() {}  
+};  
+
+#if defined(FIX)  
+#pragma vtordisp(push, 2)  
+#endif  
+struct B : virtual A  
+{  
+    B()  
+    {  
+        func();  
+    }  
+
+    void func()  
+    {  
+        A* a = static_cast<A*>(this);  
+        B* b = dynamic_cast<B*>(a);     // C4437  
+        assert(this == b);              // assert unless compiled with /vd2  
+    }  
+};  
+#if defined(FIX)  
+#pragma vtordisp(pop)  
+#endif  
+
+struct C : B  
+{  
+    int i;  
+};  
+
+int main()  
+{  
+    C c;  
+} 请参阅 See Also dynamic_cast 运算符 dynamic_cast Operator vtordisp vtordisp 编译器警告（等级 1）C4436 Compiler Warning (level 1) C4436
+
+编译器警告 （等级 4） C4456 Compiler Warning (level 4) C4456 11
+声明标识符隐藏了以前本地声明声明标识符在本地作用域中隐藏具有相同名称的以前的本地声明的声明。此警告，告知你引用到标识符在本地作用域中解析为本地声明的版本中，不以前本地，这可能也可能不是你的意图。若要解决此问题，我们建议你提供与其他本地名称不会发生冲突的本地变量名称。示例下面的示例生成 C4456，因为循环控制变量 int x 和本地变量 double x 中 member_fn 具有相同的名称。 The following sample generates C4456 because the loop control variable int x and the local variable double x in member_fn have the same names. 若要解决此问题，请使用不同的本地变量的名称。 To fix this issue, use different names for the local variables. // C4456_hide.cpp
+// compile with: cl /W4 /c C4456_hide.cpp
+
+struct S {
+    void member_fn(unsigned u) {
+        double x = 0;
+        for (int x = 0; x < 10; ++x) {  // C4456
+            u += x; // uses local int x
+        } 
+        x += u; // uses local double x
+    }
+} s;
+
+编译器警告 （等级 4） C4457 Compiler Warning (level 4) C4457 11
+声明标识符隐藏函数参数声明标识符在本地作用域中隐藏相同名为函数参数的声明。此警告，告知你引用到标识符在本地作用域中解析为本地声明的版本中，不使用参数可能会也可能不是你的意图。若要解决此问题，我们建议你提供与参数名称不会发生冲突的本地变量名称。示例下面的示例生成 C4457，因为参数 x 和本地变量 x 中 member_fn 具有相同的名称。 The following sample generates C4457 because the parameter x and the local variable x in member_fn have the same names. 若要解决此问题，请使用不同的参数和局部变量名称。 To fix this issue, use different names for the parameters and local variables. // C4457_hide.cpp
+// compile with: cl /W4 /c C4457_hide.cpp
+
+struct S {
+    void member_fn(unsigned x) {
+        double a = 0;
+        for (int x = 0; x < 10; ++x) {  // C4457
+            a += x; // uses local x
+        } 
+        a += x; // uses parameter x
+    }
+} s;
+
+编译器警告 （等级 4） C4458 Compiler Warning (level 4) C4458 11
+声明标识符隐藏类成员声明标识符在本地作用域中隐藏具有相同名称的声明标识符类范围内。此警告，告知你引用到标识符此作用域中解析为本地声明的版本中，不是类成员版本，可能会也可能不是你的意图。若要解决此问题，我们建议你提供类成员名称不会发生冲突的本地变量名称。示例下面的示例生成 C4458，因为参数 x 和本地变量 y 中 member_fn 类中具有相同名称的数据成员。 The following sample generates C4458 because the parameter x and the local variable y in member_fn have the same names as data members in the class. 若要解决此问题，请使用不同的参数和局部变量名称。 To fix this issue, use different names for the parameters and local variables. // C4458_hide.cpp
+// compile with: cl /W4 /c C4458_hide.cpp
+
+struct S {
+    int x;
+    float y;
+    void member_fn(long x) {   // C4458
+        double y;  // C4458
+        y = x;  
+        // To fix this issue, change the parameter name x
+        // and local name y to something that does not 
+        // conflict with the data member names.
+    }
+} s;
+
+编译器警告 （等级 4） C4459 Compiler Warning (level 4) C4459 11
+声明标识符隐藏了全局声明声明标识符在本地作用域中隐藏具有相同名称的声明标识符在全局范围内。此警告，告知你引用到标识符此作用域中解析为本地声明版本，而非全局版本，可能会也可能不是你的意图。通常情况下，我们建议你尽量少使用的全局变量作为良好工程做法。为了尽量减少污染全局命名空间，我们建议使用命名的命名空间的全局变量。在中，在编译器版本新此警告。若要禁止显示该版本的编译器或更高版本时迁移你的代码的警告，请使用编译器选项。示例下面的示例生成 C4459: The following sample generates C4459: // C4459_hide.cpp
+// compile with: cl /W4 /EHsc C4459_hide.cpp
+int global_or_local = 1;
+
+int main() { 
+    int global_or_local; // warning C4459 
+    global_or_local = 2;
+} 若要解决此问题的一种方法是创建您全局函数的命名空间，但不是使用 using 指令置于该命名空间的范围内，因此所有引用都必须都使用明确限定名： One way to fix this issue is to create a namespace for your globals, but not use a using directive to bring that namespace into scope, so all references must use the unambiguous qualified names: // C4459_namespace.cpp
+// compile with: cl /W4 /EHsc C4459_namespace.cpp
+namespace globals {
+    int global_or_local = 1;
+}
+
+int main() { 
+    int global_or_local; // OK 
+    global_or_local = 2;
+    globals::global_or_local = 3;
+}
+
+编译器警告（等级 4）C4460 Compiler Warning (level 4) C4460 11
+或运算符“”具有按引用传递的参数。或运算符“”的语义与运算符“”的语义不同，是否希望按值传递？你通过引用向用户定义的运行时或运算符传递了一个值。如果该值在函数内发生更改，则请注意，在函数调用之后返回的值将被赋予函数的返回值。在标准中，更改的值将在函数调用之后得到反映。示例下面的示例生成 C4460，并演示如何修复此错误。 The following sample generates C4460 and shows how to fix it. // C4460.cpp  
+// compile with: /W4 /clr   
+#include <stdio.h>  
+
+public value struct V {  
+   static V operator ++(V& me) {   // C4460  
+   // try the following line instead  
+   // static V operator ++(V me) {  
+
+      printf_s(__FUNCSIG__ " called\n");  
+      V tmp = me;  
+      me.m_i++;  
+      return tmp;  
+   }  
+   int m_i;  
+};  
+
+int main() {  
+   V v;  
+   v.m_i = 0;  
+
+   printf_s("%d\n", v.m_i);   // Should print 0  
+   v++;   // Translates to "v = V::operator ++(v)"  
+   printf_s("%d\n", v.m_i);   // will print 0, hence the warning  
+}
+
+编译器警告 （等级 4） C4463 Compiler Warning (level 4) C4463 11
+溢出分配值到只包含中的值的位域到分配值位域所能容纳的值的范围之外。有符号的位域类型使用高顺序位表示符号，因此，如果是有符号的位域是位字段大小，范围为，而无符号的位字段具有一个从到范围。示例此示例将生成，因为它尝试分配给类型的位字段的值为大小为，它具有一个从到范围。若要解决此问题，可以更改为允许的范围中的一些东西所赋的值。如果位字段旨在在范围从到中保存无符号的值，你可以更改的声明类型。如果字段旨在在范围到中保存值，然后可以将位字段大小更改为。
+
+编译器警告 （等级 4） C4471 Compiler Warning (level 4) C4471 11
+枚举：未区分范围的枚举的前向声明必须具有基础类型假定为未区分范围的枚举的前向声明找的基础类型不带说明符。默认情况下，假定是枚举的基础类型。如果使用不同类型是在枚举定义中，例如，如果指定了不同的显式类型，或不同的类型隐式设置初始值设定项，这会导致问题。您可能还必须可移植性问题其他编译器不会假定是枚举的基础类型。默认情况下;yiw此警告处于关闭状态你可以使用或启用命令行上或使用警告源文件中。在某些情况下，此警告是虚假。如果枚举的前向声明出现在定义之后，可能会触发此警告。例如，此代码是有效，即使它可能会导致示例通常情况下，它是安全的完整定义用于未区分范围而不是前向声明枚举。你可以将定义放入标头文件，并将其包含在引用它的源文件中。这适用于及更高版本。我们建议为可移植性和便于维护此解决方案。示例在中，你可以添加显式类型，对未区分范围的枚举和其前向声明。仅当复杂标头包含逻辑禁止使用而不是前向声明的定义，我们建议此解决方案。此解决方案可能会导致了维护问题：如果更改用于枚举定义的基础类型，则还必须更改所有前向声明以匹配，或可能在你代码中有无提示的错误。可以将前向声明放入标头文件，以尽量减少此问题。如果指定显式类型枚举，我们建议你还启用警告，这是在默认情况下。这标识用例的枚举项要求与显式指定类型的类型不同的位置。示例你可以更改代码以使用的范围的枚举，中的新增功能。定义和使用枚举类型的任何客户端代码必须更改为使用的范围的枚举。我们建议你使用的范围的枚举如果你有问题的命名空间污染，如定义的枚举项的名称仅限于枚举的作用域。其他功能的范围枚举是其
+
+编译器警告（等级 4）C4481 Compiler Warning (level 4) C4481 11
+使用的非标准扩展：重写说明符使用不在标准，例如，一个在下也适用于重写说明符的关键字。有关详细信息，请参阅（公共语言运行时编译）重写说明符示例下面的示例生成 C4481。 The following sample generates C4481. // C4481.cpp  
+// compile with: /W4 /c  
+class B {  
+   virtual void f(unsigned);  
+};  
+
+class C : B {  
+   void f(unsigned) override;   // C4481  
+   void f2(unsigned);  
+};
+
+编译器警告（等级 4）C4487 Compiler Warning (level 4) C4487 11
+：继承非虚拟方法相匹配，但未显式标记在派生类中的函数具有与非虚拟基类函数相同的签名。提醒您派生的类函数不重写基类函数。显式标记为派生的类函数若要解决此警告。有关详细信息，请参阅新新中的槽）。示例下面的示例生成 C4487。 The following sample generates C4487. // C4487.cpp  
+// compile with: /W4 /clr  
+using namespace System;  
+public ref struct B {  
+   void f() { Console::WriteLine("in B::f"); }  
+   void g() { Console::WriteLine("in B::g"); }  
+};  
+
+public ref struct D : B {  
+   void f() { Console::WriteLine("in D::f"); }   // C4487  
+   void g() new { Console::WriteLine("in D::g"); }   // OK  
+};  
+
+int main() {  
+   B ^ a = gcnew D;  
+   // will call base class functions  
+   a->f();  
+   a->g();  
+}
+
+编译器警告（等级 4）C4505 Compiler Warning (level 4) C4505 11
+：已删除未引用的本地函数给定的函数是模块的本地且不被引用中正文中因此，该函数是死代码。编译器未生成此死函数代码。
+
+编译器警告（等级 4）C4510 Compiler Warning (level 4) C4510 11
+：无法生成默认构造函数没有用户定义的构造函数的创建和编译器无法生成指定的类的默认构造函数。你将无法创建此类型的对象。防止生成默认构造函数，编译器的几种情况包括：的数据成员。为引用数据成员。你需要创建用户定义的默认构造函数初始化这些成员的类。下面的示例生成 C4510: The following sample generates C4510: // C4510.cpp  
+// compile with: /W4  
+struct A {  
+   const int i;  
+   int &j;  
+   A& operator=( const A& ); // C4510 expected  
+   // uncomment the following line to resolve this C4510  
+   // A(int ii, int &jj) : i(ii), j(jj) {}  
+};   // C4510  
+
+int main() {  
+}
+
+编译器警告（等级 4）C4512 Compiler Warning (level 4) C4512 11
+：无法生成赋值运算符编译器无法为给定的类生成赋值运算符。未创建任何赋值运算符。派生类不可访问的基类的赋值运算符可导致此警告。若要避免此警告，请为类指定用户定义的赋值运算符。编译器还会为不会定义此函数的类生成一个赋值运算符函数。此赋值运算符是对象的数据成员的成员复制。因为无法在初始化之后修改数据项，所以如果类包含项，则默认赋值运算符将不起作用。出现警告的另一个原因是声明了引用类型的非静态数据成员。如果这样做是为了创建一个非可复制的类型，则还必须防止创建默认复制构造函数。可使用以下三种方式之一解决代码的警告：显式定义类的赋值运算符。删除或从类中的数据项引用运算符。使用警告语句来禁止显示警告。示例以下示例生成。
+
+编译器警告（等级 4）C4513 Compiler Warning (level 4) C4513 11
+：无法生成析构函数编译器无法生成给定类在默认析构函数已不创建任何析构函数。析构函数是不可访问到派生的类的基类中。如果基类具有私有析构函数，使其公共或受保护。
+
+编译器警告（等级 4）C4514 Compiler Warning (level 4) C4514 11
+：在删除未引用的内联函数优化器中删除一个内联函数，则不会调用。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4514: The following sample generates C4514: // C4514.cpp  
+// compile with: /W4  
+#pragma warning(default : 4514)  
+class A  
+{  
+   public:  
+      void func()   // C4514, remove the function to resolve  
+      {  
+      }  
+};  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4515 Compiler Warning (level 4) C4515 11
+命名空间：命名空间使用本身命名空间是用于以递归方式。下面的示例生成 C4515: The following sample generates C4515: // C4515.cpp  
+// compile with: /W4  
+namespace A  
+{  
+   using namespace A; // C4515  
+}  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4516 Compiler Warning (level 4) C4516 11
+：访问声明已弃用成员使用声明提供更好的选择委员会已经宣布访问声明更改而无需派生类中的成员的访问权限使用关键字已过期。的未来版本可能不支持访问声明。下面的示例生成 C4516: The following sample generates C4516: // C4516.cpp  
+// compile with: /W4  
+class A  
+{  
+public:  
+   void x(char);  
+};  
+
+class B : protected A  
+{  
+public:  
+   A::x;  // C4516 on access-declaration  
+   // use the following line instead  
+   // using A::x; // using-declaration, ok  
+};  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4517 Compiler Warning (level 4) C4517 11
+访问声明已弃用成员使用声明提供更好的选择委员会已经宣布访问声明更改而无需派生类中的成员的访问权限使用关键字已过期。的未来版本可能不支持访问声明。
+
+编译器警告（等级 4）C4536 Compiler Warning (level 4) C4536 11
+：类型名超出了个字符的元数据限制如果为托管类型，则将在元数据中被截断的类型名称。请参阅有关详细信息。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。
+
+编译器警告（等级 4）C4559 Compiler Warning (level 4) C4559 11
+：重定义函数提升已重新定义函数或将其重新声明和第二个定义或声明添加修饰符修饰符。此警告为信息性。若要解决此警告，请删除其中一个定义。下面的示例生成 C4559: The following sample generates C4559: // C4559.cpp  
+// compile with: /W4 /LD  
+void f();  
+__declspec(noalias) void f();   // C4559
+
+编译器警告（等级 4）C4564 Compiler Warning (level 4) C4564 11
+方法类的定义不支持的默认参数编译器检测到具有使用默认值的一个或多个参数的方法。调用方法时，将忽略参数的默认值显式指定这些参数的值。如果不显式指定这些参数的值，编译器将生成错误。给定的创建以下.yiw文件的情况下，这允许默认参数上的方法自变量：和下面的 yiw示例使用使用中，创建
+
+编译器警告（等级 4）C4565 Compiler Warning (level 4) C4565 11
+：重定义与之前声明符号符号已重新定义或重新声明和第二个定义或声明中的，与第一个定义或声明中，不同没有修饰符修饰符。此警告为信息性。若要解决此警告，请删除其中一个定义。下面的示例生成 C4565: The following sample generates C4565: // C4565.cpp  
+// compile with: /W4 /LD  
+__declspec(noalias) void f();  
+void f();   // C4565
+
+编译器警告（等级 4）C4571 Compiler Warning (level 4) C4571 11
+自以来更改的信息：之后语义不再捕获结构化的异常使用编译时为每个之后块生成。使用编译时，之后块将不会捕获结构化的异常（除以零，指针，例如）之后块仅捕获显式引发，而异常。有关详细信息，请参阅异常处理。默认情况下，此警告处于关闭状态。打开此警告以确保与编译时（）块不想要捕获结构化的异常。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。您可以通过以下方式之一解决使用编译你仍然想要你之后块来捕获结构化的异常。如果您不希望你使用块来捕获结构化的异常，但你仍想要使用之后块，则不要启用。你仍可以捕获使用结构化的异常处理关键字的结构化的异常，，和。但请记住，编译时异常时发生不引发异常时，将仅调用析构函数。将替换为特定的异常的块之后块和（可选）添加结构化的异常处理围绕异常处理，，和。请参阅结构化异常处理（）有关详细信息。请参阅（异常处理模型）有关详细信息。示例下面的示例生成 C4571。 The following sample generates C4571. // C4571.cpp  
+// compile with: /EHs /W4 /c  
+#pragma warning(default : 4571)  
+int main() {  
+   try {  
+      int i = 0, j = 1;  
+      j /= i;   // this will throw a SE (divide by zero)  
+   }  
+   catch(...) {}   // C4571 warning  
+}
+
+编译器警告（等级 4）C4610 Compiler Warning (level 4) C4610 11
+可以永远不会实例化对象用户定义的构造函数所需类没有用户定义或默认构造函数。执行没有实例化。下面的示例生成 C4610: The following sample generates C4610: // C4610.cpp  
+// compile with: /W4  
+struct A {  
+   int &j;  
+
+   A& A::operator=( const A& );  
+};   // C4610  
+
+/* use this structure definition to resolve the warning  
+struct B {  
+   int &k;  
+
+   B(int i = 0) : k(i) {  
+   }  
+
+   B& B::operator=( const B& );  
+} b;  
+*/  
+
+int main() {  
+}
+
+编译器警告（等级 4）C4611 Compiler Warning (level 4) C4611 11
+和对象析构之间的交互是不可移植在某些平台上，包含的函数。捕获可能不支持对象语义超出范围时销毁。若要避免意外的行为，避免使用捕获具有构造函数和析构函数的函数中。此警告时，才发出一次请参阅杂注警告。
+
+编译器警告（等级 4）C4623 Compiler Warning (level 4) C4623 11
+“”：默认构造函数已被隐式定义为已删除，因为基类默认构造函数不可访问或已被删除基类中的构造函数不可访问，且没有为派生类生成构造函数。任何在堆栈上创建此类型对象的尝试都将导致编译器错误。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4623。 The following sample generates C4623. // C4623.cpp  
+// compile with: /W4  
+#pragma warning(default : 4623)  
+class B {  
+   B();  
+};  
+
+class C {  
+public:  
+   C();  
+};  
+
+class D : public B {};   // C4623 - to fix, make B's constructor public  
+class E : public C {};   // OK - class C constructor is public  
+
+int main() {  
+   // D d;  will cause an error  
+}
+
+编译器警告（等级 4）C4625 Compiler Warning (level 4) C4625 11
+“”未能生成复制构造函数，因为基类复制构造函数不可访问或已被删除复制构造函数已删除或在基类中不可访问，因此并未为派生类生成。复制此类型的对象的任何尝试都将导致编译器错误。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4625，并演示如何修复此错误。 The following sample generates C4625 and shows how to fix it. // C4625.cpp  
+// compile with: /W4 /c  
+#pragma warning(default : 4625)  
+
+struct A {  
+   A() {}  
+
+private:  
+   A(const A&) {}  
+};  
+
+struct C : private virtual A {};  
+struct B :  C {};   // C4625 no copy constructor  
+
+struct D : A {};  
+struct E :  D {};   // OK
+
+编译器警告（等级 4）C4626 Compiler Warning (level 4) C4626 11
+“派生类”：赋值运算符已隐式定义为删除，因为基类赋值运算符不可访问或已被删除赋值运算符已被删除或在基类中不可访问，因此并未为派生类生成。分配此类型的对象的任何尝试都将导致编译器错误。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。以下示例生成，并演示如何对其进行修复：
+
+编译器警告（等级 4）C4629 Compiler Warning (level 4) C4629 11
+使用了有向图，字符序列“”解释为标记“”（如果这不是你想要的，请在这两个字符之间插入一个空格）在下，当编译器检测到有向图时会发出警告。以下示例生成：
+
+编译器警告（等级 4）C4634 Compiler Warning (level 4) C4634 11
+文档注释：不能应用：原因文档标记不能应用于所有构造。例如，无法将文档注释添加到命名空间或模板中。有关更多信息，请参见。示例下面的示例生成 C4634。 The following sample generates C4634. // C4634.cpp  
+// compile with: /W4 /doc /c  
+/// This is a namespace.   // C4634  
+namespace hello {  
+   class MyClass  {};  
+}; 示例 Example 下面的示例生成 C4634。 The following sample generates C4634. // C4634_b.cpp  
+// compile with: /W4 /doc /c  
+/// This is a template.   // C4634  
+template <class T>  
+class MyClass  {};
+
+编译器警告（等级 4）C4639 Compiler Warning (level 4) C4639 11
+错误，将不会处理注释的文档。原因因多种原因会出现此警告。若要解决此警告：重新编译。通过重新安装公共语言运行时重新安装。编辑或删除该警告并重新编译导致的文档注释。颁发时，禁用所有更多的注释处理，并不会生成文件。
+
+编译器警告（等级 4）C4668 Compiler Warning (level 4) C4668 11
+没有将“”定义为预处理器宏，用“”替换“”未定义的符号所用预处理器指令。符号将计算结果为。若要定义符号，你可以使用指令或编译器选项。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。示例下面的示例生成 C4668: The following sample generates C4668: // C4668.cpp  
+// compile with: /W4  
+#include <stdio.h>  
+
+#pragma warning (default : 4668)   // turn warning on  
+
+int main()   
+{  
+    #if q   // C4668, q is not defined  
+        printf_s("defined");  
+    #else  
+        printf_s("undefined");  
+    #endif  
+}
+
+编译器警告（等级 4）C4670 Compiler Warning (level 4) C4670 11
+“”：该基类不可访问要在块中引发的对象的指定基类不可访问。不能实例化引发的对象。检查基类继承了正确的访问说明符。下面的示例生成 C4670： The following sample generates C4670: // C4670.cpp  
+// compile with: /EHsc /W4  
+class A  
+{  
+};  
+
+class B : /* public */ A  
+{  
+} b;   // inherits A with private access by default  
+
+int main()  
+{  
+    try  
+    {  
+       throw b;   // C4670  
+    }  
+    catch( B )  
+    {  
+    }  
+}
+
+编译器警告（等级 4）C4672 Compiler Warning (level 4) C4672 11
+“”：不明确。首先被看作“”要在块中引发的指定对象不明确。如果引发了该对象，则无法消除它的歧义。
+
+编译器警告（等级 4）C4673 Compiler Warning (level 4) C4673 11
+引发以下类型的不会被视为在站点中不能处理对象捕获块。紧跟在包含此警告的行的错误输出中列出了不能处理每个类型。每个未处理的类型都有其自己的警告。阅读警告的每个特定类型的详细信息。下面的示例生成 C4673: The following sample generates C4673: // C4673.cpp  
+// compile with: /EHsc /W4  
+class Base {  
+private:  
+   char * m_chr;  
+public:  
+   Base() {  
+      m_chr = 0;  
+   }  
+
+   ~Base() {  
+      if(m_chr)  
+         delete m_chr;  
+   }  
+};  
+
+class Derv : private Base {  
+public:  
+   Derv() {}  
+   ~Derv() {}  
+};  
+
+int main() {  
+   try {  
+      Derv D1;  
+      // delete previous line, uncomment the next line to resolve  
+      // Base D1;  
+      throw D1;   // C4673  
+   }  
+
+   catch(...) {}  
+}
+
+编译器警告（等级 4）C4680 Compiler Warning (level 4) C4680 11
+：组件类不指定的默认接口。默认类标记为未指定接口组件类属性。为了使有用的对象，它必须实现接口。下面的示例生成 C4680: The following sample generates C4680: // C4680.cpp  
+// compile with: /W4  
+#include <windows.h>  
+[module(name="MyModule")];  
+
+[ object, uuid(373a1a4c-469b-11d3-a6b0-00c04f79ae8f) ]  
+__interface IMyIface1  
+{  
+   HRESULT f1();  
+};  
+
+[ object, uuid(37331a4c-469b-11d3-a6b0-00c04f79ae8f) ]  
+__interface IMyIface2  
+{  
+   HRESULT f1();  
+};  
+
+// to resolve C4680, specify a source interface also  
+// for example, default(IMyIface1, IMyface2)  
+[ coclass, uuid(373a1a4d-469b-11d3-a6b0-00c04f79ae8f), default(IMyIface1), source(IMyIface1) ]  
+class CMyClass : public IMyIface1  
+{   // C4680  
+};  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4681 Compiler Warning (level 4) C4681 11
+“”：组件类不指定是事件源的默认接口未为类指定源接口。下面的示例生成 C4681： The following sample generates C4681: // C4681.cpp  
+// compile with: /W4 /c  
+#define _ATL_ATTRIBUTES 1  
+#include <atlbase.h>  
+#include <atlcom.h>  
+
+[module(name="test")];  
+
+[dual, uuid("00000000-0000-0000-0000-000000000000")]  
+__interface IEvent { [id(3)] HRESULT myEvent(); };  
+
+[object, uuid("00000000-0000-0000-0000-000000000001")]  
+__interface ISource { HRESULT Fire(); };  
+
+[ coclass,   
+  source(IEvent),   
+  default(ISource),  
+  // Uncomment the following line to resolve.  
+  // default(IEvent),   
+  uuid("00000000-0000-0000-0000-000000000002")   
+]  
+struct CSource : ISource {   // C4681  
+   HRESULT Fire() { return 0; }  
+};
+
+编译器警告（等级 4）C4682 Compiler Warning (level 4) C4682 11
+“”未指定方向参数特性，默认为特性化接口中参数的方法不具有方向性特性：或。参数默认为。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4682： The following sample generates C4682: // C4682.cpp  
+// compile with: /W4  
+#pragma warning(default : 4682)  
+#include <windows.h>  
+[module(name="MyModule")];  
+
+[ library_block, object, uuid("c54ad59d-d516-41dd-9acd-afda17565c2b") ]  
+__interface IMyIface : IUnknown  
+{  
+   HRESULT f1(int i, int *pi); // C4682  
+   // try the following line  
+   // HRESULT f1([in] int i, [in] int *pi);  
+};  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4690 Compiler Warning (level 4) C4690 11
+出栈的比入栈的多特性的出栈次数比入栈次数多一次。示例下面的示例生成 C4690。 The following sample generates C4690. // C4690.cpp  
+// compile with: /c /W4  
+[emitidl(pop)];   // C4690  
+class x {};
+
+编译器警告（等级 4）C4701 Compiler Warning (level 4) C4701 11
+可能未初始化的本地变量，然后使用本地变量名称可能已使用没有为其分配一个值。这可能导致不可预知的结果。示例以下代码生成了和。若要更正此警告，请初始化该变量，如以下示例所示：请参阅
+
+编译器警告 （等级 4） C4703 Compiler Warning (level 4) C4703 警告、 /sdl 和改进未初始化的变量检测 Warnings, /sdl, and improving uninitialized variable detection
+
+
+编译器警告（等级 4）C4702 Compiler Warning (level 4) C4702 11
+无法访问的代码此警告是为年执行的编译器一致性工作的结果：无法访问的代码。当编译器（后端）检测到无法访问的代码时，它将生成，级警告。对于在年和版本的中有效的代码，删除无法访问的代码，或确保所有源代码都是由执行某些流可到达。示例下面的示例生成 C4702。 The following sample generates C4702. // C4702.cpp  
+// compile with: /W4  
+#include <stdio.h>  
+
+int main() {  
+   return 1;  
+   printf_s("I won't print.\n");   // C4702 unreachable  
+} 示例 Example 使用编译时 /GX ， /EHc ， /EHsc ，或 /EHac 和使用 extern C 函数，代码可能会变得无法访问因为 extern C函数假定未抛出，因而 catch 块不会出现可访问。 When compiling with /GX , /EHc , /EHsc , or /EHac and using extern C functions, code can become unreachable because extern C functions are assumed to not throw, thus the catch block isn't reachable. 如果你认为，此警告不有效因为函数可以引发，编译与 /EHa 或 /EHs ，取决于引发的异常。 If you feel that this warning is not valid because a function can throw, compile with /EHa or /EHs , depending on the exception thrown. 有关详细信息，请参阅 /EH （异常处理模型） 有关详细信息。 For more information, see /EH (Exception Handling Model) for more information. 下面的示例生成 C4702。 The following sample generates C4702. // C4702b.cpp  
+// compile with: /W4 /EHsc  
+#include <iostream>  
+
+using namespace std;  
+extern "C" __declspec(dllexport) void Function2(){}  
+
+int main() {  
+   try {  
+      Function2();  
+   }  
+   catch (...) {  
+      cout << "Exp: Function2!" << endl;   // C4702  
+   }  
+}
+
+编译器警告（等级 4）C4703 Compiler Warning (level 4) C4703 11
+使用了可能未初始化的局部指针变量“”局部指针变量名称可能已使用没有为其分配一个值。这可能导致不可预知的结果。示例以下代码生成了和。若要更正此警告，请初始化该变量，如以下示例所示：请参阅
+
+编译器警告 （等级 4） C4701 Compiler Warning (level 4) C4701 警告、 /sdl 和改进未初始化的变量检测 Warnings, /sdl, and improving uninitialized variable detection
+
+
+编译器警告（等级 4）C4706 Compiler Warning (level 4) C4706 11
+条件表达式中的分配条件表达式中的测试的值已作为赋值的结果。分配都有一个值（分配左侧的值），可以在另一个表达式，包括测试表达式中合法使用。下面的示例生成 C4706: The following sample generates C4706: // C4706a.cpp  
+// compile with: /W4  
+int main()  
+{  
+   int a = 0, b = 0;  
+   if ( a  = b ) // C4706  
+   {  
+   }  
+} 即使两个测试条件两边的括号，则也会出现警告： The warning will occur even if you double the parentheses around the test condition: // C4706b.cpp  
+// compile with: /W4  
+int main()  
+{  
+   int a = 0, b = 0;  
+   if ( ( a  =  b ) ) // C4706  
+   {  
+   }  
+} 如果您的意图是测试某一关系并不进行赋值，请使用 == 运算符。 If your intention is to test a relation and not to make an assignment, use the == operator. 例如，以下行测试是否和 b 是否相等： For example, the following line tests whether a and b are equal: // C4706c.cpp  
+// compile with: /W4  
+int main()  
+{  
+   int a = 0, b = 0;  
+   if ( a == b )  
+   {  
+   }  
+} 如果你想要将测试值赋值的结果，测试，以确保该赋值非零且不为 null。 If you intend to make your test value the result of an assignment, test to ensure that the assignment is non-zero or not null. 例如，下面的代码将不会生成此警告： For example, the following code will not generate this warning: // C4706d.cpp  
+// compile with: /W4  
+int main()  
+{  
+   int a = 0, b = 0;  
+   if ( ( a = b ) != 0 )  
+   {  
+   }  
+}
+
+编译器警告（等级 4）C4709 Compiler Warning (level 4) C4709 11
+数组索引表达式中的逗号运算符数组索引表达式逗号时，编译器将使用最后一个逗号后的值。示例下面的示例生成 C4709: The following sample generates C4709: // C4709.cpp  
+// compile with: /W4  
+#include <stdio.h>  
+
+int main()   
+{  
+    int arr[2][2];  
+    arr[0][0] = 10;  
+    arr[0][1] = 11;  
+
+    // Prints 10, not 11  
+    printf_s("\n%d",arr[0][1,0]);   // C4709  
+}
+
+编译器警告（等级 4）C4710 Compiler Warning (level 4) C4710 11
+：函数未内联为内联展开选定了给定的函数，但编译器没有执行内联。在由编译器自行执行内联。内联关键字、注册关键字，用作编译器提示。编译器使用试探法来确定是否应该特定函数可对速度、编译时加速代码进行内联，或它应使代码更小，编译的空间时特定函数进行内联。编译的空间时，编译器将唯一内联非常小的函数。在某些情况下，编译器将会机械原因而不内联某个特定的函数。请参阅有关编译器可能不内联函数的原因的列表。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。
+
+编译器警告（等级 4）C4714 Compiler Warning (level 4) C4714 11
+函数标记为不内联为内联展开选定了给定的函数，但编译器没有执行内联。尽管是比编译器的更强指示、内联仍会在编译器自行执行但没有试探方法用于确定受益内联此函数。在某些情况下，编译器将会机械原因而不内联某个特定的函数。例如，编译器将不内联：如果这会导致混合使用和函数。某些函数使用复制构造上时通过值传递的对象。上时按值返回的不可展开对象的函数。使用内联程序集没有编译时的函数。使用变量自变量列表的函数。具有函数重（异常处理）语句。下面的示例生成 C4714: The following sample generates C4714: // C4714.cpp  
+// compile with: /Ob1 /GX /W4  
+__forceinline void func1()  
+{  
+   try  
+   {  
+   }  
+   catch (...)  
+   {  
+   }  
+}  
+
+void func2()  
+{  
+   func1();   // C4714  
+}  
+
+int main()  
+{  
+}
+
+编译器警告（等级 4）C4718 Compiler Warning (level 4) C4718 11
+“”：递归调用无副作用，正在删除函数包含递归调用，但却没有副作用。正在删除对此函数的调用。不影响程序的正确性，而是影响其行为。但保留该调用会导致运行时堆栈溢出异常，请删除该调用，从而排除这种可能性。
+
+编译器警告（等级 4）C4725 Compiler Warning (level 4) C4725 11
+在一些中，指令可能不准确你的代码包含某种内联程序集指令，其可能在某些微处理器上不会产生准确结果。以下示例生成：
+
+编译器警告（等级 4）C4740 Compiler Warning (Level 4) C4740 11
+流在代码或跳出内联代码会取消全局优化当没有在跳转或从块中，为该函数禁用全局优化。下面的示例生成 C4740: The following sample generates C4740: // C4740.cpp  
+// compile with: /O2 /W4  
+// processor: x86  
+int main() {  
+   __asm jmp tester  
+   tester:;  
+}
+
+编译器警告（等级 4）C4754 Compiler Warning (level 4) C4754 11
+比较中的算术运算的转换规则意味着无法执行一个分支。发出了警告，因为比较的结果总是相同。这可能表示条件的其中一个分支绝不会执行，原因最可能是关联的整数表达式不正确。此代码缺陷通常在对位体系结构执行了不正确的整数溢出检查时发生。整数转换规则很复杂，并且有很多微小的缺陷。作为解决每个警告的替代方法，你可以更新代码以使用库。示例此示例会生成加法可能导致在将结果向上转换为位值并分配给位变量前发生算术溢出。这意味着，对的检查是多余的，永远不会捕获到溢出。在这种情况下，出以下警告：若要消除此警告，您可以更改赋值语句以将操作数强制转换为字节值：示例下一个示例也会生成。运算符返回了，其大小依赖于体系结构。该代码示例适用于其中的是位类型的位体系结构。然而，在位体系结构中，是位类型。整数的转换规则意味着，在表达式中将向上转换位值，就如同采用形式一样。当和为位整数时，位加法运算永远不会溢出，并且永远不会应用约束。因此，代码永远不会检测在位体系结构中检测到整数溢出条件。此示例导致以下警告：请注意，警告消息在警告分析遇到违规代码时显式列出了常量值而不是原始的源字符串，已转换为常量。—因此，您可能必须追查源代码的哪个表达式与警告消息中的常量值关联。解析为警告消息中的常量的最常见的代码来
+
+编译器警告（等级 4）C4764 Compiler Warning (level 4) C4764 11
+无法对齐大于个字节的捕获对象指定了大于字节的对齐，但是在某些平台上，如果函数引发异常，堆栈将强制实现不大于字节的对齐。示例下面的示例生成 C4764： The following sample generates C4764: // C4764.cpp  
+// compile with: /W4 /EHsc  
+// processor: x64 IPF  
+#include <stdio.h>  
+
+class A   
+{  
+public:  
+    int x;  
+};  
+
+typedef __declspec(align(32)) A ALIGNEDA;  
+
+int main()   
+{  
+    ALIGNEDA a;  
+    try   
+    {  
+        a.x = 15;  
+        throw a;  
+    }  
+    catch (ALIGNEDA b) // can’t align b to > 16 bytes  
+    {  
+        printf_s("%d\n", b.x);  
+    }  
+}   // C4764
+
+编译器警告（等级 4）C4816 Compiler Warning (level 4) C4816 11
+“”：参数具有一个大小为零的数组，该数组将被截断（除非该对象通过引用传递）具有大小为零的数组的对象的参数不是按引用传递的。传递对象时，不会复制该数组。示例以下示例生成：
+
+编译器警告（等级 4）C4820 Compiler Warning (level 4) C4820 11
+“”字节填充添加在构造“”之后类型和元素的顺序导致编译器将填充添加到结构末尾。请参阅对齐有关填充在结构中的详细信息。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4820: The following sample generates C4820: // C4820.cpp  
+// compile with: /W4 /c  
+#pragma warning(default : 4820)   
+
+// Delete the following 4 lines to resolve.  
+__declspec(align(2)) struct MyStruct {  
+   char a;  
+   int i;   // C4820  
+};  
+
+// OK  
+#pragma pack(1)  
+__declspec(align(1)) struct MyStruct2 {  
+   char a;  
+   int i;  
+};
+
+编译器警告（等级 4）C4913 Compiler Warning (level 4) C4913 11
+存在用户定义的二进制运算符“”，但没有重载可以转换所有操作数，使用了默认的内置二进制运算符“”对内置逗号运算符的调用发生在同样具有重载的逗号运算符的程序中；你认为可能已发生的转换没有发生。下面的示例生成 C4913： The following code sample generates C4913: // C4913.cpp  
+// compile with: /W4  
+struct A  
+{  
+};  
+
+struct S  
+{  
+};  
+
+struct B  
+{  
+   // B() { }  
+   // B(S &s) { s; }  
+};  
+
+B operator , (A a, B b)     
+{  
+   a;  
+   return b;  
+}  
+
+int main()  
+{  
+   A a;  
+   B b;  
+   S s;  
+
+   a, b;   // OK calls user defined operator  
+   a, s;   // C4913 uses builtin comma operator  
+           // uncomment the conversion code in B to resolve.  
+}
+
+编译器警告（等级 4）C4918 Compiler Warning (level 4) C4918 11
+“”杂注优化列表中的无效字符在杂注语句的优化列表中发现未知字符。例如，以下语句生成：
+
+编译器警告（等级 4）C4931 Compiler Warning (level 4) C4931 11
+我们假定类型库是为位指针生成的与未提供显式信息属性指令编译器结论，指针大小的类型库是数。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。
+
+编译器警告（等级 4）C4932 Compiler Warning (level 4) C4932 11
+（和区分编译器无法区分作为参数传递到的与或与。不要尝试在同一程序中将它们同时用作标识符，因为这将导致错误。下面的示例生成 C4932： The following sample generates C4932: // C4932.cpp  
+// compile with: /clr /W4 /WX  
+int main() {  
+   int __identifier(_finally) = 245;   // C4932  
+   int __identifier(__finally) = 25;   // C4932  
+}
+
+编译器警告（等级 4）C4937 Compiler Warning (level 4) C4937 11
+“”和“”作为“”的参数时不可区分由于编译器处理指令的参数的方式不同，无法区分对编译器具有意义的名称，如具有多文本表现形式（单下划线或双下划线形式）的关键字。此类字符串的示例包括和。请注意，在下，仅双下划线形式有效。下面的示例生成 C4937： The following sample generates C4937: // C4937.cpp  
+// compile with: /openmp /W4  
+#include "omp.h"  
+int main() {  
+   #pragma omp critical ( __leave )   // C4937  
+   ;  
+
+   // OK  
+   #pragma omp critical ( leave )  
+   ;  
+}
+
+编译器警告（等级 4）C4938 Compiler Warning (level 4) C4938 11
+“”：浮点型变量可能会导致在或下出现不一致的结果不应将浮点型变量与或同时使用，因为求和计算的顺序不同。因此，结果可能与不使用的结果不同。下面的示例生成 C4938： The following sample generates C4938: // C4938.cpp  
+// compile with: /openmp /W4 /fp:strict /c  
+// #pragma fenv_access(on)  
+extern double *a;   
+
+double test(int first, int last) {   
+   double sum = 0.0;   
+   #pragma omp parallel for reduction(+: sum)   // C4938  
+   for (int i = first ; i <= last ; ++i)   
+      sum += a[i];   
+   return sum;   
+} 有显式并行化时，求和计算按如下方式进行： Without explicit parallelization, the sum is computed as follows: sum = a[first] + a[first + 1] + ... + a[last]; 无显式并行化时，求和计算按如下方式进行： With explicit parallelization (and two threads), the sum is computed as follows: sum1 = a[first] + ... a[first + last / 2];   
+sum2 = a[(first + last / 2) + 1] + ... a[last];   
+sum = sum1 + sum2;
+
+编译器警告（等级 4）C4960 Compiler Warning (level 4) C4960 11
+“”太大，无法配置当使用时，编译器检测到某个输入模块的函数具有的指令超过条。如此大的函数不可用于按配置进行的优化。若要解决此警告，请减小该函数的大小。
+
+编译器警告（等级 4）C4985 Compiler Warning (level 4) C4985 11
+“”先前声明中不存在特性。当前方法声明或定义上的源代码注释语言注释与早期声明上的注释不同。方法的定义和声明中必须使用相同的注释。提供一组可用于描述函数如何使用参数的注释、其关于参数的假设，以及就完成所作的保证。注释是在头文件中定义的。请注意，除非项目具有指定的标志，否则宏将不会展开。在指定时，即使警告和错误均显示有，编译器也会引发。更正此错误在方法的定义及其所有声明上使用相同的注释。请参阅批注
+
+编译器警告（等级 1 和等级 4）C4112 Compiler Warning (levels 1 and 4) C4112 11
+行需要介于到之间的整数指令指定了一个位于允许范围之外的整数参数。若指定的参数小于，则行计数器将重置为。如果指定的参数大于，即编译器定义的限制，则行计数器保持不变。这是在兼容性下的第级警告和扩展下的第级警告。下面的示例生成 C4112： The following sample generates C4112: // C4112.cpp  
+// compile with: /W4  
+#line 0   // C4112, value must be between 1 and number  
+
+int main() {  
+}
+
+编译器警告（等级 1 和等级 4）C4115 Compiler Warning (levels 1 and 4) C4115 11
+“”：括号中的已命名类型定义给定的符号用于在带括号的表达式内部定义结构、联合或枚举类型。定义范围可能并非预期。在函数调用中，定义具有全局作用域。在调用中，定义与调用的函数具有相同的范围。在不是带括号表达式的括号（如原型）内，声明符也可以导致此警告。这是在兼容性下编译的程序和程序的级警告。否则为级警告。
+
+编译器警告（等级 1 和等级 4）C4223 Compiler Warning (levels 1 and 4) C4223 11
+使用的非标准扩展：非左值数组转换为指针在标准中，无法将非左值数组转换为指针。与默认扩展，你可以。
+
+编译器警告（等级 2 和等级 3）C4008 Compiler Warning (levels 2 and 3) C4008 11
+“”：“”属性被忽略编译器忽略了函数（级别警告）或数据（等级警告）的、或属性。通过检查以下可能的原因进行修复带数据的属性。带函数的或属性。
+
+编译器警告（等级 2 和等级 4）C4200 Compiler Warning (levels 2 and 4) C4200 11
+使用的非标准扩展：零大小的数组在结构联合指示结构或联合包含大小为零的数组。大小为零数组的声明为扩展。编译文件时，这会造成等级警告，而在编译文件时会造成等级警告。编译还提供了此警告无法生成复制构造函数或复制赋值运算符时包含零大小的数组。此示例生成警告：此非标准扩展常用于将代码与具有可变长度的外部数据结构连接起来。如果此方案适用于你的代码，则可禁用此警告：示例
+
+编译器警告（等级 3 和等级 4）C4244 Compiler Warning (levels 3 and 4) C4244 11
+从“”到“”的“”转换，可能丢失数据整数类型转换为更小的整数类型。这是一个级别警告，如果是和小于。否则，它是警告等级分配类型的值到类型的变量的。可能发生了数据丢失。如果收到，则应将程序更改为使用兼容类型，或向代码添加一些逻辑，以确保可能值的范围将始终与你使用的类型兼容。也可以激发级别请参阅编译器警告（等级）有关详细信息。该转换可能会因隐式转换而出现问题。下面的示例生成 C4244： The following sample generates C4244: // C4244_level4.cpp  
+// compile with: /W4  
+int aa;  
+unsigned short bb;  
+int main() {  
+   int b = 0, c = 0;  
+   short a = b + c;   // C4244  
+
+   bb += c;   // C4244  
+   bb = bb + c;   // C4244  
+   bb += (unsigned short)aa;   // C4244  
+   bb = bb + (unsigned short)aa;   // OK  
+} 有关详细信息，请参阅 常用算术转换 。 For more information, see Usual Arithmetic Conversions . // C4244_level3.cpp  
+// compile with: /W3  
+int main() {  
+   __int64 i = 8;  
+   unsigned int ii = i;   // C4244  
+} 如果为 64 位目标生成的代码在为 32 位目标进行生成时不生成警告，则会出现警告 C4244。 Warning C4244 can occur when building code for 64-bit targets that does not generate the warning when building for 32-bit targets. 例如，指针之间的一个区别是，在 32 位平台上为 32 位数量，但在 64 位平台上则为 64 位数量。 For example, a difference between pointers is a 32-bit quantity on 32-bit platforms, but a 64-bit quantity on 64-bit platforms. 下面的示例在为 64 位目标进行编译时生成 C4244： The following sample generates C4244 when compiled for 64-bit targets: // C4244_level3_b.cpp  
+// compile with: /W3   
+int main() {  
+   char* p1 = 0;  
+   char* p2 = 0;  
+   int x = p2 - p1;   // C4244  
+}
+
+编译器警告 （等级 3） C4371 Compiler Warning (level 3) C4371 11
+：类的布局可能已更改从早期版本的编译器由于更好地封装成员成员如果你的代码依赖于特定内存布局的类，则会出现警告，告诉你当前编译器所创建的布局可能不同于以前版本的编译器生成的布局。这可能很大的序列化操作或操作系统接口依赖于特定内存布局。大多数其他情况下，可安全地忽略此警告。默认情况下，警告处于关闭状态。有关详细信息，请参阅编译器警告，将关闭默认。
+
+编译器警告 （等级 1） C4473 Compiler Warning (level 1) C4473 11
+函数：没有足够自变量传递为格式字符串占位符和其参数预期数可变参数自变量，但数提供缺少的可变参数参数索引所需的格式字符串此参数使用一个转换说明符此参数用作字段宽度此参数用作精度此参数将用作缓冲区大小编译器检测到满足在格式字符串中，占位符所需的参数数目与提供的参数数量不匹配。正确使用和系列可变参数函数要求你提供所指定的格式字符串的任意多个参数。某些占位符需要其他参数，以指定宽度、精度或缓冲区大小，以及内容的自变量。不匹配通常意味着是一个，在代码中。系列的格式字符串占位符与关联的自变量的信息，请参阅格式规范语法：和函数。请参阅特定于函数的信息的文档函数。此警告是中的新增功能。示例这些示例显示一个格式字符串可能会导致警告的两种方法不匹配其参数，并还演示如何以修复问题。在第一个错误消息中，参数缺失，但无法告知缺少的参数是宽度或内容，因此它假定提供的自变量是第一个，宽度，而缺少的参数是第二个类型转换说明符。您必须检查格式字符串以确定实际缺少的参数。在此示例中，要求为每个占位符，另一个用于提供要写入的地址和第二个提供的第一个大小的两个参数。查看有关所需的参数的说明每个库函数的文档。
+
+编译器警告 （等级 1） C4477 Compiler Warning (level 1) C4477 11
+函数：格式字符串字符串要求类型自变量类型，但可变参数自变量数具有类型类型编译器检测到需满足在格式字符串中，占位符的自变量的类型与提供的自变量的类型不匹配。正确使用和系列可变参数函数要求你提供的指定格式字符串的类型的参数。不匹配通常意味着是一个，在代码中。系列的格式字符串占位符与关联的自变量的信息，请参阅格式规范语法：和函数。请参阅特定于函数的信息的文档函数。此警告是中的新增功能。示例此示例显示第一个函数中，有两个警告时发现两个自变量是错误的类型，并还演示如何修复问题。在第一个错误消息中，到提供自变量时预期。将自动提升为可变参数自变量列表中。第二条错误消息显示自变量，但提供。告知你已交换的参数的顺序。您必须检查格式字符串来确定实际自变量顺序，提供正确的参数类型。
+
+编译器警告 C5038 Compiler Warning C5038 11
+数据成员将数据成员后初始化数据成员成员将在基类后初始化类成员按它们声明的顺序，而非按它们在初始值设定项列表中出现的顺序进行初始化。此警告指示的初始化顺序不是数据成员或基类，这些类的声明顺序相同。如果在列表中的一个成员的初始化依赖于更高版本声明的成员的初始化，这可以导致未定义运行时行为。此警告是版本中的新增功能，默认情况下处于关闭状态。使用以启用默认情况下处于关闭状态的所有警告或以便作为级别警告。有关详细信息，请参阅编译器警告，将关闭默认。有关如何通过编译器版本禁用警告的信息，请参阅按编译器版本的编译器警告。示例在下面的示例中，版本（与引发警告将初始化数据成员后的数据成员若要解决此问题，排列初始值设定项列表具有声明顺序相同。如果一个或两个初始化表达式同时引用基类成员，则会引发类似警告。
+
+编译器警告 C4335 Compiler Warning C4335 11
+检测到的文件格式：请将源文件转换为或格式源文件的第一行的行终止字符是样式而不是或。作为错误发出始终发出此警告。请参阅警告杂注有关如何禁用此警告信息。此外，发出此警告仅一次每编译单位。因此，如果有多个在格式中指定文件的指令，将才会发出一次。格式生成文件的一种方法是使用高级保存选项上文件菜单在中。示例下面的示例生成 C4335。 The following sample generates C4335. // C4335 expected  
+#include "c4335.h"   // assume both include files are in Macintosh format  
+#include "c4335_2.h"
+
+编译器警告 C4355 Compiler Warning C4355 11
+“”用于基成员初始值设定项列表这指针是仅在非静态成员函数中有效。它不能在初始值设定项列表的基类。基类构造函数和类成员构造函数调用前这构造函数。实际上，已传递给另一个构造函数将构造对象的指针。如果这些其他构造函数访问任何成员，或对此调用成员函数，则结果将是未定义。不应使用这指针，直到所有构造都已都完成。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。下面的示例生成 C4355: The following sample generates C4355: // C4355.cpp  
+// compile with: /w14355 /c  
+#include <tchar.h>  
+
+class CDerived;  
+class CBase {  
+public:  
+   CBase(CDerived *derived): m_pDerived(derived) {};  
+   ~CBase();  
+   virtual void function() = 0;  
+
+   CDerived * m_pDerived;  
+};  
+
+class CDerived : public CBase {  
+public:  
+   CDerived() : CBase(this) {};   // C4355 "this" used in derived c'tor  
+   virtual void function() {};  
+};  
+
+CBase::~CBase() {  
+   m_pDerived -> function();  
+}  
+
+int main() {  
+   CDerived myDerived;  
+}
+
+编译器警告 C4368 Compiler Warning C4368 11
+不能定义为托管的的成员：不支持混合的类型不能在类型中嵌入的本机数据成员。但是，您可以声明一个指向本机类型的指针，并在托管类的构造函数、析构函数和终结器中控制其生命周期。有关详细信息请参阅析构函数和终结器。始终作为错误发出此警告。使用警告杂注来禁用。示例下面的示例生成 C4368。 The following sample generates C4368. // C4368.cpp  
+// compile with: /clr /c  
+struct N {};  
+ref struct O {};  
+ref struct R {  
+    R() : m_p( new N ) {}  
+    ~R() { delete m_p; }  
+
+   property N prop;   // C4368  
+   int i[10];   // C4368  
+
+   property O ^ prop2;   // OK  
+   N * m_p;   // OK  
+};
+
+编译器警告 C4394 Compiler Warning C4394 11
+：不应与（）标记为每个符号使用标记的函数修饰符编译为（不，为本机）和导出表导出修饰符不支持对托管的函数。您可以将托管函数声明为具有公共可访问性。有关详细信息，请参阅键入可见性和成员的可见性。始终作为错误发出。你可以关闭此警告，其中包含或请参阅警告或、取消显示、、、、、、、、，、，我们，，（警告级别）有关详细信息。示例下面的示例生成 C4394。 The following sample generates C4394. // C4394.cpp  
+// compile with: /clr /c  
+__declspec(dllexport) __declspec(appdomain) int g1 = 0;   // C4394  
+__declspec(dllexport) int g2 = 0;   // OK
+
+编译器警告 C4430 Compiler Warning C4430 11
+缺少类型说明符假定为。注意：不支持默认的此错误可能来自于为年执行的编译器一致性工作：所有声明必须显式都指定的类型不再假定。始终作为错误发出。你可以关闭此警告，其中包含或请参阅警告或、取消显示、、、、、、、、，、，我们，，（警告级别）有关详细信息。示例下面的示例生成 C4430。 The following sample generates C4430. // C4430.cpp  
+// compile with: /c  
+struct CMyClass {  
+   CUndeclared m_myClass;  // C4430  
+   int m_myClass;  // OK  
+};  
+
+typedef struct {  
+   POINT();   // C4430  
+   // try the following line instead  
+   // int POINT();  
+   unsigned x;  
+   unsigned y;  
+} POINT;
+
+编译器警告 C4439 Compiler Warning C4439 11
+：与托管签名中类型的函数定义必须具有调用约定编译器隐式替换与调用约定。若要解决此警告，请删除或调用约定。始终作为错误发出。你可以关闭此警告，其中包含或请参阅警告或、取消显示、、、、、、、、，、，我们，，（警告级别）有关详细信息。示例下面的示例生成 C4439。 The following sample generates C4439. // C4439.cpp  
+// compile with: /clr  
+void __stdcall f( System::String^ arg ) {}   // C4439  
+void __clrcall f2( System::String^ arg ) {}   // OK  
+void f3( System::String^ arg ) {}   // OK
+
+编译器警告 C4484 Compiler Warning C4484 11
+基类类方法相匹配，但未标记为虚拟一步、上一或重写假定（和不是虚拟）使用编译时，编译器将不会隐式重写基类函数，这意味着该函数将获取中的新槽。若要解决，请显式指定函数是否可重写。有关详细信息，请参见（公共语言运行时编译）替代新新中的槽）始终作为错误发出。使用警告杂注来取消显示。示例下面的示例生成 C4484。 The following sample generates C4484. // C4484.cpp  
+// compile with: /clr  
+ref struct A {  
+   virtual void Test() {}  
+};  
+
+ref struct B : A {  
+   void Test() {}   // C4484  
+};  
+
+// OK  
+ref struct C {  
+   virtual void Test() {}  
+   virtual void Test2() {}  
+};  
+
+ref struct D : C {  
+   virtual void Test() new {}  
+   virtual void Test2() override {}  
+};
+
+编译器警告 C4485 Compiler Warning C4485 11
+基类类方法相匹配，但不是标记或重写假定（和虚拟）访问器中重写时，带有或不带关键字、基类访问器函数，但或说明符不是重写的函数签名的一部分。添加或说明符若要解决此警告。请参阅重写和新新中的槽）有关详细信息。始终作为错误发出。使用警告杂注可取消。示例下面的示例生成 C4485 The following sample generates C4485 // C4485.cpp  
+// compile with: /clr  
+delegate void Del();  
+
+ref struct A {  
+   virtual event Del ^E;  
+};  
+
+ref struct B : A {  
+   virtual event Del ^E;   // C4485  
+};  
+
+ref struct C : B {  
+   virtual event Del ^E {  
+      void raise() override {}  
+      void add(Del ^) override {}  
+      void remove(Del^) override {}  
+   }  
+};
+
+编译器警告 C4687 Compiler Warning C4687 11
+：密封的抽象类不能实现接口密封的抽象类型是通常仅用于容纳静态成员函数。有关详细信息，请参阅抽象和密封。默认情况下，作为错误发出。你可以取消与警告杂注。如果不能确定你想要在密封的抽象类型中实现接口，可以取消。示例下面的示例生成 C4687。 The following sample generates C4687. // C4687.cpp  
+// compile with: /clr /c  
+interface class A {};  
+
+ref struct B sealed abstract : A {};   // C4687  
+ref struct C sealed : A {};   // OK  
+ref struct D abstract : A {};   // OK
+
+编译器警告 C4693 Compiler Warning C4693 11
+“”：密封的抽象类不能具有任何实例成员“”如果标记的类型密封和抽象，它只能具有静态成员。此警告将自动提升为错误。如果你想要修改此行为，使用警告。示例下面的示例生成 C4693。 The following sample generates C4693. // C4693.cpp
+// compile with: /clr /c
+public ref class Public_Ref_Class sealed abstract {
+public:
+   void Test() {}   // C4693
+   static void Test2() {}   // OK
+};
+
+编译器警告 C4694 Compiler Warning C4694 11
+类：密封的抽象类不能有基类的一个抽象密封类不能继承自引用类型；一个密封抽象类既不能实现基类函数，也不能用作基类。有关详细信息，请参阅抽象，密封，和类和结构。此警告将自动提升为错误。如果你想要修改此行为，使用警告。示例以下示例生成。
+
+编译器警告 C4746 Compiler Warning C4746 11
+可变访问表达式受设置请考虑使用内部函数。直接访问可变变量时会发出。它旨在帮助开发人员标识受当前指定的特定可变模型的代码位置这可以控制与易失性编译器选项。具体而言，如果要在使用时查找编译器生成的硬件内存屏障，它很有用。内部函数可用于显式访问可变内存而不会受可变模型的影响。使用这些内部函数不会触发。默认情况下，此警告处于关闭状态。请参阅默认情况下处于关闭状态的编译器警告了解详细信息。
+
+编译器警告 C4867 Compiler Warning C4867 11
+：函数调用缺少自变量列表使用调用创建指向成员的指针指向成员函数的未正确初始化。此警告可以来自于为年执行的编译器一致性工作：增强的指针到成员一致性。年之前的版本编译的代码现在将生成。始终作为错误发出此警告。请使用警告杂注禁用此警告。有关和的详细信息，请参阅。示例下面的示例生成 C4867。 The following sample generates C4867. // C4867.cpp  
+// compile with: /c  
+class A {  
+public:  
+   void f(int) {}  
+
+   typedef void (A::*TAmtd)(int);  
+
+   struct B {  
+      TAmtd p;  
+   };  
+
+   void g() {  
+      B b = {f};   // C4867  
+      B b2 = {&A::f};   // OK  
+   }  
+};
+
+编译器警告 （等级 4） C4868 Compiler Warning (level 4) C4868 11
+文件编译器可能会不强制实施大括号内的初始值设定项列表中从左到右计算顺序大括号内的初始值设定项列表中的元素是从左到右的顺序进行计算。有两种情况下，编译器处于无法保证此顺序：第一种是通过值传递的对象时的某些元素第二个是编译时和的某些元素的对象的字段或数组元素。当编译器无法保证从左到右评估它会发出警告。于为执行的编译器一致性工作可以生成此警告。之前的版本编译的代码现在可以生成。默认情况下，此警告处于关闭状态。使用来激活此警告。若要解决此警告，首先考虑的初始值设定项列表元素的从左到右评估是否是必需的如元素的求值时可能会产生顺序相关的副作用。在许多情况下，在其中计算元素的顺序没有明显的影响。如果求值的顺序必须是从左到右，请考虑它是否可以传入元素改为引用。此更改消除了下面的代码示例中的警告。示例此示例生成，并显示了如何修复此错误：
+
+编译器警告 C4936 Compiler Warning C4936 11
+只有使用或编译时，才支持此编译器选项在中已弃用。使用了修饰符，但只有在编译时使用选项之一的情况下 yiw修饰符方才有效。有关详细信息，请参见应用程序域和过程。始终发出错误。可以使用杂注来禁用。下面的示例生成 C4936： The following sample generates C4936: // C4936.cpp  
+// compile with: /c  
+// #pragma warning (disable : 4936)  
+__declspec(process) int i;   // C4936  
+__declspec(appdomain) int j;   // C4936
+
+编译器警告 C4950 Compiler Warning C4950 11
+“”：标记为过时将成员或类型标记为过时与属性。始终发出错误。可以通过使用来关闭此警告警告杂注指令或编译器选项。示例下面的示例生成 C4950： The following sample generates C4950: // C4950.cpp  
+// compile with: /clr  
+using namespace System;  
+
+// Any reference to Func3 should generate an error with message  
+[System::ObsoleteAttribute("Will be removed in next version", true)]  
+Int32 Func3(Int32 a, Int32 b) {  
+   return (a + b);  
+}  
+
+int main() {  
+   Int32 MyInt3 = ::Func3(2, 2);   // C4950  
+}
+
+编译器警告 C4956 Compiler Warning C4956 11
+“”：此类型不可验证当指定了而你的代码包含不可验证的类型时，将生成此警告。有关详细信息，请参阅纯代码和可验证代码。此警告作为错误发出，可通过杂注或编译器选项禁用该警告。下面的示例生成 C4956： The following sample generates C4956: // C4956.cpp  
+// compile with: /clr:safe  
+int* p;   // C4956
+
+编译器警告 C4957 Compiler Warning C4957 11
+“”：从“”到“”的显式强制转换是不可验证的强制转换会导致不可验证的映像。某些转换是安全的（例如，触发用户定义的转换的和一个）。确保生成可验证的代码。有关详细信息，请参阅纯代码和可验证代码。此警告作为错误发出，可通过杂注或编译器选项禁用该警告。以下示例生成：
+
+编译器警告 C4958 Compiler Warning C4958 11
+“”指针算法是不可验证的使用指针算法将产生不可验证的映像。有关详细信息，请参阅纯代码和可验证代码。此警告作为错误发出，可通过杂注或编译器选项禁用该警告。下面的示例生成 C4958： The following sample generates C4958: // C4958.cpp  
+// compile with: /clr:safe  
+// #pragma warning( disable : 4958 )  
+using namespace System;  
+
+int main( ) {  
+   Int32 arr[] = new Int32[10];  
+   Int32* p = &arr[0];  
+   p++;   // C4958  
+} 编译器使用指针算法实现数组操作。 The compiler implements array operations with pointer arithmetic. 因此，不可验证本机数组；请改用 CLR 数组。 Therefore, native arrays are not verifiable; use a CLR array instead. 有关详细信息，请参阅 数组 。 For more information, see array . 下面的示例生成 C4958： The following sample generates C4958: // C4958b.cpp  
+// compile with: /clr:safe  
+// #pragma warning( disable : 4958 )  
+
+int main() {  
+   int array[5];  
+   array[4] = 0;   // C4958  
+}
+
+编译器警告 C4959 Compiler Warning C4959 11
+不能在中定义非托管结构“”，因为访问其成员会产生不可验证的代码访问非托管类型的成员会生成无法验证的映像。有关详细信息，请参阅纯代码和可验证代码。此警告作为错误发出，可通过杂注或编译器选项禁用该警告。下面的示例生成 C4959： The following sample generates C4959: // C4959.cpp  
+// compile with: /clr:safe  
+
+// Uncomment the following line to resolve.  
+// #pragma warning( disable : 4959 )  
+struct X {  
+   int data;  
+};  
+
+int main() {  
+   X x;  
+   x.data = 10;   // C4959  
+}
+
+编译器警告 C4961 Compiler Warning C4961 11
+没有将任何配置文件数据合并到“”，因此已禁用按配置文件优化没有可用的配置文件数据（文件），因此按配置优化不会发生。
+
+编译器警告 C4962 Compiler Warning C4962 11
+“”：已禁用按配置文件优化，原因在于优化导致了配置数据文件不一致函数不是使用编译的，因为该函数的计数（分析）数据不可靠。重做分析以重新生成包含该函数不可靠分析数据的文件。默认情况下，此警告处于关闭状态。有关详细信息，请参阅。
+
+编译器警告 C4972 Compiler Warning C4972 11
+直接修改取消装箱操作的结果或将其视为左值是不可验证的取消引用值类型的句柄（也称为取消装箱），然后为其赋值，是不可验证的。有关详细信息，请参阅装箱。示例下面的示例生成 C4972。 The following sample generates C4972. // C4972.cpp  
+// compile with: /clr:safe  
+using namespace System;  
+ref struct R {  
+   int ^ p;   // a value type  
+};  
+
+int main() {  
+   R ^ r = gcnew R;  
+   *(r->p) = 10;   // C4972  
+
+   // OK  
+   r->p = 10;  
+   Console::WriteLine( r->p );  
+   Console::WriteLine( *(r->p) );  
+}
+
+编译器警告 C4986 Compiler Warning C4986 11
+  异常规范与前面的声明不匹配当一个声明中存在异常规范而其他声明中没有时，则可能产生此警告。默认情况下，处于关闭状态。有关详细信息，请参阅。示例下面的示例生成 C4986。 The following sample generates C4986. class X { };  
+void f1() throw (X*);  
+// ...  
+void f1()  
+{  
+    // ...  
+} 示例 Example 以下示例将消除此警告。 The following sample eliminates this warning. class X { };  
+void f1() throw (X*);  
+// ...  
+void f1() throw (X*)  
+{  
+    // ...  
+}
